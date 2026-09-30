@@ -1,0 +1,50 @@
+{
+  "name": "lionfeather-org",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5175 --strictPort",
+    "start": "node scripts/site-server.mjs",
+    "typecheck": "tsc --noEmit",
+    "build": "npm run typecheck && vite build && npm run check:public",
+    "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort",
+    "check:public": "node scripts/check-public.mjs",
+    "cloudflare:login": "wrangler login",
+    "deploy:check": "npm run build && wrangler deploy --config wrangler.jsonc --dry-run",
+    "deploy": "npm run build && wrangler deploy --config wrangler.jsonc",
+    "format": "prettier --write src scripts index.html vite.config.ts tsconfig.json package.json README.md AGENTS.md .prettierrc.json",
+    "format:check": "prettier --check src scripts index.html vite.config.ts tsconfig.json package.json README.md AGENTS.md .prettierrc.json",
+    "test": "node --test scripts/*.test.mjs",
+    "service:prepare": "npm run build && node scripts/service.mjs prepare",
+    "service:install": "npm run build && node scripts/service.mjs install --boot --verify",
+    "service:status": "node scripts/service.mjs status",
+    "service:start": "node scripts/service.mjs start",
+    "service:stop": "node scripts/service.mjs stop",
+    "service:restart": "node scripts/service.mjs restart",
+    "service:verify": "node scripts/service.mjs verify",
+    "service:uninstall": "node scripts/service.mjs uninstall"
+  },
+  "dependencies": {
+    "@fontsource-variable/manrope": "^5.3.0",
+    "@fontsource/instrument-serif": "^5.3.0",
+    "lucide-react": "^1.47.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "react-router-dom": "^7.18.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "jsonc-parser": "3.3.1",
+    "prettier": "^3.9.8",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.0",
+    "wrangler": "4.144.0"
+  }
+}

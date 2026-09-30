@@ -1,0 +1,31 @@
+{
+  "public": {
+    "Jacob-Iwen-Resume.pdf": "20aaf4424cd089f612cb99de1d1af53a96d9d23ac109fce2fce5c891ea705082",
+    "_headers": "fe8dcf7c9e537da08ddc80cbe0c8d688369922b75fb9a4bc71e744daa3a3f3fe",
+    "favicon.svg": null,
+    "font-licenses.txt": null,
+    "images/fieldwork-agent-workspace.png": "1cb17fa3627e90c9448cb0a4f7586f401199ffd32d9aa9cfe8ff00dc03ce3658",
+    "images/fieldwork-app-design.png": "128029b68eb34bf120c66b61b15972c1ac02d7ec3bdca26932c33c11d71bf3a0",
+    "images/fieldwork-ask-codex.png": "235b81660a3956447103a6bb71b6ef51c492ecf9c2ca2759d061dd89409f2ebc",
+    "images/fieldwork-opening-detail.png": "3ff64e69314336954fa7fac3833b6209343e9f3c662094c536f4536b42ce9738",
+    "images/fieldwork-openings.png": "7218fdbe053bdd720ef14051b598e9f2ce9d4886874c73e0c8779730b2a58611",
+    "images/form-engine-portal.png": "e546468ef26f7f7d15a792d4ab65da219c391c392022fff4421365956df3c49a",
+    "images/van-dashboard.png": "3dac121b433e908703d46ed937585db01c1613e0038d951d347ef2d64afc1c8b",
+    "images/van-telemetry/custom-warning.png": "157fc05500982fde5fe23b24cfad8624393e83e1c3d56dfd71e5df0d13088c4c",
+    "images/van-telemetry/drive.png": "7859e771c7b897bce5c0cf152a8b3562c353ef748b799c4234018f30cd1c68ff",
+    "images/van-telemetry/history.png": "45693554c7cba7cbbd394e2065507d5f5c1a6597df835cfe893b1d9986ba6002",
+    "images/van-telemetry/metric-catalog.png": "8efb34572ee2abf529d22edb5feafdb691e541ab1cc59d0279660a5543e04ad5",
+    "images/van-telemetry/parked.png": "cad5c5f08b3e92fbd9bec01e6ce03eba352450fdc85eaae4e49e50fa85a67b91",
+    "images/van-telemetry/warning-evidence.png": "7315c5192b8e13aa447783282cd2b47918ee75185324f25fe3b1dfa528129df7",
+    "theme.js": null
+  },
+  "fonts": {
+    "assets/instrument-serif-latin-400-italic-DKMiL14s.woff2": "5a51946dfffa82972bc98745359c46761515641fda557c25116459a9f83da4a7",
+    "assets/instrument-serif-latin-400-italic-u__WvvIK.woff": "9bc25f743ba6bf9091d37de465dedb2d2cb0c0614738bec1c551922fb2794d1d",
+    "assets/manrope-cyrillic-wght-normal-Dvxsihut.woff2": "c268b459a9329e59fecf39a17618efd44c71735532048d60b12aab76a8c14914",
+    "assets/manrope-greek-wght-normal-DL7QRZyv.woff2": "2fb2e8cbfd52ae46179a8b6024eb162f1f9c6de3d22d6e3a30d8f395de7220be",
+    "assets/manrope-latin-ext-wght-normal-Ch3YOpNY.woff2": "3911b66d9f2e005a4b989223405d0e5032619c668597ba467cc76a23c8fffcfb",
+    "assets/manrope-latin-wght-normal-DHIcAJRg.woff2": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972",
+    "assets/manrope-vietnamese-wght-normal-usUDDRr7.woff2": "6bbb044ab420e07edb0a3042d2eb314b85e83a0182e945a15ab3b9092668dfd5"
+  }
+}
