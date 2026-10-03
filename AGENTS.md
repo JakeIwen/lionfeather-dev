@@ -93,7 +93,7 @@ polling enabled because native file events missed workspace edits on this Mac.
   kept these, so do not re-flag them: the hero line "I build software.", the
   text under the van illustration, "Selected work.", "A few things I've built",
   "Let's talk" (header) and "Let's talk shop." (contact), the 404 page, the
-  dashboard demo heading, the "Explore my work" button, and the van dashboard
+  "Explore my work" button, and the van dashboard
   project title.
 - Non-heading font sizes were increased by approximately 20%, rounded to whole
   pixels; preserve those readable sizes and the unchanged heading hierarchy.

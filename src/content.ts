@@ -44,7 +44,6 @@ export const projects: Project[] = [
         title: 'The systems behind the screen',
         paragraphs: [
           "The dashboard sits on top of systems I operate every day: automated backups; cellular, satellite, and directional Wi-Fi connectivity; and storage protection that responds to the vehicle's ignition state.",
-          'The demo below reproduces a few of those control patterns with simulated data.',
         ],
       },
     ],

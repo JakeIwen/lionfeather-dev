@@ -14,7 +14,6 @@ import {
 import { Link, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { email, projects, resumeUrl } from './content'
 import { Feather, VanIllustration } from './Illustrations'
-import DashboardDemo from './DashboardDemo'
 import DashboardScreenshot, { dashboardImageUrl } from './DashboardScreenshot'
 import FormEnginePreview, { formEngineUrl } from './FormEnginePreview'
 import FieldworkPreview, { FieldworkGallery } from './FieldworkPreview'
@@ -442,7 +441,6 @@ function ProjectPage() {
           </section>
         ))}
       </div>
-      {project.slug === 'van-dashboard' && <DashboardDemo />}
       <div className="case-end">
         <p>Contact</p>
         <a className="text-link" href={`mailto:${email}`}>

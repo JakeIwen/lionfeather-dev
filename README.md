@@ -2,7 +2,7 @@
 
 Jacob Iwen's personal engineering website. Built with React, TypeScript, and
 React Router, with Vite running on Node.js. The production build is a static
-site, including a browser-only dashboard demonstration with simulated data.
+site.
 
 Run the commands below from the repository directory.
 
@@ -62,13 +62,12 @@ reviewed images/PDFs. It does not replace content review.
 `npm run format:check` checks formatting; `npm run format` formats project files.
 
 Also verify navigation, direct project URLs, mobile layout, keyboard use,
-dashboard demo controls, email copying, and the resume download in a browser.
+email copying, and the resume download in a browser.
 
 ## Content
 
 - `src/content.ts`: project write-ups and public contact links.
 - `src/App.tsx`: homepage, project pages, navigation, and contact section.
-- `src/DashboardDemo.tsx`: isolated simulated controls; no backend requests.
 - `src/DashboardScreenshot.tsx`: the supplied dashboard screenshot, used in the
   homepage preview and shown uncropped on the project page.
 - `src/FormEnginePreview.tsx`: Form Engine's public laptop-and-phone product image,
