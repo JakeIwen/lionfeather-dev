@@ -90,22 +90,13 @@ function Contact() {
       id="contact"
       aria-labelledby="contact-heading"
     >
-      <div>
-        <p className="eyebrow">HAVE SOMETHING IN MIND?</p>
-        <h2 id="contact-heading">
-          Let’s make it <em>work.</em>
-        </h2>
-        <p>
-          I’m looking for my next software engineering role.
-          <br />
-          I’d like to hear what you’re building.
-        </p>
-      </div>
+      <h2 id="contact-heading">Let’s talk shop.</h2>
+      <a className="contact-email" href={`mailto:${email}`}>
+        {email}
+        <ArrowUpRight size={26} />
+      </a>
+      <p>Seeking my next software development role.</p>
       <div className="contact-actions">
-        <a className="contact-email" href={`mailto:${email}`}>
-          {email}
-          <ArrowUpRight size={22} />
-        </a>
         <button className="copy-button" onClick={copyEmail}>
           {copyStatus === 'Email copied' ? (
             <Check size={14} />
@@ -126,9 +117,6 @@ function Footer() {
   return (
     <footer className="site-footer container">
       <span>© {new Date().getFullYear()} Jacob Iwen</span>
-      <span className="footer-note">
-        A few things I’ve built. More to come.
-      </span>
       <a href="https://github.com/JakeIwen" target="_blank" rel="noreferrer">
         <Code2 size={14} /> GitHub <ArrowUpRight size={12} />
       </a>
@@ -142,13 +130,12 @@ function Home() {
       <section className="hero container" aria-labelledby="intro-title">
         <div className="hero-copy">
           <p className="eyebrow">
-            <span className="small-rule" /> JACOB IWEN · SENIOR FULL STACK
-            ENGINEER
+            <span className="small-rule" /> SENIOR FULL STACK ENGINEER
           </p>
           <h1 id="intro-title">
-            I build software.
+            Jacob Iwen
             <br />
-            <em>And keep it running.</em>
+            <em>I build software.</em>
           </h1>
           <p className="hero-description">
             Web applications, integrations, and the infrastructure behind them.
@@ -181,20 +168,15 @@ function Home() {
             <br />
             <span>Always building something.</span>
           </p>
-          <span className="aside-caption">
-            CURRENTLY: LIFE & SYSTEMS ON WHEELS
-          </span>
         </div>
       </section>
       <div className="experience-strip container">
-        <span className="strip-label">FROM APPLICATION TO OPERATION</span>
         <div className="stack-list">
           React <i /> TypeScript <i /> Node.js <i /> Ruby <i /> AWS <i />
           <span className="ai-python">
-            AI <ArrowRight size={13} aria-hidden="true" /> Python
+            AI <ArrowRight size={13} aria-hidden="true" /> Python & CAN
           </span>
         </div>
-        <span className="strip-label strip-end">DESIGN. BUILD. MAINTAIN.</span>
       </div>
       <section
         className="work-section container"
@@ -208,11 +190,6 @@ function Home() {
               Selected <em>work.</em>
             </h2>
           </div>
-          <p>
-            Production systems and personal projects.
-            <br />
-            Different contexts, hands-on engineering.
-          </p>
         </div>
         <div className="project-grid">
           {projects.slice(0, 2).map((project) => (
@@ -249,18 +226,16 @@ function Home() {
         </div>
         <Link className="telemetry-feature" to="/work/van-telemetry">
           <div className="telemetry-feature-copy">
-            <p className="eyebrow">VEHICLE SOFTWARE · 2026</p>
-            <h3>Van telemetry</h3>
-            <p className="telemetry-feature-summary">
-              From bus traffic to useful readings.
-            </p>
+            <p className="eyebrow">AUTOMOTIVE SOFTWARE · 2026</p>
+            <h3>Vehicle telemetry</h3>
             <p>
-              Discovering CAN signals, validating their meaning, and bringing
-              gauges, history, and warning evidence to a portrait tablet.
+              Discovering CAN bus signals, validating their meaning, and
+              bringing gauges, history, and warning evidence to a tablet web
+              app.
             </p>
             <div className="tags">Python · SocketCAN · Preact · SQLite</div>
             <span className="telemetry-feature-link">
-              Explore the project <ArrowUpRight size={17} />
+              View project <ArrowUpRight size={17} />
             </span>
           </div>
           <TelemetryPreview />
@@ -272,9 +247,6 @@ function Home() {
           <div className="fieldwork-feature-copy">
             <p className="eyebrow">PERSONAL APPLICATION · 2026</p>
             <h3>Fieldwork</h3>
-            <p className="fieldwork-feature-summary">
-              A workspace for the search.
-            </p>
             <p>
               Company research, opportunities, and application history,
               connected in one local workspace.
@@ -283,7 +255,7 @@ function Home() {
               React · TypeScript · Node.js · SQLite · Codex
             </div>
             <span className="fieldwork-feature-link">
-              Explore the project <ArrowUpRight size={17} />
+              View project <ArrowUpRight size={17} />
             </span>
           </div>
         </Link>
@@ -297,9 +269,10 @@ function Home() {
           </div>
           <div>
             <p className="eyebrow">DATA & INFRASTRUCTURE · 2018–2026</p>
-            <h3>Keeping the data moving.</h3>
+            <h3>Workforce integration platform</h3>
             <p>
-              Years of maintaining the integrations behind workforce programs.
+              More than 50 scheduled SFTP and spreadsheet jobs between workforce
+              applications and state and county agencies.
             </p>
           </div>
           <span className="pipeline-tech">Ruby · AWS · SFTP</span>
@@ -315,13 +288,7 @@ function Home() {
       >
         <div className="container about-grid">
           <div className="about-heading">
-            <p className="eyebrow">A LITTLE BACKGROUND</p>
-            <h2 id="about-title">
-              At home in
-              <br />
-              <em>the details.</em>
-            </h2>
-            <Feather className="about-feather" />
+            <h2 id="about-title">About</h2>
           </div>
           <div className="about-copy">
             <p className="about-lead">
@@ -339,7 +306,7 @@ function Home() {
               Outside that work, I build the tools I use in my campervan: a
               browser dashboard, network and backup automation, and Python
               tooling for vehicle diagnostics. The mechanical and software sides
-              of my background meet pretty regularly.
+              of my background coalesce often.
             </p>
             <div className="about-links">
               <a className="text-link" href={resumeUrl} download>
@@ -354,22 +321,41 @@ function Home() {
                 Find me on GitHub <ArrowUpRight size={15} />
               </a>
             </div>
-            <div className="education">
-              <span>
-                B.S. Mechanical Engineering{' '}
-                <small>University of Minnesota · 2012</small>
-              </span>
-              <span>
-                Full Stack Software Engineering{' '}
-                <small>PRIME Digital Academy · 2017</small>
-              </span>
-            </div>
+          </div>
+          <div className="education">
+            <span>
+              B.S. Mechanical Engineering{' '}
+              <small>University of Minnesota · 2012</small>
+            </span>
+            <span>
+              Full Stack Software Engineering{' '}
+              <small>PRIME Digital Academy · 2017</small>
+            </span>
           </div>
         </div>
       </section>
       <Contact />
     </>
   )
+}
+
+// Renders content.ts intro text: blank lines split paragraphs, **text** is bold.
+function Intro({ text }: { text: string }) {
+  return text
+    .split(/\n\n+/)
+    .map((paragraph) => (
+      <p key={paragraph.slice(0, 45)}>
+        {paragraph
+          .split(/(\*\*[^*]+\*\*)/)
+          .map((part, index) =>
+            part.startsWith('**') ? (
+              <strong key={index}>{part.slice(2, -2)}</strong>
+            ) : (
+              part
+            ),
+          )}
+      </p>
+    ))
 }
 
 function ProjectPage() {
@@ -387,7 +373,7 @@ function ProjectPage() {
           {project.category} <span> / {project.period}</span>
         </p>
         <h1>{project.title}</h1>
-        <p>{project.intro}</p>
+        <Intro text={project.intro} />
       </div>
       <div className="case-meta">
         <div>
@@ -406,12 +392,12 @@ function ProjectPage() {
             href={dashboardImageUrl}
             target="_blank"
             rel="noreferrer"
-            aria-label="Open full-size Van Dashboard screenshot in a new tab"
+            aria-label="Open full-size Van dashboard screenshot in a new tab"
           >
             <DashboardScreenshot loading="eager" />
           </a>
           <figcaption>
-            <span>Van Dashboard</span>
+            <span>Van dashboard</span>
             <a href={dashboardImageUrl} target="_blank" rel="noreferrer">
               View full size <ArrowUpRight size={13} />
             </a>
@@ -459,9 +445,9 @@ function ProjectPage() {
       </div>
       {project.slug === 'van-dashboard' && <DashboardDemo />}
       <div className="case-end">
-        <p>Want to talk about a similar problem?</p>
+        <p>Contact</p>
         <a className="text-link" href={`mailto:${email}`}>
-          <Mail size={16} /> Get in touch <ArrowUpRight size={14} />
+          <Mail size={16} /> {email} <ArrowUpRight size={14} />
         </a>
       </div>
       <Link className="next-project" to={`/work/${next.slug}`}>

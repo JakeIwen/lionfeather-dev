@@ -8,6 +8,7 @@ export type Project = {
   category: string
   period: string
   tags: string[]
+  // Blank lines separate paragraphs; **text** renders bold.
   intro: string
   role: string
   sections: { title: string; paragraphs: string[] }[]
@@ -50,8 +51,9 @@ export const projects: Project[] = [
   },
   {
     slug: 'form-engine',
-    title: 'From a document to a working application.',
-    subtitle: 'Eight years building a form-digitization platform.',
+    title: 'Form Engine',
+    subtitle:
+      'Turns existing documents into fillable web forms. Generates pixel-accurate PDFs from the results.',
     category: 'PRODUCTION SOFTWARE',
     period: '2018–2026',
     tags: ['TypeScript', 'Firebase', 'Puppeteer', 'AngularJS'],
@@ -84,8 +86,9 @@ export const projects: Project[] = [
   },
   {
     slug: 'production-pipelines',
-    title: 'Keeping the data moving.',
-    subtitle: 'Production integrations, maintained over years.',
+    title: 'Workforce integration platform',
+    subtitle:
+      'Scheduled SFTP and spreadsheet jobs between workforce applications and state and county agencies for BrightSpring/ResCare.',
     category: 'DATA & INFRASTRUCTURE',
     period: '2018–2026',
     tags: ['Ruby', 'AWS', 'SFTP', 'Quickbase'],
@@ -100,10 +103,10 @@ export const projects: Project[] = [
         ],
       },
       {
-        title: 'Moving the platform forward',
+        title: 'Replacing the servers underneath the jobs',
         paragraphs: [
-          'I independently migrated the server to Amazon Linux 2023 and upgraded the codebase to Ruby 3.3. The migration included the runbook and schedule configuration needed to move the existing jobs to the new environment.',
-          'When Quickbase enforced two-factor authentication, I built Firebase-backed authentication-ticket renewal so the integrations could continue authenticating. Changes at a provider’s boundary became application and infrastructure work inside our own systems.',
+          'In 2025 I independently migrated the platform to a new Amazon Linux 2023 server and upgraded its codebase from a legacy Ruby version to Ruby 3.3. I wrote the migration runbook and the new cron schedule that carried the existing jobs to the new environment. I had led the platform’s earlier Ruby 2.4 upgrade in 2019.',
+          'The oldest parts of the platform dated from 2012. Over seven years I maintained that code while removing more of it than I added. In 2025 I ported the jobs still in use to the new environment and decommissioned the server they had run on.',
         ],
       },
       {
@@ -117,9 +120,9 @@ export const projects: Project[] = [
   },
   {
     slug: 'fieldwork',
-    title: 'Fieldwork: a workspace for the search.',
+    title: 'Fieldwork',
     subtitle:
-      'Company research, opportunities, and application history in one place.',
+      'A personal application that keeps company research, job openings, application status, and document versions in one workspace.',
     category: 'PERSONAL APPLICATION',
     period: '2026',
     tags: ['React', 'TypeScript', 'Node.js', 'SQLite', 'Codex'],
@@ -166,18 +169,18 @@ export const projects: Project[] = [
   },
   {
     slug: 'van-telemetry',
-    title: 'Van telemetry: from bus traffic to useful readings.',
+    title: 'Van telemetry dashboard',
     subtitle:
-      'Signal discovery, a Python telemetry broker, and a dashboard built for a portrait tablet.',
-    category: 'VEHICLE SOFTWARE',
+      'Signal mapping & discovery, a Python telemetry broker, and a dashboard built for a portrait tablet.',
+    category: 'AUTOMOTIVE SOFTWARE',
     period: '2026',
     tags: ['Python', 'SocketCAN', 'CAN / UDS', 'Preact', 'SQLite'],
     intro:
-      'I built a telemetry system for my 2022 Ram ProMaster, from investigating CAN-bus signals to collecting readings and displaying them on a tablet. It brings together driving gauges, parked battery status, trip history, and the evidence behind warnings.',
+      'I developed a telemetry system for my 2022 Ram ProMaster. Investigating CAN bus signals and building a Python data broker gave me the data to show live readings and trends in a tablet web app. It combines gauges, parked battery status, trip history, and an evidence-based warning system.\n\nThe same CAN work produced a handy guarded control action, initiated from the dashboard: the doors can be locked or unlocked **remotely** through a single verified CAN frame!',
     role: 'Signal research, acquisition tooling, backend, and dashboard development',
     sections: [
       {
-        title: 'Finding the meaning behind the bytes',
+        title: 'The meaning behind the bytes',
         paragraphs: [
           'The useful work started before decoding traffic: reviewing service information, existing findings, and diagnostic-tool behavior for the modules actually installed in the van. Definitions from related vehicles were leads to investigate, not proof that this vehicle used the same encoding.',
           'I recorded CAN traffic while AlfaOBD collected labeled diagnostic readings. Those readings were linked back to their exact request and response frames in the capture, giving the comparison a common timestamp. That mattered when the tablet and capture computer disagreed about the time.',
@@ -185,11 +188,11 @@ export const projects: Project[] = [
         ],
       },
       {
-        title: 'A good correlation was only the beginning',
+        title: 'Mapping signals through correlation and tiered evidence',
         paragraphs: [
           'Engine speed was a useful positive result. A two-byte field in broadcast frame 0x0FC matched the engine computer’s RPM reading at a quarter scale across a loaded drive. Together with the earlier idle work and field evidence, that supported a receive-only RPM source for the dashboard.',
           'Other candidates failed more demanding checks. One torque-related field tracked the reference under load, but its relationship changed during lift-off and overrun. It remained a candidate instead of being presented as actual engine torque.',
-          'The validation tooling kept discovery and independent drive evidence separate. A mapping needed support for its physical meaning as well as a numerical fit. The project records whether a value is verified, follows an observed scan-tool scale, is derived, or remains an estimate.',
+          'The validation tooling kept discovery and independent drive evidence separate. A mapping needed support for its physical meaning as well as a numerical fit. The project records each value’s evidence tier: whether it is verified, follows an observed scan-tool scale, is derived, or remains an estimate.',
         ],
       },
       {

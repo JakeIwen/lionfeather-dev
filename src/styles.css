@@ -227,8 +227,8 @@ main:focus {
   white-space: nowrap;
 }
 .hero h1 em {
-  font-size: 1.16em;
-  letter-spacing: -2.3px;
+  font-size: 0.78em;
+  letter-spacing: -1.2px;
   color: var(--green);
   line-height: 1.15;
 }
@@ -259,11 +259,11 @@ main:focus {
     transform 0.2s;
 }
 .button-dark {
-  background: var(--green);
-  color: #fff;
+  background: #e4e9db;
+  color: var(--green);
 }
 .button-dark:hover {
-  background: #263d2e;
+  background: #d8dfcc;
   transform: translateY(-2px);
 }
 .text-link {
@@ -312,26 +312,14 @@ main:focus {
 .hero-aside > p span {
   color: var(--muted);
 }
-.aside-caption {
-  font-size: 8px;
-  letter-spacing: 1.35px;
-  color: var(--muted);
-  margin-top: 18px;
-}
 .experience-strip {
   border-block: 1px solid var(--line);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding-block: 19px;
   gap: 20px;
-}
-.experience-strip > .strip-label {
-  font-size: 8px;
-  font-weight: 650;
-  letter-spacing: 1.5px;
-  color: #73786b;
 }
 .experience-strip > .stack-list {
   display: flex;
@@ -376,12 +364,6 @@ main:focus {
 .section-heading h2 em {
   font-size: 1.15em;
   color: var(--green);
-}
-.section-heading > p {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.8;
-  text-align: right;
 }
 .project-grid {
   display: grid;
@@ -577,11 +559,6 @@ main:focus {
   font-size: 14px;
   line-height: 1.9;
 }
-.telemetry-feature-copy > p.telemetry-feature-summary {
-  color: #e2eadb;
-  font-size: 18px;
-  line-height: 1.5;
-}
 .telemetry-feature .tags {
   color: #b7cbb0;
   font-size: 12px;
@@ -636,7 +613,7 @@ main:focus {
 .signal-discovery ol {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 24px;
+  gap: 36px;
   list-style: none;
   margin: 18px 0 0;
   padding: 0;
@@ -645,18 +622,21 @@ main:focus {
   position: relative;
   min-width: 0;
 }
-.signal-discovery li:not(:last-child)::after {
-  content: '→';
-  position: absolute;
-  right: -15px;
-  top: 0;
-  color: var(--muted);
-  font-size: 14px;
-}
 .signal-discovery strong {
+  display: block;
+  position: relative;
   font-size: 14px;
   color: var(--green);
   font-weight: 600;
+}
+.signal-discovery .step-arrow {
+  position: absolute;
+  top: 50%;
+  right: -36px;
+  width: 36px;
+  height: 12px;
+  transform: translateY(-50%);
+  color: var(--muted);
 }
 .signal-discovery li p {
   font-size: 13px;
@@ -701,11 +681,6 @@ main:focus {
   font-size: 14px;
   line-height: 1.9;
   color: var(--muted);
-}
-.fieldwork-feature-copy > p.fieldwork-feature-summary {
-  font-size: 18px;
-  color: var(--green);
-  line-height: 1.5;
 }
 .fieldwork-feature-link {
   display: inline-flex;
@@ -904,24 +879,20 @@ main:focus {
 .about-grid {
   display: grid;
   grid-template-columns: 1fr 1.35fr;
-  gap: 110px;
+  grid-template-areas:
+    'heading copy'
+    'education copy';
+  grid-template-rows: auto 1fr;
+  gap: 0 110px;
+}
+.about-heading {
+  grid-area: heading;
+}
+.about-copy {
+  grid-area: copy;
 }
 .about-heading h2 {
-  font-size: 53px;
-  margin-top: 20px;
-  line-height: 1.08;
-  letter-spacing: -1.8px;
-}
-.about-heading h2 em {
-  font-size: 1.19em;
-  color: var(--green);
-}
-.about-feather {
-  width: 100px;
-  height: 100px;
-  color: #a6b29b;
-  transform: rotate(-15deg);
-  margin: 24px 0 0 20px;
+  margin-top: 0;
 }
 .about-copy > p {
   color: #676e61;
@@ -945,13 +916,16 @@ main:focus {
   font-size: 12px;
 }
 .education {
+  grid-area: education;
+  align-self: start;
   border-top: 1px solid #d4dacb;
-  margin-top: 30px;
+  margin-top: 28px;
   padding-top: 20px;
   display: flex;
-  gap: 35px;
-  font-size: 11px;
-  line-height: 1.8;
+  flex-direction: column;
+  gap: 14px;
+  font-size: 13px;
+  line-height: 1.6;
 }
 .education small {
   font-size: 10px;
@@ -959,40 +933,42 @@ main:focus {
   color: var(--muted);
 }
 .contact-section {
-  padding-block: 78px 83px;
+  padding-block: 64px 72px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: 60px;
+  justify-items: start;
+  gap: 0;
 }
 .contact-section h2 {
   font-size: 44px;
   letter-spacing: -1.8px;
   font-weight: 500;
-  margin-top: 12px;
 }
-.contact-section h2 em {
-  color: var(--green);
-  font-size: 1.2em;
-}
-.contact-section p:not(.eyebrow) {
+.contact-section p {
   font-size: 14px;
   line-height: 1.9;
   color: var(--muted);
-  margin-top: 14px;
+  margin-top: 18px;
 }
 .contact-actions {
-  justify-self: end;
-  padding-top: 23px;
+  margin-top: 4px;
 }
 .contact-email {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 25px;
-  font-size: 22px;
-  letter-spacing: -0.5px;
+  gap: 20px;
+  font-size: clamp(22px, 3.3vw, 40px);
+  letter-spacing: -1.2px;
+  line-height: 1.2;
+  color: var(--green);
   border-bottom: 1px solid #a7b29e;
-  padding-bottom: 14px;
+  padding-bottom: 10px;
+  margin-top: 22px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.contact-email svg {
+  width: 0.65em;
+  height: 0.65em;
 }
 .contact-email:hover {
   color: var(--rust);
@@ -1065,11 +1041,18 @@ main:focus {
   font-weight: 500;
   margin-top: 22px;
 }
-.case-heading > p:last-child {
+.case-heading > p:not(.eyebrow) {
   font-size: 19px;
   line-height: 1.9;
   color: var(--muted);
   margin-top: 26px;
+}
+.case-heading > p:not(.eyebrow) + p {
+  margin-top: 16px;
+}
+.case-heading strong {
+  color: var(--ink);
+  font-weight: 650;
 }
 .case-meta {
   max-width: 810px;
@@ -1408,9 +1391,6 @@ input[type='range'] {
   }
 }
 @media (max-width: 1100px) {
-  .experience-strip .strip-end {
-    display: none;
-  }
   .container {
     width: calc(100% - 64px);
   }
@@ -1424,7 +1404,7 @@ input[type='range'] {
     letter-spacing: -2.8px;
   }
   .hero h1 em {
-    letter-spacing: -1.8px;
+    letter-spacing: -1px;
   }
   .hero-description {
     font-size: 16px;
@@ -1454,14 +1434,7 @@ input[type='range'] {
     margin-left: auto;
   }
   .about-grid {
-    gap: 55px;
-  }
-  .contact-section {
-    gap: 30px;
-  }
-  .contact-email {
-    font-size: 18px;
-    gap: 15px;
+    gap: 0 55px;
   }
 }
 @media (max-width: 800px) {
@@ -1474,8 +1447,8 @@ input[type='range'] {
   .signal-discovery ol {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .signal-discovery li:nth-child(2)::after {
-    content: none;
+  .signal-discovery li:nth-child(2) .step-arrow {
+    display: none;
   }
   .screenshot-carousel {
     padding: 18px;
@@ -1525,11 +1498,6 @@ input[type='range'] {
     justify-content: flex-start;
     gap: 25px;
   }
-  .experience-strip > .strip-label {
-    font-size: 7px;
-    max-width: 120px;
-    line-height: 1.8;
-  }
   .experience-strip > .stack-list {
     gap: 13px;
     font-size: 12px;
@@ -1540,9 +1508,6 @@ input[type='range'] {
   }
   .section-heading h2 {
     font-size: 37px;
-  }
-  .section-heading > p {
-    font-size: 12px;
   }
   .project-grid {
     gap: 20px;
@@ -1580,10 +1545,10 @@ input[type='range'] {
   }
   .about-grid {
     grid-template-columns: 1fr 1.4fr;
-    gap: 35px;
+    gap: 0 35px;
   }
   .about-heading h2 {
-    font-size: 42px;
+    font-size: 37px;
   }
   .about-copy > p.about-lead {
     font-size: 20px;
@@ -1596,18 +1561,13 @@ input[type='range'] {
     flex-wrap: wrap;
   }
   .education {
-    flex-direction: column;
-    gap: 10px;
+    font-size: 12px;
   }
   .contact-section h2 {
     font-size: 36px;
   }
   .contact-section {
     padding-block: 55px;
-  }
-  .contact-email {
-    font-size: 16px;
-    gap: 10px;
   }
   .case-heading h1 {
     font-size: 48px;
@@ -1734,9 +1694,6 @@ input[type='range'] {
   .fieldwork-feature-copy > p:not(.eyebrow) {
     font-size: 13px;
   }
-  .fieldwork-feature-copy > p.fieldwork-feature-summary {
-    font-size: 17px;
-  }
   .container {
     width: calc(100% - 40px);
   }
@@ -1770,8 +1727,8 @@ input[type='range'] {
     line-height: 1.23;
   }
   .hero h1 em {
-    font-size: 1.17em;
-    letter-spacing: -1.5px;
+    font-size: 0.84em;
+    letter-spacing: -0.7px;
   }
   .hero-copy > .eyebrow {
     font-size: 8px;
@@ -1804,11 +1761,6 @@ input[type='range'] {
     align-items: flex-start;
     padding-block: 15px;
   }
-  .experience-strip > .strip-label {
-    font-size: 7px;
-    max-width: none;
-    letter-spacing: 1.4px;
-  }
   .experience-strip > .stack-list {
     gap: 17px;
     font-size: 12px;
@@ -1825,9 +1777,6 @@ input[type='range'] {
   .eyebrow {
     font-size: 10px;
     letter-spacing: 1.5px;
-  }
-  .section-heading > p {
-    display: none;
   }
   .project-grid {
     grid-template-columns: 1fr;
@@ -1878,17 +1827,15 @@ input[type='range'] {
   }
   .about-grid {
     grid-template-columns: 1fr;
-    gap: 26px;
+    grid-template-areas:
+      'heading'
+      'copy'
+      'education';
+    grid-template-rows: auto;
+    gap: 22px;
   }
   .about-heading h2 {
-    font-size: 45px;
-    margin-top: 13px;
-  }
-  .about-heading h2 br {
-    display: none;
-  }
-  .about-feather {
-    display: none;
+    font-size: 37px;
   }
   .about-copy > p.about-lead {
     font-size: 23px;
@@ -1901,40 +1848,30 @@ input[type='range'] {
   }
   .education {
     flex-direction: row;
-    gap: 25px;
-    font-size: 10px;
-  }
-  .education small {
-    font-size: 8px;
+    flex-wrap: wrap;
+    gap: 14px 25px;
+    margin-top: 0;
+    font-size: 12px;
   }
   .contact-section {
-    grid-template-columns: 1fr;
-    gap: 20px;
     padding-block: 45px 35px;
   }
   .contact-section h2 {
-    font-size: 40px;
+    font-size: 36px;
   }
-  .contact-section p:not(.eyebrow) {
+  .contact-section p {
     font-size: 13px;
   }
-  .contact-actions {
-    justify-self: start;
-    padding-top: 0;
-    width: 100%;
-    max-width: 350px;
-  }
   .contact-email {
-    font-size: 20px;
-    justify-content: space-between;
+    font-size: 21px;
+    letter-spacing: -0.5px;
+    gap: 12px;
+    margin-top: 16px;
   }
   .site-footer {
     font-size: 10px;
     padding-block: 20px;
     align-items: center;
-  }
-  .footer-note {
-    display: none;
   }
   .project-page {
     padding-top: 23px;
@@ -1947,7 +1884,7 @@ input[type='range'] {
     letter-spacing: -1.8px;
     margin-top: 17px;
   }
-  .case-heading > p:last-child {
+  .case-heading > p:not(.eyebrow) {
     font-size: 16px;
     margin-top: 20px;
   }
@@ -2093,10 +2030,6 @@ input[type='range'] {
   .contact-email {
     font-size: 18px;
   }
-  .education {
-    flex-direction: column;
-    gap: 12px;
-  }
 }
 :root[data-theme='dark'] ::selection {
   background: #516346;
@@ -2119,8 +2052,7 @@ input[type='range'] {
 }
 :root[data-theme='dark'] .hero-description,
 :root[data-theme='dark'] .about-copy > p,
-:root[data-theme='dark'] .case-section p,
-:root[data-theme='dark'] .experience-strip > .strip-label {
+:root[data-theme='dark'] .case-section p {
   color: var(--muted);
 }
 :root[data-theme='dark'] .about-copy > p.about-lead {
@@ -2136,12 +2068,15 @@ input[type='range'] {
 :root[data-theme='dark'] .ai-python > svg {
   color: #85957e;
 }
-:root[data-theme='dark'] .button-dark,
 :root[data-theme='dark'] .skip-link {
   color: #17271b;
 }
+:root[data-theme='dark'] .button-dark {
+  background: #2b402c;
+  color: #cfe0c2;
+}
 :root[data-theme='dark'] .button-dark:hover {
-  background: #c9ddbd;
+  background: #344936;
 }
 :root[data-theme='dark'] .availability {
   background: #2b402c;
@@ -2179,9 +2114,6 @@ input[type='range'] {
 }
 :root[data-theme='dark'] .pipeline-icon > i {
   background: #879a7c;
-}
-:root[data-theme='dark'] .about-feather {
-  color: #8b9f80;
 }
 :root[data-theme='dark'] .demo-badge {
   color: var(--green);

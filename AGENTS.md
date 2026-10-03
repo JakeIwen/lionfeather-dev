@@ -86,8 +86,15 @@ polling enabled because native file events missed workspace edits on this Mac.
 - Use clear typography, restrained color, accessible controls, and responsive
   layouts. Keep implementation notes out of ordinary visitor flows.
 - Technology labels use plain dot-separated text. The homepage stack ends in
-  `AI → Python`, with the arrow matching the gray dots. Avoid decorative project
+  `AI → Python & CAN`, with the arrow matching the gray dots. Avoid decorative project
   numbers and button-like styling on noninteractive metadata.
+- Visible lines should be labels, facts, or actions; eyebrows stay only when
+  they carry data. A 2026-10-02 review removed most slogans. Jacob deliberately
+  kept these, so do not re-flag them: the hero line "I build software.", the
+  text under the van illustration, "Selected work.", "A few things I've built",
+  "Let's talk" (header) and "Let's talk shop." (contact), the 404 page, the
+  dashboard demo heading, the "Explore my work" button, and the van dashboard
+  project title.
 - Non-heading font sizes were increased by approximately 20%, rounded to whole
   pixels; preserve those readable sizes and the unchanged heading hierarchy.
 - The van dashboard homepage preview frames the first three screenshot rows;
