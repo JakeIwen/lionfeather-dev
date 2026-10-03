@@ -1,0 +1,135 @@
+- generic [ref=e2]:
+  - link "Skip to content" [ref=e3] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=e4]:
+    - link "Lionfeather, Jacob Iwen home" [ref=e5] [cursor=pointer]:
+      - /url: /
+      - text: lionfeather
+      - generic [ref=e8]: .
+    - navigation "Main navigation" [ref=e9]:
+      - link "Work" [ref=e10] [cursor=pointer]:
+        - /url: /#work
+      - link "About" [ref=e11] [cursor=pointer]:
+        - /url: /#about
+      - link "Resume" [ref=e12] [cursor=pointer]:
+        - /url: /Jacob-Iwen-Resume.pdf
+    - group "Appearance" [ref=e16]:
+      - button "Soft" [pressed] [ref=e17] [cursor=pointer]
+      - button "Dark" [ref=e24] [cursor=pointer]
+    - link "Let's talk" [ref=e27] [cursor=pointer]:
+      - /url: mailto:lionfeatherdev@gmail.com
+  - main [ref=e31]:
+    - article [ref=e32]:
+      - link "All work" [ref=e33] [cursor=pointer]:
+        - /url: /#work
+      - generic [ref=e36]:
+        - paragraph [ref=e37]:
+          - text: AUTOMOTIVE SOFTWARE
+          - generic [ref=e38]: / 2026
+        - heading "Van telemetry dashboard" [level=1] [ref=e39]
+        - paragraph [ref=e40]: "I developed a telemetry system for my 2022 Ram ProMaster. Investigating CAN bus signals and building a Python data broker gave me the data to show live readings and trends in a tablet web app: gauges, parked battery status, trip history, and an evidence-based warning system."
+        - paragraph [ref=e41]:
+          - text: "The same CAN work produced one guarded control action: from the dashboard, the doors can be locked or unlocked"
+          - strong [ref=e42]: remotely
+          - text: with a single verified CAN frame.
+      - generic [ref=e43]:
+        - generic [ref=e44]:
+          - text: MY ROLE
+          - paragraph [ref=e45]: Signal research, acquisition tooling, backend, and dashboard development
+        - generic [ref=e46]:
+          - text: TOOLS & TECHNOLOGIES
+          - paragraph [ref=e47]: Python · SocketCAN · CAN / UDS · Preact · SQLite
+      - region "Van telemetry screenshots" [ref=e48]:
+        - generic [ref=e49]:
+          - generic [ref=e50]:
+            - paragraph [ref=e51]: EXPLORE THE APP
+            - paragraph [ref=e52]: Driving gauges
+          - status [ref=e53]:
+            - generic [ref=e54]: Driving gauges, screenshot
+            - strong [ref=e55]: "1"
+            - generic [ref=e56]: of 6
+        - figure "Portrait tablet gauges · Illustrative demo telemetry View full size" [ref=e57]:
+          - generic [ref=e58]:
+            - button "Previous screenshot" [ref=e59] [cursor=pointer]
+            - link "Open full-size Van telemetry driving gauges screenshot in a new tab" [ref=e62]:
+              - /url: /images/van-telemetry/drive.png
+              - img "Van telemetry driving view with large speed and RPM gauges, temperatures, oil pressure, voltage, power, tires, and trip information. Illustrative demo data." [ref=e63]
+            - button "Next screenshot" [ref=e64] [cursor=pointer]
+          - generic [ref=e67]:
+            - generic [ref=e68]: Portrait tablet gauges · Illustrative demo telemetry
+            - link "View full size" [ref=e69] [cursor=pointer]:
+              - /url: /images/van-telemetry/drive.png
+        - group "Choose a screenshot" [ref=e73]:
+          - 'button "Show screenshot 1 of 6: Driving gauges" [pressed] [ref=e74] [cursor=pointer]':
+            - generic [ref=e75]: Driving gauges
+          - 'button "Show screenshot 2 of 6: Parked overview" [ref=e76] [cursor=pointer]':
+            - generic [ref=e77]: Parked overview
+          - 'button "Show screenshot 3 of 6: Warning evidence" [ref=e78] [cursor=pointer]':
+            - generic [ref=e79]: Warning evidence
+          - 'button "Show screenshot 4 of 6: Trip history" [ref=e80] [cursor=pointer]':
+            - generic [ref=e81]: Trip history
+          - 'button "Show screenshot 5 of 6: Metric sources" [ref=e82] [cursor=pointer]':
+            - generic [ref=e83]: Metric sources
+          - 'button "Show screenshot 6 of 6: Warning review" [ref=e84] [cursor=pointer]':
+            - generic [ref=e85]: Warning review
+      - complementary "Signal discovery workflow" [ref=e86]:
+        - paragraph [ref=e87]: FROM A RAW FRAME TO A USABLE READING
+        - list [ref=e88]:
+          - listitem [ref=e89]:
+            - strong [ref=e90]: Observe
+            - paragraph [ref=e93]: Capture bus traffic alongside known diagnostic readings.
+          - listitem [ref=e94]:
+            - strong [ref=e95]: Match
+            - paragraph [ref=e98]: Align timestamps, then test bit layouts, scale, and offset.
+          - listitem [ref=e99]:
+            - strong [ref=e100]: Challenge
+            - paragraph [ref=e103]: Check the fit against independent drives and competing interpretations.
+          - listitem [ref=e104]:
+            - strong [ref=e105]: Publish
+            - paragraph [ref=e106]: Retain the source, confidence, and freshness of each metric.
+      - generic [ref=e107]:
+        - generic [ref=e108]:
+          - generic [ref=e109]: "01"
+          - generic [ref=e110]:
+            - heading "The meaning behind the bytes" [level=2] [ref=e111]
+            - paragraph [ref=e112]: "The useful work started before decoding any traffic: reviewing service information, existing findings, and diagnostic-tool behavior for the modules actually installed in the van. Definitions from related vehicles were leads to investigate, not proof that this vehicle used the same encoding."
+            - paragraph [ref=e113]: I recorded CAN traffic while AlfaOBD, a diagnostic app, collected labeled readings, then linked each reading back to its exact request and response frames in the capture. That gave the two data sets a common clock even when the tablet and the capture computer disagreed about the time.
+            - paragraph [ref=e114]: Python tooling then searched for candidate fields, testing byte order, signedness, scale, offset, and packed-bit layouts that cross byte boundaries.
+        - generic [ref=e115]:
+          - generic [ref=e116]: "02"
+          - generic [ref=e117]:
+            - heading "Mapping signals through correlation and tiered evidence" [level=2] [ref=e118]
+            - paragraph [ref=e119]: Engine speed was a clear positive result. A two-byte field in broadcast frame 0x0FC matched the engine computer's RPM reading at a quarter scale across a loaded drive. With the earlier idle analysis, that was enough to publish RPM from passive broadcasts alone.
+            - paragraph [ref=e120]: Other candidates failed the harder checks. One torque-related field tracked the reference torque reading under load, but the relationship changed during lift-off and overrun, so it stayed a candidate rather than being presented as engine torque.
+            - paragraph [ref=e121]: "The validation tooling kept the data used to discover a mapping separate from the independent drives used to test it, and a mapping needed support for its physical meaning, not just a numerical fit. Each value records its evidence tier: verified, matched to a scan-tool scale, derived, or still an estimate."
+        - generic [ref=e122]:
+          - generic [ref=e123]: "03"
+          - generic [ref=e124]:
+            - heading "Keeping acquisition separate from the interface" [level=2] [ref=e125]
+            - paragraph [ref=e126]: A Python broker owns all access to the vehicle buses and exposes an approved set of metrics. Readings such as RPM, coolant temperature, oil pressure, and voltage come from passive broadcasts. Measurements that still need a diagnostic request go through explicitly allowed paths that check the vehicle's state and bus ownership first.
+            - paragraph [ref=e127]: The web layer reads only the broker's cache; opening a page or receiving a stream update does not by itself trigger a read from the CAN bus. Each reading carries its source, quality, and age, and the client accounts for delivery delays and reconnections before treating a value as current.
+        - generic [ref=e128]:
+          - generic [ref=e129]: "04"
+          - generic [ref=e130]:
+            - heading "A dashboard for the tablet already in the van" [level=2] [ref=e131]
+            - paragraph [ref=e132]: I designed the Preact interface around an older tablet mounted in portrait. The driving view keeps the main gauges on one screen with large numerals and restrained color, and the Parked, Health, History, and System views hold the detail that would crowd it.
+            - paragraph [ref=e133]: Server-sent events carry small updates to the current state, while the larger history and health summaries refresh separately. Preact signals push only the slices that changed, so the interface does not rebuild every panel on every update. A stale or last-recorded value stays visibly distinct from a live reading.
+        - generic [ref=e134]:
+          - generic [ref=e135]: "05"
+          - generic [ref=e136]:
+            - heading "Warnings that preserve their evidence" [level=2] [ref=e137]
+            - paragraph [ref=e138]: A SQLite-backed historian records the measurements behind trends and warning events. When a warning fires, its event view preserves the opening readings, comparison baselines, and the timeline, so I can see why it appeared instead of trusting a status badge.
+            - paragraph [ref=e139]: The dashboard also has an advisor built on Codex, OpenAI's agent. It can talk through a saved event or propose a warning rule limited to numeric thresholds; I review every setting before the rule is saved, and the advisor has no tools that touch the CAN bus or the services. The screenshots show illustrative telemetry and warning scenarios, including a simulated conversation, not evidence of a particular drive or diagnosis.
+      - generic [ref=e140]:
+        - paragraph [ref=e141]: Contact
+        - link "lionfeatherdev@gmail.com" [ref=e142] [cursor=pointer]:
+          - /url: mailto:lionfeatherdev@gmail.com
+      - link [ref=e149] [cursor=pointer]:
+        - /url: /work/van-dashboard
+        - generic [ref=e150]:
+          - paragraph [ref=e151]: NEXT PROJECT
+          - heading "A dashboard for a home on wheels." [level=2] [ref=e152]
+  - contentinfo [ref=e155]:
+    - generic [ref=e156]: © 2026 Jacob Iwen
+    - link "GitHub" [ref=e157] [cursor=pointer]:
+      - /url: https://github.com/JakeIwen

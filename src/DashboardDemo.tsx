@@ -33,8 +33,7 @@ export default function DashboardDemo() {
         <span className="demo-badge">Simulated demo</span>
       </div>
       <p className="demo-description">
-        An illustrative preview of the control patterns. All values are
-        examples; nothing here connects to the van.
+        All values are examples; nothing here connects to the van.
       </p>
       <div className="demo-dashboard">
         <div className="demo-top">

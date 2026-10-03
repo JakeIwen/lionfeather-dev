@@ -1,0 +1,118 @@
+- generic [ref=f1e2]:
+  - link "Skip to content" [ref=f1e3] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=f1e4]:
+    - link "Lionfeather, Jacob Iwen home" [ref=f1e5] [cursor=pointer]:
+      - /url: /
+      - text: lionfeather
+      - generic [ref=f1e8]: .
+    - navigation "Main navigation" [ref=f1e9]:
+      - link "Work" [ref=f1e10] [cursor=pointer]:
+        - /url: /#work
+      - link "About" [ref=f1e11] [cursor=pointer]:
+        - /url: /#about
+      - link "Resume" [ref=f1e12] [cursor=pointer]:
+        - /url: /Jacob-Iwen-Resume.pdf
+    - group "Appearance" [ref=f1e16]:
+      - button "Soft" [pressed] [ref=f1e17] [cursor=pointer]
+      - button "Dark" [ref=f1e24] [cursor=pointer]
+    - link "Let's talk" [ref=f1e27] [cursor=pointer]:
+      - /url: mailto:lionfeatherdev@gmail.com
+  - main [ref=f1e31]:
+    - article [ref=f1e32]:
+      - link "All work" [ref=f1e33] [cursor=pointer]:
+        - /url: /#work
+      - generic [ref=f1e36]:
+        - paragraph [ref=f1e37]:
+          - text: PERSONAL PROJECT
+          - generic [ref=f1e38]: / Ongoing
+        - heading "A dashboard for a home on wheels." [level=1] [ref=f1e39]
+        - paragraph [ref=f1e40]: I live in a converted campervan. Its network, storage, backups, lighting, and media services are connected through a Raspberry Pi and an OpenWrt router. I built a browser dashboard to see what is happening and control those systems from one place.
+      - generic [ref=f1e41]:
+        - generic [ref=f1e42]:
+          - text: MY ROLE
+          - paragraph [ref=f1e43]: Design, frontend, backend, and system integration
+        - generic [ref=f1e44]:
+          - text: TOOLS & TECHNOLOGIES
+          - paragraph [ref=f1e45]: React · TypeScript · Python · Raspberry Pi
+      - figure "Van dashboard View full size" [ref=f1e46]:
+        - link "Open full-size Van dashboard screenshot in a new tab" [ref=f1e47]:
+          - /url: /images/van-dashboard.png
+          - img "Van dashboard showing networking, system health, storage, lighting, backups, media, and vehicle controls in a dark tile layout." [ref=f1e48]
+        - generic [ref=f1e49]:
+          - generic [ref=f1e50]: Van dashboard
+          - link "View full size" [ref=f1e51] [cursor=pointer]:
+            - /url: /images/van-dashboard.png
+      - generic [ref=f1e55]:
+        - generic [ref=f1e56]:
+          - generic [ref=f1e57]: "01"
+          - generic [ref=f1e58]:
+            - heading "An interface to physical systems" [level=2] [ref=f1e59]
+            - paragraph [ref=f1e60]: "The dashboard brings together systems with very different behavior: a light responds quickly, a backup can run for hours, and switching a network connection can interrupt the request that initiated it. The interface needs to account for those differences."
+            - paragraph [ref=f1e61]: The React and TypeScript frontend groups the controls by system, and a Python/Flask backend owns the device and service controllers. The browser is a client of that backend and keeps no copy of the device state.
+        - generic [ref=f1e62]:
+          - generic [ref=f1e63]: "02"
+          - generic [ref=f1e64]:
+            - heading "Working with imperfect connections" [level=2] [ref=f1e65]
+            - paragraph [ref=f1e66]: Polling runs one request at a time, so slow responses cannot pile up, and it pauses while the page is hidden. If a refresh fails, the interface keeps showing the last valid data.
+            - paragraph [ref=f1e67]: Control failures need different handling from read failures. A timeout does not prove that a device ignored a command, so after a failed action the interface asks the backend for the current state instead of retrying a command that may already have taken effect.
+        - generic [ref=f1e68]:
+          - generic [ref=f1e69]: "03"
+          - generic [ref=f1e70]:
+            - heading "The systems behind the screen" [level=2] [ref=f1e71]
+            - paragraph [ref=f1e72]: "The dashboard sits on top of systems I operate every day: automated backups; cellular, satellite, and directional Wi-Fi connectivity; and storage protection that responds to the vehicle's ignition state."
+            - paragraph [ref=f1e73]: The demo below reproduces a few of those control patterns with simulated data.
+      - region [ref=f1e74]:
+        - generic [ref=f1e75]:
+          - generic [ref=f1e76]:
+            - paragraph [ref=f1e77]: TRY A FEW CONTROLS
+            - heading "A small look inside." [level=2] [ref=f1e78]
+          - generic [ref=f1e79]: Simulated demo
+        - paragraph [ref=f1e80]: All values are examples; nothing here connects to the van.
+        - generic [ref=f1e81]:
+          - generic [ref=f1e82]:
+            - generic [ref=f1e83]: van / home
+            - button "Reset demo" [ref=f1e85] [cursor=pointer]
+          - generic [ref=f1e89]:
+            - generic [ref=f1e90]:
+              - heading "Connection" [level=3] [ref=f1e95]
+              - paragraph [ref=f1e96]:
+                - text: Connected through
+                - strong [ref=f1e97]: Wi-Fi
+              - group "Choose a simulated connection" [ref=f1e98]:
+                - button "Wi-Fi" [pressed] [ref=f1e100] [cursor=pointer]
+                - button "LTE" [ref=f1e101] [cursor=pointer]
+                - button "Starlink" [ref=f1e102] [cursor=pointer]
+              - generic [ref=f1e103]: Connection available
+            - generic [ref=f1e106]:
+              - generic [ref=f1e109]:
+                - heading "Cabin lighting" [level=3] [ref=f1e110]
+                - switch "Cabin lights" [checked] [ref=f1e111] [cursor=pointer]
+              - paragraph [ref=f1e113]: Lights on at 65%
+              - generic [ref=f1e114]:
+                - text: Brightness
+                - generic [ref=f1e115]: 65%
+              - slider "Brightness 65%" [ref=f1e116]: "65"
+            - generic [ref=f1e117]:
+              - heading "Backups" [level=3] [ref=f1e121]
+              - paragraph [ref=f1e122]: "Last example backup: today, 04:00"
+              - button "Simulate a backup" [ref=f1e123] [cursor=pointer]
+            - generic [ref=f1e124]:
+              - heading "Storage" [level=3] [ref=f1e129]
+              - paragraph [ref=f1e130]: Example media volume
+              - generic [ref=f1e133]:
+                - generic [ref=f1e134]: 1.2 TB used
+                - generic [ref=f1e135]: 2 TB total
+      - generic [ref=f1e136]:
+        - paragraph [ref=f1e137]: Contact
+        - link "lionfeatherdev@gmail.com" [ref=f1e138] [cursor=pointer]:
+          - /url: mailto:lionfeatherdev@gmail.com
+      - link [ref=f1e145] [cursor=pointer]:
+        - /url: /work/form-engine
+        - generic [ref=f1e146]:
+          - paragraph [ref=f1e147]: NEXT PROJECT
+          - heading "Form Engine" [level=2] [ref=f1e148]
+  - contentinfo [ref=f1e151]:
+    - generic [ref=f1e152]: © 2026 Jacob Iwen
+    - link "GitHub" [ref=f1e153] [cursor=pointer]:
+      - /url: https://github.com/JakeIwen

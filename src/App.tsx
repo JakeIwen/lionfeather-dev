@@ -66,7 +66,7 @@ function Header() {
       </nav>
       <ThemeToggle />
       <a className="header-contact" href={`mailto:${email}`}>
-        Let’s talk <ArrowUpRight size={15} />
+        Let's talk <ArrowUpRight size={15} />
       </a>
     </header>
   )
@@ -90,7 +90,7 @@ function Contact() {
       id="contact"
       aria-labelledby="contact-heading"
     >
-      <h2 id="contact-heading">Let’s talk shop.</h2>
+      <h2 id="contact-heading">Let's talk shop.</h2>
       <a className="contact-email" href={`mailto:${email}`}>
         {email}
         <ArrowUpRight size={26} />
@@ -185,7 +185,7 @@ function Home() {
       >
         <div className="section-heading">
           <div>
-            <p className="eyebrow">A FEW THINGS I’VE BUILT</p>
+            <p className="eyebrow">A FEW THINGS I'VE BUILT</p>
             <h2 id="work-title">
               Selected <em>work.</em>
             </h2>
@@ -268,7 +268,7 @@ function Home() {
             <span />
           </div>
           <div>
-            <p className="eyebrow">DATA & INFRASTRUCTURE · 2018–2026</p>
+            <p className="eyebrow">DATA & INFRASTRUCTURE · 2018-2026</p>
             <h3>Workforce integration platform</h3>
             <p>
               More than 50 scheduled SFTP and spreadsheet jobs between workforce
@@ -292,21 +292,20 @@ function Home() {
           </div>
           <div className="about-copy">
             <p className="about-lead">
-              I’m Jacob, a full-stack engineer with a mechanical engineering
+              I'm Jacob, a full-stack engineer with a mechanical engineering
               background and a home on wheels.
             </p>
             <p>
-              From 2018 to 2026, I worked at Advantage Integrated Solutions,
-              building a form-digitization product and maintaining client
-              portals, data pipelines, and AWS infrastructure. I was part of a
-              small product team, and my work spanned the application, its
-              integrations, and the systems that kept it running.
+              From 2018 to 2026, I worked on a small product team at Advantage
+              Integrated Solutions, building a form-digitization product and
+              maintaining client portals, data pipelines, and AWS
+              infrastructure.
             </p>
             <p>
               Outside that work, I build the tools I use in my campervan: a
               browser dashboard, network and backup automation, and Python
-              tooling for vehicle diagnostics. The mechanical and software sides
-              of my background coalesce often.
+              tooling for vehicle diagnostics. That is where the mechanical and
+              software sides of my background meet.
             </p>
             <div className="about-links">
               <a className="text-link" href={resumeUrl} download>
@@ -466,7 +465,7 @@ function NotFound() {
     <section className="not-found container">
       <p className="eyebrow">404 · PAGE NOT FOUND</p>
       <h1>A loose connection.</h1>
-      <p>That page isn’t here. You can find my projects on the homepage.</p>
+      <p>That page isn't here. You can find my projects on the homepage.</p>
       <Link className="button button-dark" to="/">
         Back to the homepage <MoveUpRight size={17} />
       </Link>
