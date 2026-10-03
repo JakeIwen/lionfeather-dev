@@ -4,6 +4,7 @@ coverage/
 .vite/
 .local/
 .agent/
+tmp/
 .wrangler/
 AGENTS.private.md
 *.private.md
