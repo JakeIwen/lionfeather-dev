@@ -121,6 +121,18 @@ homepage, direct project URLs, and resume download at https://lionfeather.dev.
 Configuration alone does not mean the site has been deployed. The bare domain
 is configured; `www.lionfeather.dev` is not currently attached.
 
+Both deployment commands also run `npm run check:resume`, which refuses to
+publish a stale resume. It reads the resume repository's location from ignored
+`.local/resume-source.json` (`checkout`, plus `contentMaster` and `versions`
+paths relative to it), finds the version directory the Markdown content master
+says it was synchronized to, confirms that directory's `resume.md` snapshot and
+`verification.json` agree with it, and requires `public/Jacob-Iwen-Resume.pdf`
+to be byte-identical to that version's `*_public.pdf`. A newer `v<N>` directory
+that already holds a public PDF also fails the check until the master names it.
+When it fails, it prints the copy command and the hash to record in
+`scripts/public-assets.json` after reviewing the new PDF. The ordinary build
+does not need the resume repository or this file.
+
 ### Privacy checks before publishing
 
 `scripts/public-assets.json` lists reviewed public files and pins the hashes of

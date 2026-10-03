@@ -20,9 +20,12 @@ external private checkout.
 - `npm run typecheck`: check application and tooling TypeScript.
 - `npm run preview`: preview the production build on loopback port 4173.
 - `npm run check:public`: check Git exclusions and generated public artifacts.
+- `npm run check:resume`: confirm the public resume matches the current public
+  master named by the resume repository's content master; see the README.
 - `npm run cloudflare:login`: authorize the Cloudflare CLI through browser consent.
-- `npm run deploy:check`: build and dry-run the Cloudflare deployment.
-- `npm run deploy`: build, check public artifacts, and publish to lionfeather.dev.
+- `npm run deploy:check`: build, run the resume check, and dry-run the deployment.
+- `npm run deploy`: build, check public artifacts and the resume, and publish to
+  lionfeather.dev.
 - `npm start`: serve the existing production build on loopback port 5174.
 - `npm test`: exercise static-serving boundaries and lifecycle ownership checks.
 - `npm run service:prepare`: build and validate a local boot-service plist.
@@ -124,6 +127,9 @@ polling enabled because native file events missed workspace edits on this Mac.
 - `scripts/public-assets.json` is the reviewed public-file inventory. Changed
   images, PDFs, fonts, and security headers require content/metadata review before
   updating hashes. Never refresh hashes merely to make a failing build pass.
+- The resume check reads the private resume repository's location from ignored
+  `.local/resume-source.json`; keep that path out of tracked files. The build
+  itself must keep working without the file or the repository.
 - `scripts/public-audit.mjs` enforces the upload boundary, inventory, and common
   secret/private-address checks. Binary hashes preserve reviewed bytes; they do
   not replace reviewing image pixels or PDF text, links, and metadata.
