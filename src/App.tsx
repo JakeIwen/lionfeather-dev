@@ -298,9 +298,9 @@ function Home() {
             <p>
               From 2018 to 2026, I worked at Advantage Integrated Solutions,
               building a form-digitization product and maintaining client
-              portals, data pipelines, and AWS infrastructure. On a small
-              product team, my work spanned the application, its integrations,
-              and the systems that kept it operating.
+              portals, data pipelines, and AWS infrastructure. I was part of a
+              small product team, and my work spanned the application, its
+              integrations, and the systems that kept it running.
             </p>
             <p>
               Outside that work, I build the tools I use in my campervan: a

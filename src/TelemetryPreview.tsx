@@ -142,7 +142,10 @@ export function SignalDiscovery() {
             Challenge
             <StepArrow />
           </strong>
-          <p>Test independent drives and competing interpretations.</p>
+          <p>
+            Check the fit against independent drives and competing
+            interpretations.
+          </p>
         </li>
         <li>
           <strong>Publish</strong>

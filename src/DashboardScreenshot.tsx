@@ -9,7 +9,7 @@ export default function DashboardScreenshot({
     <img
       className="dashboard-screenshot"
       src={dashboardImageUrl}
-      alt="Van Dashboard showing networking, system health, storage, lighting, backups, media, and vehicle controls in a dark tile layout."
+      alt="Van dashboard showing networking, system health, storage, lighting, backups, media, and vehicle controls in a dark tile layout."
       width={2236}
       height={1710}
       loading={loading}

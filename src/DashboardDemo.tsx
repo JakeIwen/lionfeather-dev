@@ -104,7 +104,7 @@ export default function DashboardDemo() {
             <h3>Backups</h3>
             <p aria-live="polite">
               {backup
-                ? 'Demo backup completed.'
+                ? 'Demo backup completed'
                 : 'Last example backup: today, 04:00'}
             </p>
             <button
