@@ -43,7 +43,7 @@ export const projects: Project[] = [
       {
         title: 'The systems behind the screen',
         paragraphs: [
-          'The dashboard sits on top of systems I operate every day: automated backups, directional Wi-Fi and cellular connectivity, and storage protection that responds to the vehicle’s ignition state.',
+          'The dashboard sits on top of systems I operate every day: automated backups, cellular, satellite, and directional Wi-Fi connectivity, and storage protection that responds to the vehicle’s ignition state.',
           'The small demo below is an illustrative interface with simulated data. It lets you explore a few of the dashboard’s control patterns without connecting to the van.',
         ],
       },
@@ -72,7 +72,7 @@ export const projects: Project[] = [
         title: 'Sending only what the endpoint needs',
         paragraphs: [
           'One API path was serializing the full in-memory form template even though the endpoint needed only a small set of identifiers. I replaced that request with a compact payload carrying only what the endpoint needed, which eliminated multi-second uploads in throttled Fast 3G tests.',
-          'In separate template-loading work, I stopped the API from returning embedded document assets when the caller only needed links; development benchmarks showed roughly halved page-load and template-fetch times. Bundle optimization reduced the JavaScript size by 25%. Those are separate measurements, not a single application-wide speedup.',
+          'In separate template-loading work, I stopped the API from returning embedded document assets when the caller only needed links; development benchmarks showed roughly halved page-load and template-fetch times. Bundle optimization reduced the JavaScript size by ~25%.',
         ],
       },
       {
