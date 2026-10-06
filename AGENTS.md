@@ -159,9 +159,8 @@ polling enabled because native file events missed workspace edits on this Mac.
 - If browser tools fail, run `codex-browser status`; for an unhealthy clean
   service use `codex-browser-service status`. `codex-browser smoke` checks the
   clean driver end to end.
-- Inspect current files and Git state; preserve unrelated work. Do not stage or
-  change the Git index unless explicitly asked. Summarize edits instead of
-  printing diffs or patches unless requested.
+- Inspect current files and Git state; preserve unrelated work. Summarize
+  edits instead of printing diffs or patches unless requested.
 - For substantive multi-session work, keep a concise note in ignored
   `.agent/handoffs/<workstream>.md`; list and reuse matching workstreams first.
   Replace stale information. When finished, promote durable project facts here
