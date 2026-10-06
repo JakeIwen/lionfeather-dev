@@ -1,0 +1,70 @@
+{
+ "advisory": {
+  "duplicate_names": {
+   "digest": [
+    "scripts/public-audit.mjs",
+    "scripts/resume-source.mjs"
+   ]
+  },
+  "heuristic_long_functions": [
+   {
+    "file": "src/App.tsx",
+    "line": 126,
+    "lines": 213,
+    "name": "Home"
+   },
+   {
+    "file": "src/App.tsx",
+    "line": 359,
+    "lines": 101,
+    "name": "ProjectPage"
+   }
+  ]
+ },
+ "date": "2026-10-05",
+ "files": {
+  "public/theme.js": 10,
+  "scripts/check-public.mjs": 48,
+  "scripts/check-resume.mjs": 8,
+  "scripts/public-audit.mjs": 137,
+  "scripts/public-audit.test.mjs": 140,
+  "scripts/resume-source.mjs": 112,
+  "scripts/resume-source.test.mjs": 102,
+  "scripts/service.mjs": 502,
+  "scripts/site-server.mjs": 297,
+  "scripts/site-server.test.mjs": 226,
+  "src/App.tsx": 492,
+  "src/DashboardScreenshot.tsx": 19,
+  "src/FieldworkPreview.tsx": 78,
+  "src/FormEnginePreview.tsx": 19,
+  "src/Illustrations.tsx": 95,
+  "src/ScreenshotCarousel.tsx": 161,
+  "src/TelemetryPreview.tsx": 157,
+  "src/ThemeToggle.tsx": 78,
+  "src/content.ts": 220,
+  "src/main.tsx": 15,
+  "vite.config.ts": 32
+ },
+ "head": "3c50e7e8d04b44d69dd113ca3d7b88e21de90a58",
+ "limits": {
+  "enforce_tests": true,
+  "file_lines": 800,
+  "func_lines": 80
+ },
+ "markers": {
+  "bare_except": 0,
+  "dual_import_guard": 0,
+  "lint_disable": 0,
+  "sys_path_hack": 0,
+  "ts_any": 0,
+  "type_ignore": 0
+ },
+ "parse_errors": [],
+ "py_funcs": {},
+ "tests": [
+  "scripts/public-audit.test.mjs",
+  "scripts/resume-source.test.mjs",
+  "scripts/site-server.test.mjs"
+ ],
+ "version": 2
+}
