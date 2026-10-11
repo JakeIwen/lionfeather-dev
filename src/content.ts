@@ -23,14 +23,14 @@ export const projects: Project[] = [
     period: 'Ongoing',
     tags: ['React', 'TypeScript', 'Python', 'Raspberry Pi'],
     intro:
-      'I live in a converted campervan. Its network, storage, backups, lighting, and media services are connected through a Raspberry Pi and an OpenWrt router. I built a browser dashboard to see what is happening and control those systems from one place.',
-    role: 'Design, frontend, backend, and system integration',
+      'I live in a converted campervan. Its network, storage, backups, lighting, and media services are connected through a Raspberry Pi and an OpenWrt router. I built a browser dashboard with coding-agent assistance under my direction and review to see what is happening and control those systems from one place.',
+    role: 'Design, frontend, backend, and system integration with coding-agent assistance under my direction and review',
     sections: [
       {
         title: 'An interface to physical systems',
         paragraphs: [
           'The dashboard brings together systems with very different behavior: a light responds quickly, a backup can run for hours, and switching a network connection can interrupt the request that initiated it. The interface needs to account for those differences.',
-          'The React and TypeScript frontend groups the controls by system, and a Python/Flask backend owns the device and service controllers. The browser is a client of that backend and keeps no copy of the device state.',
+          'The React and TypeScript frontend groups the controls by system, and a Python/Flask backend owns the device and service controllers. The browser is a client of that backend and holds no independently authoritative device state.',
         ],
       },
       {
@@ -63,22 +63,22 @@ export const projects: Project[] = [
       {
         title: 'Keeping the original document useful',
         paragraphs: [
-          'Many business processes depend on a particular document layout, and digitizing the process does not remove that need: people still expect to receive, print, or sign the document they recognize. I built the form-builder core during the initial buildout and owned the Puppeteer-based PDF platform that produces those documents.',
-          'That work ran from the browser to the backend: template editing, signature capture, fonts, rendering timing, and the final PDF output.',
+          'Many business processes depend on a particular document layout. Digitizing the process still has to produce the form people expect to receive, print, or sign. I built the form-builder core during the initial buildout and owned the Puppeteer-based PDF platform.',
+          "The work crossed template editing, signature capture, fonts, render timing, and the final PDF. The requirement was to preserve the document's layout through those steps, not replace it with a generic web form.",
         ],
       },
       {
         title: 'Sending only what the endpoint needs',
         paragraphs: [
-          'One API path serialized the full in-memory form template when the endpoint needed only a few identifiers. Sending just those identifiers eliminated multi-second uploads in throttled Fast 3G tests.',
-          'Separately, I stopped the template API from returning embedded document assets when the caller only needed links; development benchmarks showed roughly halved page-load and template-fetch times. Bundle optimization reduced the JavaScript size by ~25%.',
+          "One API path serialized the full in-memory form template even though the endpoint needed only routing identifiers. I replaced that request with an endpoint-specific payload rather than keep sending the browser's full object. In one representative throttled Fast 3G test, the POST shrank from 375 KB to 370 bytes and a roughly four-to-five-second upload dropped to milliseconds.",
+          'Separately, I changed template loading to return document-asset links instead of embedded base64 bodies, fetching the bytes explicitly when needed. Development benchmarks showed roughly halved page-load and template-fetch times. Those were measured development results, not a production-wide speedup; the separate bundle optimization reduced JavaScript size by about 25%.',
         ],
       },
       {
         title: 'Maintaining the product as its dependencies changed',
         paragraphs: [
-          "I led the product's Node.js runtime migrations and moved a legacy XML API to JSON REST endpoints. I also independently built a healthcare EDI module for claim generation and remittance processing.",
-          'In 2026, I added LLM-based form-template generation built on MCP tools and the OpenAI Agents SDK, with transaction logging so each generation can be audited.',
+          "I led the Node.js 14 and 22 runtime migrations and implemented the move of record, report, and file operations from Quickbase's legacy XML API to its JSON REST API. I also independently built a healthcare EDI module for claim generation and remittance processing. The API migration was implemented; I do not claim a verified production rollout for it or the asset-loading change.",
+          'In 2026, I built LLM-based form-template generation using MCP tools and the OpenAI Agents SDK, with transaction logging for auditability. That was product-feature work, not model training or evidence of measured customer adoption of the AI feature.',
         ],
       },
     ],
@@ -104,15 +104,15 @@ export const projects: Project[] = [
       {
         title: 'Replacing the servers underneath the jobs',
         paragraphs: [
-          'The oldest parts of the platform dated from 2012. I led its Ruby 2.4 upgrade in 2019, and over seven years I maintained that code while removing more of it than I added.',
-          'In 2025 I independently migrated the platform to a new Amazon Linux 2023 server and upgraded it to Ruby 3.3. I wrote the migration runbook and the new cron schedule, ported the jobs still in use, and decommissioned the old server.',
+          'One history was the ResCare-Apps script server, which dated to 2012. Over seven years I maintained that code while removing more of it than I added. Its surviving jobs were moved to the successor repository before I decommissioned that server in 2025.',
+          "Separately, I led the background-job platform's Ruby 2.4 upgrade in 2019. In 2025 I independently moved that platform to a new Amazon Linux 2023 server and Ruby 3.3, and wrote its migration runbook and new cron schedule.",
         ],
       },
       {
         title: 'Part of a broader production responsibility',
         paragraphs: [
           'Alongside this platform, I maintained customer-facing portals, document systems, database archives, and AWS infrastructure. That included runtime upgrades, RDS migrations, backups, certificate rollout tooling, and monitoring.',
-          'I carried each change from writing it through deployment and support.',
+          'My long-term ownership of these systems included deployment and support.',
         ],
       },
     ],
@@ -126,42 +126,42 @@ export const projects: Project[] = [
     period: '2026',
     tags: ['React', 'TypeScript', 'Node.js', 'SQLite', 'Codex'],
     intro:
-      "I built Fieldwork to keep company research, job openings, application status, and document versions in one local workspace. It connects to Codex, OpenAI's agent, which helps me investigate opportunities and review the evidence behind a decision.",
-    role: 'Product direction, interface design, and full-stack development',
+      'I built Fieldwork with coding-agent assistance to keep company research, job openings, application status, and document versions in one local workspace. I directed the product and interface, reviewed changes, and decided which results to rely on. The app connects to Codex for research and document work; it is a personal, single-user application.',
+    role: 'Product direction, interface design, and full-stack development with coding-agent assistance',
     sections: [
       {
         title: 'From a posting to a useful record',
         paragraphs: [
-          'A saved job link on its own tells me little. I also need the company context, location requirements, compensation, the date the posting was checked, and the questions that still need an answer. Fieldwork keeps all of that together in one record for the opening.',
-          'The React interface lets me search and filter openings, compare roles, save views, and keep my own notes next to the research and its sources. Company pages, openings, and application records link to one another, so context gathered once stays available at each later step.',
+          'A saved job link on its own tells me little. I also need company context, location restrictions, compensation, dated sources, and the questions still worth asking. Fieldwork keeps those details with the opening instead of requiring me to reconstruct them at each step.',
+          'The React interface lets me search and filter openings, compare roles, save views, and keep my notes beside the research. Company pages, openings, and application records link to one another without making imported research the authority over my application status.',
         ],
       },
       {
         title: 'Research assistance, with a review step',
         paragraphs: [
-          'I use Ask Codex to compare a role with my experience, investigate company policies, and find gaps worth following up on. I check the supporting sources and decide which opportunities to pursue.',
-          'Every task runs on my own Codex account and starts from a prompt I can edit, with only the context I choose to include: the opening, the company, and selected notes about my experience.',
+          'I use Ask Codex to compare a role with my experience and investigate questions about the company. I review the supporting sources and decide which opportunities to pursue. Question and document tasks capture the current resume, evidence, and writing rules along with relevant opening context, rather than relying only on a free-form prompt.',
+          'For document tasks, the agent works through defined source tools in an isolated draft. The backend runs the trusted PDF renderer and validators; the agent cannot make a draft authoritative just by saying it is finished. Recorded checks cover real source reads, revisions, PDF generation, and restart/resume, not only simulated protocol responses.',
         ],
       },
       {
         title: 'Refreshing research without losing personal work',
         paragraphs: [
-          'The TypeScript and Node.js backend stores personal records in SQLite, separately from imported research that can be rebuilt. Refreshing a posting should not erase a bookmark, replace a note, or move an application to a different status.',
-          'Each piece of research keeps its source and the date it was observed. An incomplete scan does not prove a role has closed, so the app marks the status uncertain instead of closed. Version-checked writes keep a stale browser tab from overwriting newer personal changes.',
+          'The Node.js backend stores personal records in SQLite, separately from imported Markdown and JSON research. I chose that separation so rebuilding the research index would not erase notes or change application status. Version-checked writes also reject an update from a stale browser tab.',
+          'An incomplete scan is not proof that a role closed. Research retains its source and observation date, and missing evidence stays qualified. Likewise, replacing a general resume is a reviewed, hash-checked operation with recovery records, not an atomic transaction across every source file.',
         ],
       },
       {
         title: 'Improving the app from inside the app',
         paragraphs: [
-          'The App design workspace lets me describe an interface change and see it in a separate preview that excludes my private records. Before applying it, I can inspect the changed files along with the build and browser-check results.',
-          'Applying a reviewed change first checks that the source files still match what was reviewed; if something else has edited them in the meantime, the update is blocked.',
+          'The App design workspace creates a separate client-interface preview without my private records. Before applying a change, I can inspect the changed files and the build and browser-check results. This workflow is for the client interface, not unrestricted backend or database changes.',
+          'Apply checks that the source files still match the reviewed version and blocks the update if they changed. That is a separate decision from generating the proposal, with an undo copy retained for the applied change.',
         ],
       },
       {
         title: 'Keeping an accurate application history',
         paragraphs: [
-          'Preparing an application and recording its submission are separate actions. Recording a submission stores the exact document versions I selected as immutable copies, so editing a file later cannot change the record of what was sent.',
-          'The browser talks to a local Express server, so the whole workspace stays on my machine, and backups cover both the database and the preserved document copies. The screenshots above show example records and unsent prompts.',
+          'Preparing documents and recording an application as sent are different actions. Fieldwork preserves the selected document bytes as immutable copies instead of keeping only paths to files I might later edit. The tracker records my actions; it does not establish that an employer received an application.',
+          'The browser and Express server run locally, and backups include the database and preserved document objects. A restore fixture checks saved application bytes, but that is not proof of recovery for every possible failure. Codex processes supplied task context outside the local app, so I do not describe the whole workflow as offline. The screenshots show example records and unsent prompts.',
         ],
       },
     ],
@@ -175,8 +175,8 @@ export const projects: Project[] = [
     period: '2026',
     tags: ['Python', 'SocketCAN', 'CAN / UDS', 'Preact', 'SQLite'],
     intro:
-      'I developed a telemetry system for my 2022 Ram ProMaster. Investigating CAN bus signals and building a Python data broker gave me the data to show live readings and trends in a tablet web app: gauges, parked battery status, trip history, and an evidence-based warning system.\n\nThe same CAN work produced one guarded control action: from the dashboard, the doors can be locked or unlocked **remotely** with a single verified CAN frame.',
-    role: 'Signal research, acquisition tooling, backend, and dashboard development',
+      'I developed a telemetry system for my 2022 Ram ProMaster with coding-agent assistance under my direction and review. Investigating CAN bus signals and building a Python data broker gave me the data to show live readings and trends in a tablet web app: gauges, parked battery status, trip history, and an evidence-based warning system.\n\nThe same CAN work produced one guarded control action: an authorized single action frame unlocks the front doors, though wake traffic may precede it.',
+    role: 'Signal research, acquisition tooling, backend, and dashboard development with coding-agent assistance under my direction and review',
     sections: [
       {
         title: 'The meaning behind the bytes',
