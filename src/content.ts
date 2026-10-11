@@ -24,7 +24,7 @@ export const projects: Project[] = [
     tags: ['React', 'TypeScript', 'Python', 'Raspberry Pi'],
     intro:
       'I live in a converted campervan. Its network, storage, backups, lighting, and media services are connected through a Raspberry Pi and an OpenWrt router. I built a browser dashboard with coding-agent assistance under my direction and review to see what is happening and control those systems from one place.',
-    role: 'Design, frontend, backend, and system integration with coding-agent assistance under my direction and review',
+    role: 'Design, frontend, backend, and system integration',
     sections: [
       {
         title: 'An interface to physical systems',
@@ -71,14 +71,14 @@ export const projects: Project[] = [
         title: 'Sending only what the endpoint needs',
         paragraphs: [
           "One API path serialized the full in-memory form template even though the endpoint needed only routing identifiers. I replaced that request with an endpoint-specific payload rather than keep sending the browser's full object. In one representative throttled Fast 3G test, the POST shrank from 375 KB to 370 bytes and a roughly four-to-five-second upload dropped to milliseconds.",
-          'Separately, I changed template loading to return document-asset links instead of embedded base64 bodies, fetching the bytes explicitly when needed. Development benchmarks showed roughly halved page-load and template-fetch times. Those were measured development results, not a production-wide speedup; the separate bundle optimization reduced JavaScript size by about 25%.',
+          'Separately, I changed template loading to return document-asset links instead of embedded base64 bodies, fetching the bytes explicitly when needed. Development benchmarks showed roughly halved page-load and template-fetch times. Those were measured development results; a separate bundle optimization reduced JavaScript size by about 25%.',
         ],
       },
       {
         title: 'Maintaining the product as its dependencies changed',
         paragraphs: [
-          "I led the Node.js 14 and 22 runtime migrations and implemented the move of record, report, and file operations from Quickbase's legacy XML API to its JSON REST API. I also independently built a healthcare EDI module for claim generation and remittance processing. The API migration was implemented; I do not claim a verified production rollout for it or the asset-loading change.",
-          'In 2026, I built LLM-based form-template generation using MCP tools and the OpenAI Agents SDK, with transaction logging for auditability. That was product-feature work, not model training or evidence of measured customer adoption of the AI feature.',
+          "I led the Node.js 14 and 22 runtime migrations and implemented the move of record, report, and file operations from Quickbase's legacy XML API to its JSON REST API. I also independently built a healthcare EDI module for claim generation and remittance processing.",
+          'In 2026, I built LLM-based form-template generation using MCP tools and the OpenAI Agents SDK, with transaction logging for auditability.',
         ],
       },
     ],
@@ -127,7 +127,7 @@ export const projects: Project[] = [
     tags: ['React', 'TypeScript', 'Node.js', 'SQLite', 'Codex'],
     intro:
       'I built Fieldwork with coding-agent assistance to keep company research, job openings, application status, and document versions in one local workspace. I directed the product and interface, reviewed changes, and decided which results to rely on. The app connects to Codex for research and document work; it is a personal, single-user application.',
-    role: 'Product direction, interface design, and full-stack development with coding-agent assistance',
+    role: 'Product direction, interface design, and full-stack development',
     sections: [
       {
         title: 'From a posting to a useful record',
@@ -140,20 +140,20 @@ export const projects: Project[] = [
         title: 'Research assistance, with a review step',
         paragraphs: [
           'I use Ask Codex to compare a role with my experience and investigate questions about the company. I review the supporting sources and decide which opportunities to pursue. Question and document tasks capture the current resume, evidence, and writing rules along with relevant opening context, rather than relying only on a free-form prompt.',
-          'For document tasks, the agent works through defined source tools in an isolated draft. The backend runs the trusted PDF renderer and validators; the agent cannot make a draft authoritative just by saying it is finished. Recorded checks cover real source reads, revisions, PDF generation, and restart/resume, not only simulated protocol responses.',
+          'For document tasks, the agent works through defined source tools in an isolated draft. The backend runs the trusted PDF renderer and validators; the agent cannot make a draft authoritative just by saying it is finished. Recorded checks cover real source reads, revisions, PDF generation, and restart/resume.',
         ],
       },
       {
         title: 'Refreshing research without losing personal work',
         paragraphs: [
           'The Node.js backend stores personal records in SQLite, separately from imported Markdown and JSON research. I chose that separation so rebuilding the research index would not erase notes or change application status. Version-checked writes also reject an update from a stale browser tab.',
-          'An incomplete scan is not proof that a role closed. Research retains its source and observation date, and missing evidence stays qualified. Likewise, replacing a general resume is a reviewed, hash-checked operation with recovery records, not an atomic transaction across every source file.',
+          'An incomplete scan is not proof that a role closed. Research retains its source and observation date, and missing evidence stays qualified. Replacing the general resume is a reviewed, hash-checked operation with recovery records.',
         ],
       },
       {
         title: 'Improving the app from inside the app',
         paragraphs: [
-          'The App design workspace creates a separate client-interface preview without my private records. Before applying a change, I can inspect the changed files and the build and browser-check results. This workflow is for the client interface, not unrestricted backend or database changes.',
+          'The App design workspace creates a separate client-interface preview without my private records. Before applying a change, I can inspect the changed files and the build and browser-check results. It covers client-interface changes.',
           'Apply checks that the source files still match the reviewed version and blocks the update if they changed. That is a separate decision from generating the proposal, with an undo copy retained for the applied change.',
         ],
       },
@@ -161,7 +161,7 @@ export const projects: Project[] = [
         title: 'Keeping an accurate application history',
         paragraphs: [
           'Preparing documents and recording an application as sent are different actions. Fieldwork preserves the selected document bytes as immutable copies instead of keeping only paths to files I might later edit. The tracker records my actions; it does not establish that an employer received an application.',
-          'The browser and Express server run locally, and backups include the database and preserved document objects. A restore fixture checks saved application bytes, but that is not proof of recovery for every possible failure. Codex processes supplied task context outside the local app, so I do not describe the whole workflow as offline. The screenshots show example records and unsent prompts.',
+          'The browser and Express server run locally, and backups include the database and preserved document objects. Research and document tasks send their captured context to Codex. The screenshots show example records and unsent prompts.',
         ],
       },
     ],
@@ -176,7 +176,7 @@ export const projects: Project[] = [
     tags: ['Python', 'SocketCAN', 'CAN / UDS', 'Preact', 'SQLite'],
     intro:
       'I developed a telemetry system for my 2022 Ram ProMaster with coding-agent assistance under my direction and review. Investigating CAN bus signals and building a Python data broker gave me the data to show live readings and trends in a tablet web app: gauges, parked battery status, trip history, and an evidence-based warning system.\n\nThe same CAN work produced one guarded control action: an authorized single action frame unlocks the front doors, though wake traffic may precede it.',
-    role: 'Signal research, acquisition tooling, backend, and dashboard development with coding-agent assistance under my direction and review',
+    role: 'Signal research, acquisition tooling, backend, and dashboard development',
     sections: [
       {
         title: 'The meaning behind the bytes',
