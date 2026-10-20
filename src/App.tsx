@@ -227,6 +227,27 @@ function Home() {
             </Link>
           ))}
         </div>
+        <Link className="pipeline-project" to="/work/production-pipelines">
+          <div className="pipeline-icon" aria-hidden="true">
+            <span />
+            <i />
+            <span />
+            <i />
+            <span />
+          </div>
+          <div>
+            <p className="eyebrow">DATA & INFRASTRUCTURE · 2018-2026</p>
+            <h3>Workforce integration platform</h3>
+            <p>
+              More than 50 scheduled SFTP and spreadsheet jobs between workforce
+              applications and state and county agencies.
+            </p>
+          </div>
+          <span className="pipeline-tech">Ruby · AWS · SFTP</span>
+          <span className="project-arrow">
+            <ArrowUpRight size={24} />
+          </span>
+        </Link>
         <Link className="telemetry-feature" to="/work/van-telemetry">
           <div className="telemetry-feature-copy">
             <p className="eyebrow">AUTOMOTIVE SOFTWARE · 2026</p>
@@ -261,27 +282,6 @@ function Home() {
               View project <ArrowUpRight size={17} />
             </span>
           </div>
-        </Link>
-        <Link className="pipeline-project" to="/work/production-pipelines">
-          <div className="pipeline-icon" aria-hidden="true">
-            <span />
-            <i />
-            <span />
-            <i />
-            <span />
-          </div>
-          <div>
-            <p className="eyebrow">DATA & INFRASTRUCTURE · 2018-2026</p>
-            <h3>Workforce integration platform</h3>
-            <p>
-              More than 50 scheduled SFTP and spreadsheet jobs between workforce
-              applications and state and county agencies.
-            </p>
-          </div>
-          <span className="pipeline-tech">Ruby · AWS · SFTP</span>
-          <span className="project-arrow">
-            <ArrowUpRight size={24} />
-          </span>
         </Link>
       </section>
       <RecommendationSection />
