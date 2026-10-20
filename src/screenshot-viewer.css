@@ -1,0 +1,166 @@
+.screenshot-viewer {
+  --viewer-bg: #101512;
+  --viewer-control: #223028;
+  --viewer-ink: #f1f5ef;
+  --viewer-muted: #c2cec4;
+  --viewer-line: #617568;
+  --viewer-focus: #e4a489;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100vh;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  border: 0;
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
+    env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+  overflow: hidden;
+  background: var(--viewer-bg);
+  color: var(--viewer-ink);
+  /* The viewer stays dark in both themes, so native scrollbars should too. */
+  color-scheme: dark;
+  overscroll-behavior: contain;
+}
+
+.screenshot-viewer[open] {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.screenshot-viewer::backdrop {
+  background: #101512f5;
+}
+
+.screenshot-viewer button,
+.screenshot-viewer a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  gap: 6px;
+  padding: 9px 12px;
+  border: 1px solid var(--viewer-line);
+  border-radius: 6px;
+  background: var(--viewer-control);
+  color: var(--viewer-ink);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.screenshot-viewer :focus-visible {
+  outline: 3px solid var(--viewer-focus);
+  outline-offset: 2px;
+}
+
+.screenshot-viewer button:hover,
+.screenshot-viewer a:hover {
+  border-color: var(--viewer-ink);
+}
+
+.viewer-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+}
+
+.viewer-toolbar > span {
+  flex: 1;
+  min-width: 0;
+  font-size: 16px;
+}
+
+.viewer-toolbar > button {
+  flex-shrink: 0;
+}
+
+.viewer-pane {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 0;
+  margin: 4px;
+  padding: 12px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y pinch-zoom;
+}
+
+.viewer-pane img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.viewer-pane.is-zoomed {
+  align-items: flex-start;
+  justify-content: flex-start;
+  touch-action: pan-x pan-y pinch-zoom;
+}
+
+.viewer-pane.is-zoomed img {
+  max-width: none;
+  max-height: none;
+  margin: auto;
+}
+
+.viewer-caption {
+  padding: 12px 16px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.5;
+  max-height: 40dvh;
+  overflow: auto;
+}
+
+.viewer-navigation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.viewer-label {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.viewer-label strong {
+  font-size: 16px;
+}
+
+.viewer-label span,
+.viewer-caption p {
+  color: var(--viewer-muted);
+}
+
+.viewer-caption p {
+  margin: 8px 0;
+}
+
+.viewer-trigger,
+.gallery-stage .viewer-trigger {
+  touch-action: pan-y pinch-zoom;
+}
+
+.case-screenshot figcaption .viewer-caption-trigger {
+  min-height: 44px;
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screenshot-viewer,
+  .screenshot-viewer * {
+    scroll-behavior: auto;
+  }
+}

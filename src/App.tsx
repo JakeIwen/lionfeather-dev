@@ -14,7 +14,7 @@ import {
 import { Link, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { email, projects, recommendationPath, resumeUrl } from './content'
 import { Feather, VanIllustration } from './Illustrations'
-import DashboardScreenshot, { dashboardImageUrl } from './DashboardScreenshot'
+import DashboardScreenshot, { DashboardFigure } from './DashboardScreenshot'
 import FormEnginePreview, { formEngineUrl } from './FormEnginePreview'
 import FieldworkPreview, { FieldworkGallery } from './FieldworkPreview'
 import {
@@ -378,25 +378,7 @@ function ProjectPage() {
           <p>{project.tags.join(' · ')}</p>
         </div>
       </div>
-      {project.slug === 'van-dashboard' && (
-        <figure className="case-screenshot">
-          <a
-            className="screenshot-link"
-            href={dashboardImageUrl}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Open full-size Van dashboard screenshot in a new tab"
-          >
-            <DashboardScreenshot loading="eager" />
-          </a>
-          <figcaption>
-            <span>Van dashboard</span>
-            <a href={dashboardImageUrl} target="_blank" rel="noreferrer">
-              View full size <ArrowUpRight size={13} />
-            </a>
-          </figcaption>
-        </figure>
-      )}
+      {project.slug === 'van-dashboard' && <DashboardFigure />}
       {project.slug === 'form-engine' && (
         <figure className="case-screenshot form-engine-preview">
           <a

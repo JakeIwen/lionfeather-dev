@@ -121,8 +121,14 @@ polling enabled because native file events missed workspace edits on this Mac.
   (`src/Recommendation.tsx`). Keep the letter's wording verbatim. His email
   address is deliberately omitted and his phone number never appears; the
   page says his contact details are available on request.
-- Fieldwork and telemetry share `ScreenshotCarousel.tsx`. Preserve arrows,
-  counters, thumbnails, keyboard/focus behavior, full-size links, and image ratios.
+- Fieldwork and telemetry share `ScreenshotCarousel.tsx` and the full-screen
+  `ScreenshotViewer.tsx`, also used by `DashboardScreenshot.tsx`. The viewer keeps
+  captions, original-file links, native zoom/panning, swipe and Back-to-close;
+  preserve inline arrows, counters, thumbnails, keyboard/focus behavior, and image
+  ratios. `ScreenshotFigure.tsx` shares the image/caption triggers; `screenshots.ts`
+  defines their image records, `useSwipe.ts` shares touch detection, and
+  `useScreenshotViewer.ts` / `useViewerDialog.ts` own history and modal lifecycle.
+  Viewer styles live in `screenshot-viewer.css`.
 - Appearance uses a header Soft/Dark control. `public/theme.js` applies the saved
   `lionfeather-theme-v1` choice before rendering, otherwise follows the system.
   `ThemeToggle.tsx` maintains it across routes and reloads, with graceful behavior

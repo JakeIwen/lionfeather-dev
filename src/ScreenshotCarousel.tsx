@@ -1,19 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
-import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import type { Screenshot } from './screenshots'
+import ScreenshotFigure from './ScreenshotFigure'
+import ScreenshotViewer from './ScreenshotViewer'
+import { useScreenshotViewer } from './useScreenshotViewer'
 
-export default function ScreenshotCarousel({
-  title,
-  id,
-  images,
-  className = '',
-}: {
-  title: string
-  id: string
-  images: readonly Screenshot[]
-  className?: string
-}) {
+function useCarouselSelection(images: readonly Screenshot[]) {
   const [selection, setSelection] = useState(0)
   const thumbnails = useRef<HTMLDivElement>(null)
   const thumbnailButtons = useRef<
@@ -21,7 +13,6 @@ export default function ScreenshotCarousel({
   >({})
   const index = selection % images.length
   const image = images[index]!
-  const screenId = `${id}-screen`
 
   useEffect(() => {
     const strip = thumbnails.current
@@ -49,7 +40,32 @@ export default function ScreenshotCarousel({
       thumbnailButtons.current[next.id]?.focus({ preventScroll: true })
     }
   }
+  return {
+    image,
+    index,
+    thumbnails,
+    thumbnailButtons,
+    move,
+    handleKeyDown,
+    setSelection,
+  }
+}
 
+export default function ScreenshotCarousel({
+  title,
+  id,
+  images,
+  className = '',
+}: {
+  title: string
+  id: string
+  images: readonly Screenshot[]
+  className?: string
+}) {
+  const selection = useCarouselSelection(images)
+  const viewer = useScreenshotViewer()
+  const { image, index, move, handleKeyDown, setSelection } = selection
+  const screenId = `${id}-screen`
   return (
     <section
       className={`screenshot-carousel ${className}`}
@@ -73,80 +89,68 @@ export default function ScreenshotCarousel({
           <span> of {images.length}</span>
         </div>
       </div>
-      <figure className="case-screenshot" id={screenId}>
-        <div className="gallery-stage">
-          <button
-            className="gallery-arrow"
-            type="button"
-            aria-label="Previous screenshot"
-            aria-controls={screenId}
-            onClick={() => move(-1)}
-          >
-            <ChevronLeft size={23} aria-hidden="true" />
-          </button>
-          <a
-            className="screenshot-link"
-            href={image.src}
-            target="_blank"
-            rel="noreferrer"
-            aria-label={`Open full-size ${title} ${image.label.toLowerCase()} screenshot in a new tab`}
-          >
-            <img
-              className="carousel-image"
-              src={image.src}
-              alt={image.alt}
-              width={image.width}
-              height={image.height}
-              decoding="async"
-            />
-          </a>
-          <button
-            className="gallery-arrow"
-            type="button"
-            aria-label="Next screenshot"
-            aria-controls={screenId}
-            onClick={() => move(1)}
-          >
-            <ChevronRight size={23} aria-hidden="true" />
-          </button>
-        </div>
-        <figcaption>
-          <span>{image.context}</span>
-          <a href={image.src} target="_blank" rel="noreferrer">
-            View full size <ArrowUpRight size={13} />
-          </a>
-        </figcaption>
-      </figure>
-      <div
-        className="gallery-thumbnails"
-        role="group"
-        aria-label="Choose a screenshot"
-        ref={thumbnails}
-      >
-        {images.map((item, position) => (
-          <button
-            className="gallery-thumbnail"
-            key={item.id}
-            type="button"
-            aria-label={`Show screenshot ${position + 1} of ${images.length}: ${item.label}`}
-            aria-pressed={index === position}
-            aria-controls={screenId}
-            ref={(button) => {
-              thumbnailButtons.current[item.id] = button ?? undefined
-            }}
-            onClick={() => setSelection(position)}
-          >
-            <img
-              src={item.src}
-              alt=""
-              width={item.width}
-              height={item.height}
-              loading="lazy"
-            />
-            <span>{item.label}</span>
-          </button>
-        ))}
-      </div>
+      <ScreenshotFigure
+        image={image}
+        title={title}
+        id={screenId}
+        onOpen={viewer.open}
+        onMove={move}
+      />
+      <CarouselThumbnails
+        images={images}
+        screenId={screenId}
+        selection={selection}
+      />
+      <ScreenshotViewer
+        title={title}
+        images={images}
+        index={index}
+        onSelect={setSelection}
+        viewer={viewer}
+      />
     </section>
+  )
+}
+
+function CarouselThumbnails({
+  images,
+  screenId,
+  selection,
+}: {
+  images: readonly Screenshot[]
+  screenId: string
+  selection: ReturnType<typeof useCarouselSelection>
+}) {
+  return (
+    <div
+      className="gallery-thumbnails"
+      role="group"
+      aria-label="Choose a screenshot"
+      ref={selection.thumbnails}
+    >
+      {images.map((item, position) => (
+        <button
+          className="gallery-thumbnail"
+          key={item.id}
+          type="button"
+          aria-label={`Show screenshot ${position + 1} of ${images.length}: ${item.label}`}
+          aria-pressed={selection.index === position}
+          aria-controls={screenId}
+          ref={(button) => {
+            selection.thumbnailButtons.current[item.id] = button ?? undefined
+          }}
+          onClick={() => selection.setSelection(position)}
+        >
+          <img
+            src={item.src}
+            alt=""
+            width={item.width}
+            height={item.height}
+            loading="lazy"
+          />
+          <span>{item.label}</span>
+        </button>
+      ))}
+    </div>
   )
 }
