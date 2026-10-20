@@ -23,6 +23,7 @@ import {
   TelemetryPreview,
 } from './TelemetryPreview'
 import ThemeToggle from './ThemeToggle'
+import BoldText from './RichText'
 
 function PagePosition() {
   const { pathname, hash } = useLocation()
@@ -339,21 +340,11 @@ function Home() {
 
 // Renders content.ts intro text: blank lines split paragraphs, **text** is bold.
 function Intro({ text }: { text: string }) {
-  return text
-    .split(/\n\n+/)
-    .map((paragraph) => (
-      <p key={paragraph.slice(0, 45)}>
-        {paragraph
-          .split(/(\*\*[^*]+\*\*)/)
-          .map((part, index) =>
-            part.startsWith('**') ? (
-              <strong key={index}>{part.slice(2, -2)}</strong>
-            ) : (
-              part
-            ),
-          )}
-      </p>
-    ))
+  return text.split(/\n\n+/).map((paragraph) => (
+    <p key={paragraph.slice(0, 45)}>
+      <BoldText text={paragraph} />
+    </p>
+  ))
 }
 
 function ProjectPage() {
