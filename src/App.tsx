@@ -12,7 +12,7 @@ import {
   MoveUpRight,
 } from 'lucide-react'
 import { Link, Route, Routes, useLocation, useParams } from 'react-router-dom'
-import { email, projects, resumeUrl } from './content'
+import { email, projects, recommendationPath, resumeUrl } from './content'
 import { Feather, VanIllustration } from './Illustrations'
 import DashboardScreenshot, { dashboardImageUrl } from './DashboardScreenshot'
 import FormEnginePreview, { formEngineUrl } from './FormEnginePreview'
@@ -24,6 +24,7 @@ import {
 } from './TelemetryPreview'
 import ThemeToggle from './ThemeToggle'
 import BoldText from './RichText'
+import { RecommendationPage, RecommendationSection } from './Recommendation'
 
 function PagePosition() {
   const { pathname, hash } = useLocation()
@@ -32,7 +33,9 @@ function PagePosition() {
     const project = projects.find((item) => pathname === `/work/${item.slug}`)
     document.title = project
       ? `${project.title} · Jacob Iwen`
-      : 'Jacob Iwen · Lionfeather'
+      : pathname === recommendationPath
+        ? 'Letter of recommendation · Jacob Iwen'
+        : 'Jacob Iwen · Lionfeather'
     const frame = requestAnimationFrame(() => {
       if (hash) document.getElementById(hash.slice(1))?.scrollIntoView()
       else window.scrollTo(0, 0)
@@ -281,6 +284,7 @@ function Home() {
           </span>
         </Link>
       </section>
+      <RecommendationSection />
       <section
         className="about-section"
         id="about"
@@ -474,6 +478,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/work/:slug" element={<ProjectPage />} />
+          <Route path={recommendationPath} element={<RecommendationPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

@@ -115,6 +115,12 @@ polling enabled because native file events missed workspace edits on this Mac.
 - Telemetry screenshots use illustrative data; the warning conversation is
   simulated. Preserve those captions. Never use the screenshots as evidence of
   an actual drive, diagnosis, warning installation, or successful vehicle action.
+- Henry Broddle's October 7, 2026 letter of recommendation is highlighted on
+  the homepage (`#recommendation`, between Selected work and About) and
+  reproduced on `/recommendation` from `recommendation` in `src/content.ts`
+  (`src/Recommendation.tsx`). Keep the letter's wording verbatim. His email
+  address is deliberately omitted and his phone number never appears; the
+  page says his contact details are available on request.
 - Fieldwork and telemetry share `ScreenshotCarousel.tsx`. Preserve arrows,
   counters, thumbnails, keyboard/focus behavior, full-size links, and image ratios.
 - Appearance uses a header Soft/Dark control. `public/theme.js` applies the saved
