@@ -1,16 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
-
-export type Screenshot = {
-  id: string
-  label: string
-  src: string
-  width: number
-  height: number
-  context: string
-  alt: string
-}
+import type { Screenshot } from './screenshots'
 
 export default function ScreenshotCarousel({
   title,

@@ -1,5 +1,5 @@
 import ScreenshotCarousel from './ScreenshotCarousel'
-import type { Screenshot } from './ScreenshotCarousel'
+import type { Screenshot } from './screenshots'
 
 const path = '/images/van-telemetry/'
 const screens: Screenshot[] = [
