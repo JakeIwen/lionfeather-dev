@@ -14,3 +14,4 @@ AGENTS.private.md
 *.log
 .DS_Store
 *.tsbuildinfo
+.playwright-mcp/
