@@ -4,6 +4,8 @@ Jacob Iwen's personal engineering website. Built with React, TypeScript, and
 React Router, with Vite running on Node.js. The production build is a static
 site.
 
+![Lionfeather portfolio homepage](docs/images/homepage.png)
+
 Run the commands below from the repository directory.
 
 ## Persistent local hosting
