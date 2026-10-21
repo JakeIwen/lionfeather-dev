@@ -16,10 +16,15 @@ external private checkout.
 - React, TypeScript, React Router, and Vite, using Node.js 22.12+ and npm.
 - `npm ci`: install the locked dependencies.
 - `npm run dev`: start Vite with live updates on loopback port 5175.
-- `npm run build`: typecheck, build the static site, and check public artifacts.
+- `npm run build`: typecheck, check stylesheets, build the static site, and check
+  public artifacts.
 - `npm run typecheck`: check application and tooling TypeScript.
 - `npm run preview`: preview the production build on loopback port 4173.
 - `npm run check:public`: check Git exclusions and generated public artifacts.
+- `npm run check:css`: enforce stylesheet rules (`scripts/check-css.mjs`): 800-line
+  files, colors only in `src/styles/palette.css`, `[data-theme` selectors only
+  there, no unused classes, no duplicate selectors, no nesting. Exemptions are
+  `codeshape: allow-size <reason>` (file) or `codeshape: allow-marker` (line).
 - `npm run check:resume`: confirm the public resume matches the current public
   master named by the resume repository's content master; see the README.
 - `npm run cloudflare:login`: authorize the Cloudflare CLI through browser consent.
@@ -27,7 +32,8 @@ external private checkout.
 - `npm run deploy`: build, check public artifacts and the resume, and publish to
   lionfeather.dev.
 - `npm start`: serve the existing production build on loopback port 5174.
-- `npm test`: exercise static-serving boundaries and lifecycle ownership checks.
+- `npm test`: the whole suite: static-serving boundaries, lifecycle ownership,
+  public-asset audit, resume source, and the stylesheet rules on the real tree.
 - `npm run service:prepare`: build and validate a local boot-service plist.
 - `npm run service:install`: build, install the macOS boot service, and verify
   automatic restart. Run from normal Terminal as the user, not under sudo.
