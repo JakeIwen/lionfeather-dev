@@ -1,7 +1,7 @@
 import { ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { email, resumeUrl } from '../../content/site'
-import { Feather } from '../Illustrations'
+import { Feather } from './Feather'
 import { ThemeToggle } from './ThemeToggle'
 import './ThemeToggle.css'
 import './Header.css'

@@ -56,10 +56,11 @@ viewer because nothing else uses them.
 - `src/App.tsx`: layout shell and `<Routes>` only.
 - `src/pages/`: route components for the home, project, recommendation, and
   not-found pages.
-- `src/pages/home/`: sections used only by the homepage.
+- `src/pages/home/`: sections and components used only by the homepage, such as
+  the van illustration beside the hero.
 - `src/components/`: shared components grouped by concern.
-- `src/components/layout/`: header, footer, theme toggle, and page-position
-  components.
+- `src/components/layout/`: header, feather mark, footer, theme toggle, and
+  page-position components.
 - `src/components/screenshots/`: shared screenshot controls, viewer, and hooks.
 - `src/components/projects/`: project previews, figures, galleries, and signal
   discovery components. `projectMedia.tsx` maps each project slug to its

@@ -1,7 +1,7 @@
 import { ArrowDown, ArrowUpRight } from 'lucide-react'
-import { VanIllustration } from '../../components/Illustrations'
 import { resumeUrl } from '../../content/site'
-import '../../components/Illustrations.css'
+import { VanIllustration } from './VanIllustration'
+import './VanIllustration.css'
 import './Hero.css'
 
 export function Hero() {

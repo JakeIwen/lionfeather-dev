@@ -74,9 +74,10 @@ email copying, and the resume download in a browser.
 - `src/pages/`: route components for the homepage, project pages, recommendation
   letter, and 404 page.
 - `src/pages/home/`: homepage sections, including project features,
-  recommendation, about, and contact.
-- `src/components/layout/`: shared header, footer, Soft/Dark theme toggle, and
-  page-position components. `public/theme.js` applies the saved appearance
+  recommendation, about, and contact, plus the original SVG van illustration
+  beside the hero.
+- `src/components/layout/`: shared header, original SVG feather mark, footer,
+  Soft/Dark theme toggle, and page-position components. `public/theme.js` applies the saved appearance
   before rendering; screenshot pixels stay unchanged.
 - `src/components/projects/`: project previews, figures, galleries, and the
   signal-discovery diagram for the dashboard, Form Engine, Fieldwork, and
@@ -86,9 +87,7 @@ email copying, and the resume download in a browser.
 - `src/components/screenshots/`: shared compact screenshot navigation, figures,
   full-screen viewer, and hooks for Fieldwork, van telemetry, and dashboard
   screenshots, with keyboard controls and full-size links.
-- `src/components/BoldText.tsx` and `src/components/Illustrations.tsx`: bold
-  text rendering for content strings and original SVG feather and van
-  illustrations.
+- `src/components/BoldText.tsx`: bold text rendering for content strings.
 - `src/content/`: project write-ups, public contact links, Henry Broddle's
   recommendation letter, and screenshot records.
 - `src/routes.ts`: route paths and route helpers.
