@@ -13,7 +13,7 @@ function savedTheme(): Theme | null {
   }
 }
 
-export default function ThemeToggle() {
+export function ThemeToggle() {
   const [theme, setTheme] = useState<Theme>(() =>
     document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light',
   )

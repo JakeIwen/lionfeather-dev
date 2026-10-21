@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
-import type { Screenshot } from './screenshots'
-import ScreenshotFigure from './ScreenshotFigure'
-import ScreenshotViewer from './ScreenshotViewer'
+import type { Screenshot } from '../../content/screenshots'
+import { ScreenshotFigure } from './ScreenshotFigure'
+import { ScreenshotViewer } from './ScreenshotViewer'
 import { useScreenshotViewer } from './useScreenshotViewer'
 
 function useCarouselSelection(images: readonly Screenshot[]) {
@@ -51,7 +51,7 @@ function useCarouselSelection(images: readonly Screenshot[]) {
   }
 }
 
-export default function ScreenshotCarousel({
+export function ScreenshotCarousel({
   title,
   id,
   images,

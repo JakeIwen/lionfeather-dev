@@ -1,5 +1,5 @@
 // Renders **text** in content strings as <strong>.
-export default function BoldText({ text }: { text: string }) {
+export function BoldText({ text }: { text: string }) {
   return (
     <>
       {text

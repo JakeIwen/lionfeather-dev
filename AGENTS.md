@@ -44,7 +44,27 @@ external private checkout.
 
 ## Project map
 
-- `src/`: application, page components, and project content.
+Route components live in `src/pages/`, homepage-only sections in
+`src/pages/home/`, shared components in `src/components/` grouped by concern,
+and data and copy in `src/content/`. Components use named exports with one
+component per file and a matching filename; screenshot hooks stay beside the
+viewer because nothing else uses them.
+
+- `src/main.tsx`: application entry for fonts, styles, the development palette
+  panel, and `<App />`.
+- `src/App.tsx`: layout shell and `<Routes>` only.
+- `src/pages/`: route components for the home, project, recommendation, and
+  not-found pages.
+- `src/pages/home/`: sections used only by the homepage.
+- `src/components/`: shared components grouped by concern.
+- `src/components/layout/`: header, footer, theme toggle, and page-position
+  components.
+- `src/components/screenshots/`: shared screenshot controls, viewer, and hooks.
+- `src/components/projects/`: project previews, figures, galleries, and signal
+  discovery components.
+- `src/content/`: public links, project write-ups, recommendation letter, and
+  screenshot records.
+- `src/routes.ts`: route paths and route helpers.
 - `src/styles/`: stylesheets by page area, imported in cascade order by
   `index.css`. Each area file keeps its own `@media` rules; `motion.css` stays last.
   `palette.css` holds every color.
@@ -128,23 +148,26 @@ polling enabled because native file events missed workspace edits on this Mac.
   an actual drive, diagnosis, warning installation, or successful vehicle action.
 - Henry Broddle's October 7, 2026 letter of recommendation is highlighted on
   the homepage (`#recommendation`, between Selected work and About) and
-  reproduced on `/recommendation` from `recommendation` in `src/content.ts`
-  (`src/Recommendation.tsx`). Keep the letter's wording verbatim. His email
-  address is deliberately omitted and his phone number never appears; the
-  page says his contact details are available on request.
+  reproduced on `/recommendation` from `recommendation` in
+  `src/content/recommendation.ts`, rendered by
+  `src/pages/RecommendationPage.tsx` and
+  `src/pages/home/RecommendationSection.tsx`. Keep the letter's wording
+  verbatim. His email address is deliberately omitted and his phone number
+  never appears; the page says his contact details are available on request.
 - Fieldwork and telemetry share `ScreenshotCarousel.tsx` and the full-screen
-  `ScreenshotViewer.tsx`, also used by `DashboardScreenshot.tsx`. The viewer keeps
-  captions, original-file links, native zoom/panning, swipe and Back-to-close;
-  preserve inline arrows, counters, thumbnails, keyboard/focus behavior, and image
-  ratios. `ScreenshotFigure.tsx` shares the image/caption triggers; `screenshots.ts`
-  defines their image records, `useSwipe.ts` shares touch detection, and
-  `useScreenshotViewer.ts` / `useViewerDialog.ts` own history and modal lifecycle.
-  Viewer styles live in `src/styles/screenshot-viewer.css`.
+  `ScreenshotViewer.tsx` in `src/components/screenshots/`, also used by the
+  dashboard's `DashboardFigure.tsx`. The viewer keeps captions, original-file
+  links, native zoom/panning, swipe and Back-to-close; preserve inline arrows,
+  counters, thumbnails, keyboard/focus behavior, and image ratios.
+  `ScreenshotFigure.tsx` shares the image/caption triggers, `useSwipe.ts` shares
+  touch detection, and `useScreenshotViewer.ts` / `useViewerDialog.ts` own
+  history and modal lifecycle. `src/content/screenshots.ts` defines the image
+  records. Viewer styles live in `src/styles/screenshot-viewer.css`.
 - Appearance uses a header Soft/Dark control. `public/theme.js` applies the saved
   `lionfeather-theme-v1` choice before rendering, otherwise follows the system.
-  `ThemeToggle.tsx` maintains it across routes and reloads, with graceful behavior
-  when storage is unavailable, and copies the computed paper color into the
-  theme-color meta. Theme the UI without filtering screenshot pixels.
+  `src/components/layout/ThemeToggle.tsx` maintains it across routes and
+  reloads, with graceful behavior when storage is unavailable, and copies the
+  computed paper color into the theme-color meta. Theme the UI without filtering screenshot pixels.
 - Colors: components use only semantic tokens from `src/styles/palette.css`. Each
   token is `oklch(L C H)` with L fixed, so the contrast against white and black
   that Jacob chose stays put; C scales with `--chroma` and H follows

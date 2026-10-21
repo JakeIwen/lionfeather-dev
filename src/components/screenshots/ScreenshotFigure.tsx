@@ -1,6 +1,6 @@
 import type { MouseEvent, ReactNode } from 'react'
 import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
-import type { Screenshot } from './screenshots'
+import type { Screenshot } from '../../content/screenshots'
 import { useSwipe } from './useSwipe'
 
 type FigureProps = {
@@ -12,7 +12,7 @@ type FigureProps = {
   children?: ReactNode
 }
 
-export default function ScreenshotFigure({
+export function ScreenshotFigure({
   image,
   title,
   id,

@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { ArrowUpRight, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import type { KeyboardEvent } from 'react'
-import type { Screenshot } from './screenshots'
+import type { Screenshot } from '../../content/screenshots'
 import type { useScreenshotViewer } from './useScreenshotViewer'
 import { useSwipe } from './useSwipe'
 import { useViewerDialog } from './useViewerDialog'
@@ -29,7 +29,7 @@ function useAdjacentImages(
   }, [images, index, open])
 }
 
-export default function ScreenshotViewer({
+export function ScreenshotViewer({
   title,
   images,
   index,

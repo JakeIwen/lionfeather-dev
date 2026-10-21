@@ -26,7 +26,7 @@ retains its owner's rights and is not licensed as part of this site's code.
 
 ## Original illustrations and fonts
 
-The feather and van SVGs are defined in `src/Illustrations.tsx`.
+The feather and van SVGs are defined in `src/components/Illustrations.tsx`.
 Locally bundled font license notices are in `public/font-licenses.txt`.
 
 ## Van telemetry

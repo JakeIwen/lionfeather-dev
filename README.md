@@ -68,24 +68,31 @@ email copying, and the resume download in a browser.
 
 ## Content
 
-- `src/content.ts`: project write-ups and public contact links.
-- `src/App.tsx`: homepage, project pages, navigation, and contact section.
-- `src/DashboardScreenshot.tsx`: the supplied dashboard screenshot, used in the
-  homepage preview and shown uncropped on the project page.
-- `src/FormEnginePreview.tsx`: Form Engine's public laptop-and-phone product image,
-  with attribution and a link to its product website on the project page.
-- `src/FieldworkPreview.tsx`: Fieldwork's five-view screenshot gallery, including
-  opportunity research, Ask Codex, App design, and the agent workspace, with
-  example records and prompts.
-- `src/TelemetryPreview.tsx`: six selected portrait telemetry screenshots and a
-  signal-discovery diagram. Demo readings and simulated conversations are labeled.
-- `src/ScreenshotCarousel.tsx`: shared compact screenshot navigation for
-  Fieldwork and van telemetry, with keyboard controls and full-size links.
-- `src/ThemeToggle.tsx` and `public/theme.js`: Soft/Dark appearance controls,
-  following the system preference until an explicit choice is saved. The head
-  script applies appearance before rendering; screenshot pixels stay unchanged.
-- `src/Illustrations.tsx`: original SVG feather and van illustrations.
-- `src/styles.css`: responsive visual design.
+- `src/main.tsx`: application entry for fonts, styles, the development palette
+  panel, and `<App />`.
+- `src/App.tsx`: layout shell and route rendering.
+- `src/pages/`: route components for the homepage, project pages, recommendation
+  letter, and 404 page.
+- `src/pages/home/`: homepage sections, including project features,
+  recommendation, about, and contact.
+- `src/components/layout/`: shared header, footer, Soft/Dark theme toggle, and
+  page-position components. `public/theme.js` applies the saved appearance
+  before rendering; screenshot pixels stay unchanged.
+- `src/components/projects/`: project previews, figures, galleries, and the
+  signal-discovery diagram for the dashboard, Form Engine, Fieldwork, and
+  telemetry projects. The dashboard preview is cropped on the homepage and shown
+  whole on its project page. Demo readings and simulated conversations are
+  labeled.
+- `src/components/screenshots/`: shared compact screenshot navigation, figures,
+  full-screen viewer, and hooks for Fieldwork, van telemetry, and dashboard
+  screenshots, with keyboard controls and full-size links.
+- `src/components/BoldText.tsx` and `src/components/Illustrations.tsx`: bold
+  text rendering for content strings and original SVG feather and van
+  illustrations.
+- `src/content/`: project write-ups, public contact links, Henry Broddle's
+  recommendation letter, and screenshot records.
+- `src/routes.ts`: route paths and route helpers.
+- `src/styles/`: responsive visual design and page-area styles.
 - `public/Jacob-Iwen-Resume.pdf`: public resume download.
 
 Fonts are packaged locally. No analytics, tracking, external font service,
