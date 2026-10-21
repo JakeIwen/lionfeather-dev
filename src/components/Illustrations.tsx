@@ -1,3 +1,4 @@
+import './Illustrations.css'
 export function Feather({ className = '' }: { className?: string }) {
   return (
     <svg
@@ -17,10 +18,10 @@ export function Feather({ className = '' }: { className?: string }) {
   )
 }
 
-export function VanIllustration() {
+export function VanIllustration({ className = '' }: { className?: string }) {
   return (
     <svg
-      className="van-illustration"
+      className={`van-illustration ${className}`}
       viewBox="0 0 380 260"
       fill="none"
       aria-hidden="true"

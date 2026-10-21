@@ -66,9 +66,10 @@ viewer because nothing else uses them.
 - `src/content/`: public links, project write-ups, recommendation letter, and
   screenshot records.
 - `src/routes.ts`: route paths and route helpers.
-- `src/styles/`: stylesheets by page area, imported in cascade order by
-  `index.css`. Each area file keeps its own `@media` rules; `motion.css` stays last.
-  `palette.css` holds every color.
+- `src/styles/`: the global layer, imported in order by `index.css`: `palette.css`
+  (every color), `base.css` (resets, elements, and primitives used across folders),
+  `screenshot-primitives.css`, and `motion.css` last. Component styles live beside
+  their components; see Styles below.
 - `src/dev/`: development-only tools (the palette panel), loaded behind
   `import.meta.env.DEV` and absent from the production bundle.
 - `public/`: intentionally public static files, including the downloadable resume.
@@ -163,7 +164,15 @@ polling enabled because native file events missed workspace edits on this Mac.
   `ScreenshotFigure.tsx` shares the image/caption triggers, `useSwipe.ts` shares
   touch detection, and `useScreenshotViewer.ts` / `useViewerDialog.ts` own
   history and modal lifecycle. `src/content/screenshots.ts` defines the image
-  records. Viewer styles live in `src/styles/screenshot-viewer.css`.
+  records. Viewer styles live in `ScreenshotViewer.css` beside the viewer.
+- Styles: each component's stylesheet sits beside it (`Hero.tsx` + `Hero.css`),
+  imported by that module after its child components so a parent's rules follow
+  the child's defaults; a sheet shared by siblings in one folder gets a
+  descriptive name (`case-study.css`, `project-metadata.css`). A sheet styles only
+  classes its importers render or global ones, so a parent restyles a child
+  through a modifier class it passes (`hero-van`) or a custom property
+  (`--gallery-height`). Verify style moves with a computed-style comparison of
+  both builds, not by reading.
 - Appearance uses a header Soft/Dark control. `public/theme.js` applies the saved
   `lionfeather-theme-v1` choice before rendering, otherwise follows the system.
   `src/components/layout/ThemeToggle.tsx` maintains it across routes and

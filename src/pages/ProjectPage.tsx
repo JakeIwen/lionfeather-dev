@@ -6,6 +6,8 @@ import { projects, type Project } from '../content/projects'
 import { email } from '../content/site'
 import { projectPath } from '../routes'
 import { NotFoundPage } from './NotFoundPage'
+import './case-study.css'
+import './ProjectPage.css'
 
 // Renders a project's intro text: blank lines split paragraphs, **text** is bold.
 function Intro({ text }: { text: string }) {

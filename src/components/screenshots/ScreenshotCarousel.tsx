@@ -4,6 +4,8 @@ import type { Screenshot } from '../../content/screenshots'
 import { ScreenshotFigure } from './ScreenshotFigure'
 import { ScreenshotViewer } from './ScreenshotViewer'
 import { useScreenshotViewer } from './useScreenshotViewer'
+import './screen-reader.css'
+import './ScreenshotCarousel.css'
 
 function useCarouselSelection(images: readonly Screenshot[]) {
   const [selection, setSelection] = useState(0)

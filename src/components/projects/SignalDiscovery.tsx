@@ -1,3 +1,4 @@
+import './SignalDiscovery.css'
 // A long arrow for the step row; the lucide icon is square and too short here.
 function StepArrow() {
   return (

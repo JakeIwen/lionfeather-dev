@@ -1,4 +1,5 @@
 import { telemetryScreenshots } from '../../content/screenshots'
+import './TelemetryPreview.css'
 
 export function TelemetryPreview() {
   return (

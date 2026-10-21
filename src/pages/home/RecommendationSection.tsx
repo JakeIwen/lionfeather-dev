@@ -2,6 +2,7 @@ import { ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { recommendation } from '../../content/recommendation'
 import { recommendationPath } from '../../routes'
+import './RecommendationSection.css'
 
 export function RecommendationSection() {
   return (

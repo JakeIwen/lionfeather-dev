@@ -1,0 +1,25 @@
+.case-screenshot {
+  margin: 0;
+}
+.screenshot-link {
+  display: block;
+  border-radius: 5px;
+  overflow: hidden;
+  cursor: zoom-in;
+}
+.case-screenshot figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: 12px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.case-screenshot figcaption a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.case-screenshot figcaption a:hover {
+  color: var(--accent);
+}

@@ -1,0 +1,37 @@
+.appearance-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.appearance-control button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 8px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+.appearance-control button[aria-pressed='true'] {
+  background: var(--surface-hover);
+  color: var(--brand);
+  box-shadow: 0 1px 3px var(--shadow-control);
+}
+@media (max-width: 580px) {
+  .appearance-control.header-appearance {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .appearance-control button {
+    padding: 6px;
+    gap: 4px;
+    font-size: 11px;
+  }
+}

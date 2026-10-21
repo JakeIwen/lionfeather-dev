@@ -1,0 +1,13 @@
+.form-engine-screenshot {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--surface-bright);
+}
+.form-engine-screenshot.form-engine-card-image {
+  position: absolute;
+  inset: 12px;
+  width: calc(100% - 24px);
+  height: calc(100% - 24px);
+  object-fit: contain;
+}

@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { projectCardMedia } from '../../components/projects/projectMedia'
 import type { Project } from '../../content/projects'
 import { projectPath } from '../../routes'
+import './project-metadata.css'
+import './ProjectCard.css'
 
 type ProjectCardProps = {
   project: Project

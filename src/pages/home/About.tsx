@@ -1,5 +1,6 @@
 import { ArrowUpRight, Download } from 'lucide-react'
 import { githubUrl, resumeUrl } from '../../content/site'
+import './About.css'
 
 export function About() {
   return (

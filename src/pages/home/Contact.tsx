@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ArrowUpRight, Check, Copy } from 'lucide-react'
 import { email } from '../../content/site'
+import './Contact.css'
 
 export function Contact() {
   const [copyStatus, setCopyStatus] = useState('')

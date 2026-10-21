@@ -1,0 +1,30 @@
+.not-found {
+  padding-block: 100px 140px;
+  min-height: 70vh;
+}
+.not-found h1 {
+  font-size: 60px;
+  letter-spacing: -2.5px;
+  margin-top: 20px;
+  font-weight: 500;
+}
+.not-found p:not(.eyebrow) {
+  color: var(--muted);
+  margin-top: 20px;
+  font-size: 17px;
+  line-height: 1.8;
+}
+.not-found .button {
+  margin-top: 30px;
+}
+@media (max-width: 580px) {
+  .not-found {
+    padding-block: 65px 90px;
+  }
+  .not-found h1 {
+    font-size: 42px;
+  }
+  .not-found p:not(.eyebrow) {
+    font-size: 14px;
+  }
+}

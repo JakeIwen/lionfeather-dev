@@ -1,3 +1,10 @@
+.about-heading h2 {
+  font-size: 43px;
+  line-height: 1.2;
+  font-weight: 480;
+  letter-spacing: -1.7px;
+  margin-top: 0;
+}
 .about-section {
   background: var(--surface);
   padding-block: 68px;
@@ -17,9 +24,6 @@
 }
 .about-copy {
   grid-area: copy;
-}
-.about-heading h2 {
-  margin-top: 0;
 }
 .about-copy > p {
   color: var(--muted);
@@ -59,91 +63,18 @@
   display: block;
   color: var(--muted);
 }
-.recommendation-section {
-  display: grid;
-  grid-template-columns: 1fr 1.35fr;
-  gap: 0 110px;
-  padding-bottom: 77px;
-  scroll-margin-top: 15px;
-}
-.recommendation-section h2 {
-  margin-top: 0;
-}
-.recommendation-quote,
-.recommendation-quote blockquote,
-.recommendation-quote blockquote p {
-  margin: 0;
-}
-.recommendation-quote .recommendation-lead {
-  font-family: var(--serif);
-  font-size: 36px;
-  line-height: 1.25;
-  color: var(--brand);
-}
-.recommendation-quote blockquote p + p {
-  margin-top: 18px;
-  font-size: 15px;
-  line-height: 1.9;
-  color: var(--muted);
-}
-.recommendation-quote figcaption {
-  margin-top: 24px;
-  padding-top: 18px;
-  border-top: 1px solid var(--line);
-  font-size: 14px;
-  font-weight: 650;
-  line-height: 1.6;
-}
-.recommendation-quote figcaption small {
-  display: block;
-  font-size: 12px;
-  font-weight: 400;
-  color: var(--muted);
-}
-.recommendation-link {
-  margin-top: 22px;
-  font-size: 13px;
-}
-.letter-body {
-  max-width: 810px;
-  margin: 0 auto;
-  font-size: 16px;
-  line-height: 1.9;
-}
-.letter-body p,
-.letter-body ul {
-  margin: 0 0 18px;
-}
-.letter-body ul {
-  padding-left: 22px;
-}
-.letter-body li + li {
-  margin-top: 8px;
-}
-.letter-body strong {
-  font-weight: 650;
-}
-.letter-body .letter-signature {
-  margin-top: 34px;
-}
 @media (max-width: 1100px) {
-  .about-grid,
-  .recommendation-section {
+  .about-grid {
     gap: 0 55px;
   }
 }
 @media (max-width: 800px) {
-  .about-grid,
-  .recommendation-section {
+  .about-grid {
     grid-template-columns: 1fr 1.4fr;
     gap: 0 35px;
   }
-  .about-heading h2,
-  .recommendation-section h2 {
+  .about-heading h2 {
     font-size: 37px;
-  }
-  .recommendation-quote .recommendation-lead {
-    font-size: 30px;
   }
   .about-copy > p.about-lead {
     font-size: 20px;
@@ -162,17 +93,6 @@
 @media (max-width: 580px) {
   .about-section {
     padding-block: 43px;
-  }
-  .recommendation-section {
-    grid-template-columns: 1fr;
-    gap: 22px;
-    padding-bottom: 50px;
-  }
-  .recommendation-quote .recommendation-lead {
-    font-size: 27px;
-  }
-  .letter-body {
-    font-size: 15px;
   }
   .about-grid {
     grid-template-columns: 1fr;

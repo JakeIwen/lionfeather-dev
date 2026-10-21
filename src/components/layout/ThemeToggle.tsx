@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Moon, Sun } from 'lucide-react'
+import './ThemeToggle.css'
 
 type Theme = 'light' | 'dark'
 const storageKey = 'lionfeather-theme-v1'
@@ -13,7 +14,7 @@ function savedTheme(): Theme | null {
   }
 }
 
-export function ThemeToggle() {
+export function ThemeToggle({ className = '' }: { className?: string }) {
   const [theme, setTheme] = useState<Theme>(() =>
     document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light',
   )
@@ -67,7 +68,11 @@ export function ThemeToggle() {
   }
 
   return (
-    <div className="appearance-control" role="group" aria-label="Appearance">
+    <div
+      className={`appearance-control ${className}`}
+      role="group"
+      aria-label="Appearance"
+    >
       <button
         type="button"
         aria-pressed={theme === 'light'}

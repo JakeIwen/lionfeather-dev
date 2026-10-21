@@ -1,0 +1,6 @@
+.fieldwork-screenshot {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--image-light);
+}

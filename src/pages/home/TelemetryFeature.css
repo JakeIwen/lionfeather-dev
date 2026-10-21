@@ -1,0 +1,63 @@
+.telemetry-feature {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  align-items: center;
+  margin-top: 30px;
+  overflow: hidden;
+  border: 1px solid var(--illustration-ink);
+  border-radius: 6px;
+  background: var(--inverse-surface);
+  color: var(--inverse-ink);
+}
+.telemetry-feature-copy {
+  padding: 38px;
+  min-width: 0;
+}
+.telemetry-feature .eyebrow {
+  color: var(--inverse-muted);
+}
+.telemetry-feature h3 {
+  font-size: 35px;
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: -1px;
+  margin-top: 15px;
+}
+.telemetry-feature-copy > p:not(.eyebrow) {
+  margin-top: 15px;
+  color: var(--inverse-muted);
+  font-size: 14px;
+  line-height: 1.9;
+}
+.telemetry-feature .tags {
+  color: var(--inverse-muted);
+  font-size: 12px;
+}
+.telemetry-feature-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 26px;
+  color: var(--inverse-link);
+  font-size: 13px;
+  font-weight: 600;
+}
+.telemetry-feature:hover .telemetry-feature-link {
+  color: var(--inverse-accent);
+}
+@media (max-width: 800px) {
+  .telemetry-feature {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .telemetry-feature-copy {
+    padding: 28px;
+  }
+}
+@media (max-width: 580px) {
+  .telemetry-feature-copy {
+    padding: 24px 20px;
+  }
+  .telemetry-feature h3 {
+    font-size: 30px;
+  }
+}

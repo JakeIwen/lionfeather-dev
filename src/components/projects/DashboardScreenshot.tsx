@@ -1,13 +1,18 @@
 import { dashboardScreenshot } from '../../content/screenshots'
+import './DashboardScreenshot.css'
 
 export function DashboardScreenshot({
   loading = 'lazy',
+  className = '',
 }: {
   loading?: 'lazy' | 'eager'
+  className?: string
 }) {
   return (
     <img
-      className="dashboard-screenshot"
+      className={
+        className ? `dashboard-screenshot ${className}` : 'dashboard-screenshot'
+      }
       src={dashboardScreenshot.src}
       alt={dashboardScreenshot.alt}
       width={dashboardScreenshot.width}

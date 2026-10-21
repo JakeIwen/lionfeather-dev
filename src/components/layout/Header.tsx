@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { email, resumeUrl } from '../../content/site'
 import { Feather } from '../Illustrations'
 import { ThemeToggle } from './ThemeToggle'
+import './ThemeToggle.css'
+import './Header.css'
 
 export function Header() {
   return (
@@ -22,7 +24,7 @@ export function Header() {
           Resume <ArrowUpRight size={14} />
         </a>
       </nav>
-      <ThemeToggle />
+      <ThemeToggle className="header-appearance" />
       <a className="header-contact" href={`mailto:${email}`}>
         Let's talk <ArrowUpRight size={15} />
       </a>

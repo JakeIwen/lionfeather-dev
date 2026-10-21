@@ -1,0 +1,42 @@
+.project-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  transition:
+    background 0.2s,
+    transform 0.2s;
+  color: var(--brand);
+}
+.tags {
+  margin-top: 18px;
+  font-size: 10px;
+  line-height: 1.8;
+  letter-spacing: 0.2px;
+  color: var(--text-secondary);
+}
+@media (max-width: 800px) {
+  .project-arrow {
+    height: 30px;
+    width: 30px;
+  }
+  .project-arrow svg {
+    width: 20px;
+  }
+  .tags {
+    font-size: 8px;
+  }
+}
+@media (max-width: 580px) {
+  .tags {
+    font-size: 10px;
+  }
+  .project-arrow {
+    height: 33px;
+    width: 33px;
+  }
+}

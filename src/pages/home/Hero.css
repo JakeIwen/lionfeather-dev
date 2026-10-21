@@ -71,67 +71,12 @@
   background: var(--status);
   box-shadow: 0 0 0 3px var(--status-halo);
 }
-.van-illustration {
-  width: 280px;
-  max-width: 115%;
-  margin: 25px 0 1px;
-  color: var(--illustration-ink);
-}
-.van-body {
-  fill: var(--illustration-body);
-}
-.van-panel {
-  fill: var(--illustration-panel);
-}
-.van-window {
-  fill: var(--illustration-window);
-}
-.van-glass {
-  fill: var(--illustration-glass);
-}
-.van-signal {
-  stroke: var(--illustration-accent);
-}
-.van-signal-dot {
-  fill: var(--illustration-accent);
-}
 .hero-aside > p {
   font-size: 14px;
   line-height: 1.75;
 }
 .hero-aside > p span {
   color: var(--muted);
-}
-.experience-strip {
-  border-block: 1px solid var(--line);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  padding-block: 19px;
-  gap: 20px;
-}
-.experience-strip > .stack-list {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  font-size: 14px;
-  color: var(--text-stack);
-}
-.ai-python {
-  display: inline-flex;
-  align-items: center;
-  gap: inherit;
-  white-space: nowrap;
-}
-.ai-python > svg {
-  color: var(--marker);
-}
-.experience-strip i {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: var(--marker);
 }
 @media (min-width: 1440px) {
   .hero {
@@ -144,9 +89,6 @@
   .hero-description {
     font-size: 18px;
     max-width: 530px;
-  }
-  .hero-aside .van-illustration {
-    width: 310px;
   }
 }
 @media (max-width: 1100px) {
@@ -166,16 +108,9 @@
     font-size: 16px;
     max-width: 440px;
   }
-  .van-illustration {
-    width: 240px;
-    margin-top: 30px;
-  }
   .hero-copy > .eyebrow {
     font-size: 10px;
     letter-spacing: 1.2px;
-  }
-  .experience-strip > .stack-list {
-    gap: 17px;
   }
 }
 @media (max-width: 800px) {
@@ -194,15 +129,6 @@
   }
   .hero-copy > .eyebrow {
     font-size: 11px;
-  }
-  .experience-strip {
-    justify-content: flex-start;
-    gap: 25px;
-  }
-  .experience-strip > .stack-list {
-    gap: 13px;
-    font-size: 12px;
-    flex-wrap: wrap;
   }
 }
 @media (max-width: 580px) {
@@ -237,16 +163,6 @@
     gap: 25px;
     margin-top: 24px;
   }
-  .experience-strip {
-    gap: 12px;
-    flex-direction: column;
-    align-items: flex-start;
-    padding-block: 15px;
-  }
-  .experience-strip > .stack-list {
-    gap: 17px;
-    font-size: 12px;
-  }
 }
 @media (max-width: 360px) {
   .hero h1 {
@@ -254,8 +170,5 @@
   }
   .hero-copy > .eyebrow {
     font-size: 7px;
-  }
-  .experience-strip > .stack-list {
-    gap: 12px;
   }
 }

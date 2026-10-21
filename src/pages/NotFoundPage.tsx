@@ -1,5 +1,6 @@
 import { MoveUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import './NotFoundPage.css'
 
 export function NotFoundPage() {
   return (

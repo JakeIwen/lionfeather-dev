@@ -1,0 +1,6 @@
+.form-engine-preview .screenshot-link {
+  cursor: pointer;
+}
+.form-engine-preview figcaption {
+  flex-wrap: wrap;
+}

@@ -1,5 +1,6 @@
 import { ArrowUpRight, Code2 } from 'lucide-react'
 import { githubUrl } from '../../content/site'
+import './Footer.css'
 
 export function Footer() {
   return (

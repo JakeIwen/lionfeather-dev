@@ -1,5 +1,6 @@
 import { ArrowUpRight } from 'lucide-react'
 import { FormEnginePreview } from './FormEnginePreview'
+import './FormEngineFigure.css'
 
 const formEngineUrl = 'https://www.formengine.com/'
 

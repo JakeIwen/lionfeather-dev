@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { BoldText } from '../components/BoldText'
 import { recommendation } from '../content/recommendation'
 import { email } from '../content/site'
+import './case-study.css'
+import './RecommendationPage.css'
 
 export function RecommendationPage() {
   const { author, title, company, date, salutation, letter, closing } =

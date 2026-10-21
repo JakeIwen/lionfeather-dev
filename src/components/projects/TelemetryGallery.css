@@ -1,0 +1,8 @@
+.telemetry-gallery {
+  --gallery-height: 560px;
+}
+@media (max-width: 580px) {
+  .telemetry-gallery {
+    --gallery-height-compact: 360px;
+  }
+}

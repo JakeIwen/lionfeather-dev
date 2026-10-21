@@ -1,0 +1,37 @@
+.telemetry-preview {
+  padding: 26px 22px;
+  min-width: 0;
+  text-align: center;
+  background: var(--inverse-inset);
+}
+.telemetry-tablets {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+}
+.telemetry-tablets img {
+  display: block;
+  width: min(44%, 210px);
+  height: auto;
+  border: 5px solid var(--inverse-deep);
+  border-radius: 12px;
+  box-shadow: 0 12px 24px var(--shadow-tablet);
+}
+.telemetry-preview > p {
+  margin-top: 14px;
+  color: var(--inverse-muted);
+  font-size: 11px;
+}
+@media (max-width: 580px) {
+  .telemetry-preview {
+    padding: 20px 12px;
+  }
+  .telemetry-tablets {
+    gap: 8px;
+  }
+  .telemetry-tablets img {
+    width: 46%;
+    border-width: 3px;
+  }
+}

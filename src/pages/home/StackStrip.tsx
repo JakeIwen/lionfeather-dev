@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react'
+import './StackStrip.css'
 
 export function StackStrip() {
   return (

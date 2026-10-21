@@ -142,12 +142,9 @@
   margin: 8px 0;
 }
 
-.viewer-trigger,
-.gallery-stage .viewer-trigger {
-  touch-action: pan-y pinch-zoom;
-}
-
-.case-screenshot figcaption .viewer-caption-trigger {
-  min-height: 44px;
-  flex-shrink: 0;
+@media (prefers-reduced-motion: reduce) {
+  .screenshot-viewer,
+  .screenshot-viewer * {
+    scroll-behavior: auto;
+  }
 }

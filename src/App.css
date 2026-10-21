@@ -1,0 +1,20 @@
+.skip-link {
+  position: fixed;
+  top: 10px;
+  left: 20px;
+  background: var(--brand);
+  color: var(--on-brand);
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  z-index: 10;
+}
+.skip-link:focus {
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip-path: none;
+  padding: 14px 20px;
+}

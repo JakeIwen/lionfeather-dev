@@ -9,10 +9,3 @@
     animation: none !important;
   }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .screenshot-viewer,
-  .screenshot-viewer * {
-    scroll-behavior: auto;
-  }
-}

@@ -5,6 +5,8 @@ import type { Screenshot } from '../../content/screenshots'
 import type { useScreenshotViewer } from './useScreenshotViewer'
 import { useSwipe } from './useSwipe'
 import { useViewerDialog } from './useViewerDialog'
+import './screen-reader.css'
+import './ScreenshotViewer.css'
 
 type ViewerProps = {
   title: string

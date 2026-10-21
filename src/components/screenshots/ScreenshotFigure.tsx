@@ -2,6 +2,7 @@ import type { MouseEvent, ReactNode } from 'react'
 import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import type { Screenshot } from '../../content/screenshots'
 import { useSwipe } from './useSwipe'
+import './ScreenshotFigure.css'
 
 type FigureProps = {
   image: Screenshot
@@ -22,7 +23,10 @@ export function ScreenshotFigure({
 }: FigureProps) {
   const swipe = useSwipe((direction) => onMove?.(direction), !!onMove)
   return (
-    <figure className="case-screenshot" id={id}>
+    <figure
+      className={`case-screenshot${onMove ? ' carousel-figure' : ''}`}
+      id={id}
+    >
       <div className={onMove ? 'gallery-stage' : undefined}>
         {onMove && <GalleryArrow direction={-1} id={id} onMove={onMove} />}
         <a

@@ -2,6 +2,8 @@ import { ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { FieldworkPreview } from '../../components/projects/FieldworkPreview'
 import { projectPath } from '../../routes'
+import './project-metadata.css'
+import './FieldworkFeature.css'
 
 export function FieldworkFeature() {
   return (

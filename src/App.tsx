@@ -7,6 +7,7 @@ import { NotFoundPage } from './pages/NotFoundPage'
 import { ProjectPage } from './pages/ProjectPage'
 import { RecommendationPage } from './pages/RecommendationPage'
 import { projectRoute, recommendationPath } from './routes'
+import './App.css'
 
 export function App() {
   return (

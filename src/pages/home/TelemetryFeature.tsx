@@ -2,6 +2,8 @@ import { ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { TelemetryPreview } from '../../components/projects/TelemetryPreview'
 import { projectPath } from '../../routes'
+import './project-metadata.css'
+import './TelemetryFeature.css'
 
 export function TelemetryFeature() {
   return (

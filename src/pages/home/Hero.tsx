@@ -1,6 +1,8 @@
 import { ArrowDown, ArrowUpRight } from 'lucide-react'
 import { VanIllustration } from '../../components/Illustrations'
 import { resumeUrl } from '../../content/site'
+import '../../components/Illustrations.css'
+import './Hero.css'
 
 export function Hero() {
   return (
@@ -37,7 +39,7 @@ export function Hero() {
         <div className="availability">
           <span className="status-dot" /> OPEN TO OPPORTUNITIES
         </div>
-        <VanIllustration />
+        <VanIllustration className="hero-van" />
         <p>
           Software engineer.
           <br />

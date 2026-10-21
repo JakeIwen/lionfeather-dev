@@ -1,5 +1,6 @@
 import { fieldworkScreenshots } from '../../content/screenshots'
 import type { FieldworkScreen } from '../../content/screenshots'
+import './FieldworkPreview.css'
 
 export function FieldworkPreview({
   screen = 'detail',

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { RefObject } from 'react'
 import { Copy, Palette, RotateCcw, X } from 'lucide-react'
+import './PalettePanel.css'
 
 type KnobKey = 'hueNeutral' | 'hueBrand' | 'hueAccent' | 'chroma'
 type CopyState = 'idle' | 'copied' | 'fallback'

@@ -1,5 +1,6 @@
 import { telemetryScreenshots } from '../../content/screenshots'
 import { ScreenshotCarousel } from '../screenshots/ScreenshotCarousel'
+import './TelemetryGallery.css'
 
 export function TelemetryGallery() {
   return (

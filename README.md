@@ -92,7 +92,9 @@ email copying, and the resume download in a browser.
 - `src/content/`: project write-ups, public contact links, Henry Broddle's
   recommendation letter, and screenshot records.
 - `src/routes.ts`: route paths and route helpers.
-- `src/styles/`: responsive visual design and page-area styles.
+- `src/styles/`: the global style layer (color palette, base rules, shared
+  screenshot primitives, reduced motion). Each component's styles sit beside it
+  as `Name.css`.
 - `public/Jacob-Iwen-Resume.pdf`: public resume download.
 
 Fonts are packaged locally. No analytics, tracking, external font service,

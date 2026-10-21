@@ -1,6 +1,8 @@
 import { ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { projectPath } from '../../routes'
+import './project-metadata.css'
+import './PipelineFeature.css'
 
 export function PipelineFeature() {
   return (
