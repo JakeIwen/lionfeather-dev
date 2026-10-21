@@ -1,11 +1,7 @@
 import { ArrowLeft, ArrowRight, ArrowUpRight, Mail } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 import { BoldText } from '../components/BoldText'
-import { DashboardFigure } from '../components/projects/DashboardFigure'
-import { FieldworkGallery } from '../components/projects/FieldworkGallery'
-import { FormEngineFigure } from '../components/projects/FormEngineFigure'
-import { SignalDiscovery } from '../components/projects/SignalDiscovery'
-import { TelemetryGallery } from '../components/projects/TelemetryGallery'
+import { caseStudyMedia } from '../components/projects/projectMedia'
 import { projects, type Project } from '../content/projects'
 import { email } from '../content/site'
 import { projectPath } from '../routes'
@@ -18,22 +14,6 @@ function Intro({ text }: { text: string }) {
       <BoldText text={paragraph} />
     </p>
   ))
-}
-
-function ProjectMedia({ project }: { project: Project }) {
-  return (
-    <>
-      {project.slug === 'van-dashboard' && <DashboardFigure />}
-      {project.slug === 'form-engine' && <FormEngineFigure />}
-      {project.slug === 'fieldwork' && <FieldworkGallery />}
-      {project.slug === 'van-telemetry' && (
-        <>
-          <TelemetryGallery />
-          <SignalDiscovery />
-        </>
-      )}
-    </>
-  )
 }
 
 function CaseSections({ project }: { project: Project }) {
@@ -104,7 +84,7 @@ export function ProjectPage() {
           <p>{project.tags.join(' · ')}</p>
         </div>
       </div>
-      <ProjectMedia project={project} />
+      {caseStudyMedia[project.slug]}
       <CaseSections project={project} />
       <CaseEnd />
       <NextProject project={next} />

@@ -1,5 +1,12 @@
+export type ProjectSlug =
+  | 'van-dashboard'
+  | 'form-engine'
+  | 'production-pipelines'
+  | 'fieldwork'
+  | 'van-telemetry'
+
 export type Project = {
-  slug: string
+  slug: ProjectSlug
   title: string
   subtitle: string
   category: string

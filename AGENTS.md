@@ -61,7 +61,8 @@ viewer because nothing else uses them.
   components.
 - `src/components/screenshots/`: shared screenshot controls, viewer, and hooks.
 - `src/components/projects/`: project previews, figures, galleries, and signal
-  discovery components.
+  discovery components. `projectMedia.tsx` maps each project slug to its
+  homepage card image and case-study figures; add a project's media there.
 - `src/content/`: public links, project write-ups, recommendation letter, and
   screenshot records.
 - `src/routes.ts`: route paths and route helpers.

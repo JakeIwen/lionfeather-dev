@@ -1,7 +1,6 @@
 import { ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { DashboardScreenshot } from '../../components/projects/DashboardScreenshot'
-import { FormEnginePreview } from '../../components/projects/FormEnginePreview'
+import { projectCardMedia } from '../../components/projects/projectMedia'
 import type { Project } from '../../content/projects'
 import { projectPath } from '../../routes'
 
@@ -15,13 +14,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
       className={`project-card ${project.slug}`}
       to={projectPath(project.slug)}
     >
-      <div className="project-visual">
-        {project.slug === 'van-dashboard' ? (
-          <DashboardScreenshot />
-        ) : (
-          <FormEnginePreview />
-        )}
-      </div>
+      <div className="project-visual">{projectCardMedia[project.slug]}</div>
       <div className="project-details">
         <div className="project-meta">
           <span>{project.category}</span>
