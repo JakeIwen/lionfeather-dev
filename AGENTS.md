@@ -23,8 +23,9 @@ external private checkout.
 - `npm run check:public`: check Git exclusions and generated public artifacts.
 - `npm run check:css`: enforce stylesheet rules (`scripts/check-css.mjs`): 800-line
   files, colors only in `src/styles/palette.css`, `[data-theme` selectors only
-  there, no unused classes, no duplicate selectors, no nesting. Exemptions are
-  `codeshape: allow-size <reason>` (file) or `codeshape: allow-marker` (line).
+  there, no unused classes, no duplicate selectors, no nesting, plus the ownership
+  rules under Styles below. Exemptions are `codeshape: allow-size <reason>` (file)
+  or `codeshape: allow-marker` (line).
 - `npm run check:resume`: confirm the public resume matches the current public
   master named by the resume repository's content master; see the README.
 - `npm run cloudflare:login`: authorize the Cloudflare CLI through browser consent.
@@ -168,11 +169,15 @@ polling enabled because native file events missed workspace edits on this Mac.
 - Styles: each component's stylesheet sits beside it (`Hero.tsx` + `Hero.css`),
   imported by that module after its child components so a parent's rules follow
   the child's defaults; a sheet shared by siblings in one folder gets a
-  descriptive name (`case-study.css`, `project-metadata.css`). A sheet styles only
-  classes its importers render or global ones, so a parent restyles a child
-  through a modifier class it passes (`hero-van`) or a custom property
-  (`--gallery-height`). Verify style moves with a computed-style comparison of
-  both builds, not by reading.
+  descriptive name (`case-study.css`, `project-metadata.css`). `check:css`
+  enforces it: a global class used by one module moves beside it (colocate), a
+  module imports the sheet defining the classes it renders (ownership), and a
+  sheet styles only classes its importers render or global ones (coupling), so a
+  parent restyles a child through a modifier class it passes (`hero-van`) or a
+  custom property (`--gallery-height`). Every stylesheet must be imported.
+  References are class strings in `.tsx` files; slug classes from
+  `src/content/` count as data. Verify style moves with a computed-style
+  comparison of both builds, not by reading.
 - Appearance uses a header Soft/Dark control. `public/theme.js` applies the saved
   `lionfeather-theme-v1` choice before rendering, otherwise follows the system.
   `src/components/layout/ThemeToggle.tsx` maintains it across routes and

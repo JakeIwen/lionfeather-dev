@@ -1,6 +1,13 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { dirname, extname, join, relative, resolve, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { checkCssOwnership } from './css-ownership.mjs'
+import {
+  addMarkerLines,
+  consumeQuoted,
+  lineLocator,
+  scanScript,
+} from './script-scanner.mjs'
 
 const DEFAULT_FILE_LINES = 800
 const PALETTE_FILE = 'src/styles/palette.css'
@@ -52,32 +59,6 @@ function relativePath(root, path) {
   return relative(root, path).split(sep).join('/')
 }
 
-function lineLocator(text) {
-  const starts = [0]
-  for (let index = 0; index < text.length; index += 1) {
-    if (text[index] === '\n') starts.push(index + 1)
-  }
-  return (offset) => {
-    let low = 0
-    let high = starts.length
-    while (low + 1 < high) {
-      const middle = Math.floor((low + high) / 2)
-      if (starts[middle] <= offset) low = middle
-      else high = middle
-    }
-    return low + 1
-  }
-}
-
-function consumeQuoted(text, start) {
-  const quote = text[start]
-  for (let index = start + 1; index < text.length; index += 1) {
-    if (text[index] === '\\') index += 1
-    else if (text[index] === quote) return index + 1
-  }
-  return text.length
-}
-
 function isCssUrlStart(text, index) {
   const previous = index > 0 ? text[index - 1] : ''
   return (
@@ -94,12 +75,6 @@ function consumeCssUrl(text, start) {
     else if (text[index] === ')') return index + 1
   }
   return text.length
-}
-
-function addMarkerLines(comment, start, lineAt, markerLines) {
-  for (const match of comment.matchAll(/codeshape:\s*allow-marker\b/g)) {
-    markerLines.add(lineAt(start + match.index))
-  }
 }
 
 function stripCssComments(text) {
@@ -265,8 +240,14 @@ function inspectSelector(state, selector, start, context) {
 
   for (const match of searchable.matchAll(/\.([A-Za-z_-][A-Za-z0-9_-]*)/g)) {
     const classLine = state.lineAt(start + match.index)
-    if (state.sourceTokens.has(match[1]) || state.markerLines.has(classLine))
-      continue
+    const exempt = state.markerLines.has(classLine)
+    state.classSelectors.push({
+      className: match[1],
+      exempt,
+      file: state.file,
+      line: classLine,
+    })
+    if (state.sourceTokens.has(match[1]) || exempt) continue
     state.violations.push({
       file: state.file,
       line: classLine,
@@ -274,6 +255,18 @@ function inspectSelector(state, selector, start, context) {
       message: `Class ".${match[1]}" is not referenced by src/**/*.{ts,tsx} or index.html.`,
     })
   }
+}
+
+function inspectCssStatement(state, start, end) {
+  const offset = firstContentOffset(state.code, start, end)
+  const statement = state.code.slice(offset, end)
+  const match =
+    /^@import\s+(?:url\(\s*)?(?:"([^"]+)"|'([^']+)'|([^\s);]+))/i.exec(
+      statement,
+    )
+  const specifier = match?.[1] ?? match?.[2] ?? match?.[3]
+  if (!specifier) return
+  state.cssImports.push({ line: state.lineAt(offset), specifier })
 }
 
 function atRuleFrame(prelude, parent) {
@@ -358,7 +351,9 @@ function parseCss(state) {
       openCssBlock(state, stack, index)
     } else if (parentheses === 0 && brackets === 0 && character === ';') {
       const frame = stack.at(-1)
-      if (
+      if (frame.kind === 'rules' && !frame.insideStyle) {
+        inspectCssStatement(state, frame.segmentStart, index)
+      } else if (
         frame.kind === 'style' ||
         frame.kind === 'declarations' ||
         frame.kind === 'keyframe-step' ||
@@ -383,61 +378,26 @@ function parseCss(state) {
   }
 }
 
-function recordScriptComment(text, start, end, lineAt, markerLines) {
-  addMarkerLines(text.slice(start, end), start, lineAt, markerLines)
-}
-
-function scanScript(text) {
-  const lineAt = lineLocator(text)
-  const markerLines = new Set()
-  const strings = []
-  const stack = [{ type: 'code', templateExpression: false, depth: 0 }]
-  for (let index = 0; index < text.length; index += 1) {
-    const frame = stack.at(-1)
-    if (frame.type === 'template') {
-      if (text[index] === '\\') index += 1
-      else if (text[index] === '`') {
-        strings.push({ start: frame.segmentStart, end: index + 1 })
-        stack.pop()
-      } else if (text[index] === '$' && text[index + 1] === '{') {
-        strings.push({ start: frame.segmentStart, end: index })
-        stack.push({ type: 'code', templateExpression: true, depth: 1 })
-        index += 1
-      }
-      continue
-    }
-
-    if (text[index] === '/' && text[index + 1] === '/') {
-      const end = text.indexOf('\n', index + 2)
-      const stop = end === -1 ? text.length : end
-      recordScriptComment(text, index, stop, lineAt, markerLines)
-      index = stop - 1
-    } else if (text[index] === '/' && text[index + 1] === '*') {
-      const close = text.indexOf('*/', index + 2)
-      const stop = close === -1 ? text.length : close + 2
-      recordScriptComment(text, index, stop, lineAt, markerLines)
-      index = stop - 1
-    } else if (text[index] === '"' || text[index] === "'") {
-      const end = consumeQuoted(text, index)
-      strings.push({ start: index, end })
-      index = end - 1
-    } else if (text[index] === '`') {
-      stack.push({ type: 'template', segmentStart: index })
-    } else if (frame.templateExpression && text[index] === '{') {
-      frame.depth += 1
-    } else if (frame.templateExpression && text[index] === '}') {
-      frame.depth -= 1
-      if (frame.depth === 0) {
-        stack.pop()
-        stack.at(-1).segmentStart = index + 1
-      }
+function scriptClassReferences(text, scan) {
+  const references = []
+  for (const span of scan.strings) {
+    if (!span.reference) continue
+    const value = text.slice(span.contentStart, span.contentEnd)
+    for (const match of value.matchAll(/\S+/g)) {
+      if (!/^[A-Za-z_-][A-Za-z0-9_-]*$/.test(match[0])) continue
+      const line = scan.lineAt(span.contentStart + match.index)
+      references.push({
+        className: match[0],
+        exempt: scan.markerLines.has(line),
+        line,
+      })
     }
   }
-  return { lineAt, markerLines, strings }
+  return references
 }
 
-function inspectScriptColors(text, file, violations) {
-  const { lineAt, markerLines, strings } = scanScript(text)
+function inspectScriptColors(text, file, violations, scan = scanScript(text)) {
+  const { lineAt, markerLines, strings } = scan
   const hex =
     /([ '"`(:])(#(?:[0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{4}|[0-9a-f]{3}))(?![A-Za-z0-9_-])/gi
   const functions =
@@ -494,47 +454,125 @@ function sourceTokens(root, scriptFiles) {
   return tokens
 }
 
+function indexClassReferences(root) {
+  const path = join(root, 'index.html')
+  if (!existsSync(path)) return []
+  const text = readFileSync(path, 'utf8')
+  const lineAt = lineLocator(text)
+  const code = text.replace(/<!--[\s\S]*?-->/g, (comment) =>
+    comment.replace(/[^\r\n]/g, ' '),
+  )
+  const references = []
+  const attributes = /\bclass\s*=\s*(["'])([\s\S]*?)\1/gi
+  for (const match of code.matchAll(attributes)) {
+    const value = match[2]
+    const quoteOffset = match[0].indexOf(match[1])
+    const valueStart = match.index + quoteOffset + 1
+    for (const token of value.matchAll(/\S+/g)) {
+      if (!/^[A-Za-z_-][A-Za-z0-9_-]*$/.test(token[0])) continue
+      references.push({
+        className: token[0],
+        line: lineAt(valueStart + token.index),
+      })
+    }
+  }
+  return references
+}
+
+function resolveCssImports(root, importer, specifiers, cssFiles) {
+  const imports = new Set()
+  for (const specifier of specifiers) {
+    if (!/^\.\.?\//.test(specifier)) continue
+    const cleanSpecifier = specifier.split(/[?#]/, 1)[0]
+    const target = relativePath(
+      root,
+      resolve(dirname(join(root, importer)), cleanSpecifier),
+    )
+    if (cssFiles.has(target)) imports.add(target)
+  }
+  return [...imports].sort()
+}
+
+function inspectModule(path, root, cssFiles, violations) {
+  const text = readFileSync(path, 'utf8')
+  const file = relativePath(root, path)
+  const isTsx = extname(path) === '.tsx'
+  const scan = scanScript(text, { jsx: isTsx })
+  inspectScriptColors(text, file, violations, scan)
+  return {
+    file,
+    imports: resolveCssImports(root, file, scan.cssImports, cssFiles),
+    references: isTsx ? scriptClassReferences(text, scan) : [],
+  }
+}
+
+function inspectStylesheet(path, root, context) {
+  const text = readFileSync(path, 'utf8')
+  const file = relativePath(root, path)
+  const metadata = stripCssComments(text)
+  const lines = countLines(text)
+  const classSelectors = []
+  const cssImports = []
+  if (lines > context.limit && !metadata.hasSizeExemption) {
+    context.violations.push({
+      file,
+      line: context.limit + 1,
+      rule: 'size',
+      message: `CSS file has ${lines} lines; limit is ${context.limit}.`,
+    })
+  }
+  parseCss({
+    classSelectors,
+    code: metadata.code,
+    cssImports,
+    file,
+    lineAt: lineLocator(text),
+    markerLines: metadata.markerLines,
+    selectors: context.selectors,
+    sourceTokens: context.tokens,
+    violations: context.violations,
+  })
+  return {
+    classes: classSelectors,
+    file,
+    imports: resolveCssImports(
+      root,
+      file,
+      cssImports.map(({ specifier }) => specifier),
+      context.cssFiles,
+    ),
+  }
+}
+
 export function checkCss({ root }) {
   const absoluteRoot = resolve(root)
   const sourceRoot = join(absoluteRoot, 'src')
   const cssFiles = filesUnder(sourceRoot, new Set(['.css']))
   const scriptFiles = filesUnder(sourceRoot, new Set(['.ts', '.tsx']))
-  const selectors = new Map()
-  const violations = []
-  const limit = lineLimit(absoluteRoot)
-  const tokens = sourceTokens(absoluteRoot, scriptFiles)
-
-  for (const path of scriptFiles) {
-    inspectScriptColors(
-      readFileSync(path, 'utf8'),
-      relativePath(absoluteRoot, path),
-      violations,
-    )
+  const cssFileNames = new Set(
+    cssFiles.map((path) => relativePath(absoluteRoot, path)),
+  )
+  const context = {
+    cssFiles: cssFileNames,
+    limit: lineLimit(absoluteRoot),
+    selectors: new Map(),
+    tokens: sourceTokens(absoluteRoot, scriptFiles),
+    violations: [],
   }
-  for (const path of cssFiles) {
-    const text = readFileSync(path, 'utf8')
-    const file = relativePath(absoluteRoot, path)
-    const metadata = stripCssComments(text)
-    const lines = countLines(text)
-    if (lines > limit && !metadata.hasSizeExemption) {
-      violations.push({
-        file,
-        line: limit + 1,
-        rule: 'size',
-        message: `CSS file has ${lines} lines; limit is ${limit}.`,
-      })
-    }
-    parseCss({
-      code: metadata.code,
-      file,
-      lineAt: lineLocator(text),
-      markerLines: metadata.markerLines,
-      selectors,
-      sourceTokens: tokens,
-      violations,
-    })
-  }
-  return violations.sort(
+  const modules = scriptFiles.map((path) =>
+    inspectModule(path, absoluteRoot, cssFileNames, context.violations),
+  )
+  const stylesheets = cssFiles.map((path) =>
+    inspectStylesheet(path, absoluteRoot, context),
+  )
+  context.violations.push(
+    ...checkCssOwnership({
+      indexReferences: indexClassReferences(absoluteRoot),
+      modules,
+      stylesheets,
+    }),
+  )
+  return context.violations.sort(
     (left, right) =>
       left.file.localeCompare(right.file) ||
       left.line - right.line ||

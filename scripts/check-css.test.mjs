@@ -238,9 +238,181 @@ test('tokenizer ignores comments, strings, and URL contents', (t) => {
 }
 `,
     },
-    source: 'export const classes = "safe"',
+    source: 'import "./app.css"\nexport const classes = "safe"',
   })
   assert.deepEqual(checkCss({ root }), [])
+})
+
+test('colocate moves single-module global classes but keeps shared and HTML classes global', (t) => {
+  const root = fixture(t, {
+    files: {
+      'index.html': '<main class="html-only"></main>',
+      'src/Other.tsx': 'export const other = "shared"',
+      'src/styles/base.css': `
+.solo { display: block; }
+.nested { display: block; }
+.shared { display: block; }
+.html-only { display: block; }
+.ignored { display: block; } /* codeshape: allow-marker */
+`,
+    },
+    source: `
+import './styles/base.css'
+export const classes = 'solo shared ignored'
+export const nested = \`base \${active ? 'nested' : ''}\`
+`,
+  })
+  assert.deepEqual(violationsFor(root, 'colocate'), [
+    {
+      file: 'src/styles/base.css',
+      line: 2,
+      rule: 'colocate',
+      message:
+        'Class ".solo" is only used by src/App.tsx; move it to a stylesheet beside it.',
+    },
+    {
+      file: 'src/styles/base.css',
+      line: 3,
+      rule: 'colocate',
+      message:
+        'Class ".nested" is only used by src/App.tsx; move it to a stylesheet beside it.',
+    },
+  ])
+})
+
+test('ownership follows direct imports and precise TSX string references', (t) => {
+  const root = fixture(t, {
+    files: {
+      'src/Card.css': `
+.card { display: block; }
+.conditional { display: block; }
+.jsx-text { display: block; }
+.content-only { display: block; }
+`,
+      'src/Card.tsx': `
+import './Card.css'
+export const Card = ({ variant }) => (
+  <div className={\`card \${variant ? 'conditional' : ''}\`}>
+    jsx-text
+  </div>
+)
+`,
+      'src/Other.tsx': 'export const otherClass = "card"',
+      'src/TextOnly.tsx': 'export const TextOnly = () => <p>card</p>',
+      'src/projectMedia.tsx':
+        "export const projectMedia = { 'card': <span /> }",
+      'src/One.css': '.one.is-active { display: block; }',
+      'src/One.tsx': `import './One.css'\nexport const one = 'one is-active'`,
+      'src/Two.css': '.two.is-active { display: block; }',
+      'src/Two.tsx': `import './Two.css'\nexport const two = 'two is-active'`,
+      'src/content/data.ts':
+        'export const classes = "card content-only is-active"',
+    },
+  })
+  assert.deepEqual(checkCss({ root }), [
+    {
+      file: 'src/Other.tsx',
+      line: 1,
+      rule: 'ownership',
+      message:
+        'Class ".card" is defined in src/Card.css, but that stylesheet is not imported by src/Other.tsx.',
+    },
+  ])
+})
+
+test('coupling accepts parent-passed classes and rejects child-owned selector classes', (t) => {
+  const root = fixture(t, {
+    files: {
+      'src/Hero.css': `
+.hero-van { display: block; }
+.hero-van .van-body { display: block; }
+`,
+      'src/Hero.tsx': `
+import './Hero.css'
+export const Hero = () => <Illustration className="hero-van" />
+`,
+      'src/Illustrations.tsx':
+        'export const Illustration = () => <svg className="van-body" />',
+    },
+  })
+  assert.deepEqual(violationsFor(root, 'coupling'), [
+    {
+      file: 'src/Hero.css',
+      line: 3,
+      rule: 'coupling',
+      message:
+        'Class ".van-body" is not referenced by any module that imports src/Hero.css.',
+    },
+  ])
+})
+
+test('coupling permits component context around a global class', (t) => {
+  const root = fixture(t, {
+    files: {
+      'src/Button.tsx': 'export const Button = () => <a className="button" />',
+      'src/Contact.css': '.contact .button { display: inline-flex; }',
+      'src/Contact.tsx': `
+import './Contact.css'
+export const Contact = () => <section className="contact" />
+`,
+      'src/styles/base.css': '.button { display: inline-flex; }',
+    },
+    source: "import './styles/base.css'",
+  })
+  assert.deepEqual(violationsFor(root, 'coupling'), [])
+})
+
+test('orphan-stylesheet follows reachable CSS import chains', (t) => {
+  const root = fixture(t, {
+    files: {
+      'src/orphan.css': 'aside { display: block; }',
+      'src/styles/base.css': `@import url('./nested.css');\nhtml { display: block; }`,
+      'src/styles/deep.css': 'main { display: block; }',
+      'src/styles/nested.css': `@import './deep.css';\nbody { display: block; }`,
+    },
+    source: "import './styles/base.css'",
+  })
+  assert.deepEqual(violationsFor(root, 'orphan-stylesheet'), [
+    {
+      file: 'src/orphan.css',
+      line: 1,
+      rule: 'orphan-stylesheet',
+      message:
+        'Stylesheet "src/orphan.css" is not reachable from a relative side-effect import in a TypeScript module.',
+    },
+  ])
+})
+
+test('ownership and coupling require the rendering module to import the sheet', (t) => {
+  const root = fixture(t, {
+    files: {
+      'src/dev/PalettePanel.tsx':
+        'export const PalettePanel = () => <aside className="palette-panel" />',
+      'src/dev/mountPalettePanel.tsx': "import './palette-panel.css'",
+      'src/dev/palette-panel.css': '.palette-panel { display: block; }',
+    },
+  })
+  assert.equal(violationsFor(root, 'ownership').length, 1)
+  assert.equal(violationsFor(root, 'coupling').length, 1)
+  assert.deepEqual(violationsFor(root, 'orphan-stylesheet'), [])
+})
+
+test('allow-marker exempts new line-level organization rules', (t) => {
+  const root = fixture(t, {
+    files: {
+      'src/Owner.css':
+        '.local { display: block; } /* codeshape: allow-marker */',
+      'src/Owner.tsx': "import './Owner.css'",
+      'src/Other.tsx':
+        'export const local = "local" // codeshape: allow-marker',
+      'src/styles/base.css':
+        '.global { display: block; } /* codeshape: allow-marker */',
+    },
+    source: `import './styles/base.css'\nexport const global = 'global'`,
+  })
+  assert.deepEqual(violationsFor(root, 'colocate'), [])
+  assert.deepEqual(violationsFor(root, 'ownership'), [])
+  assert.deepEqual(violationsFor(root, 'coupling'), [])
 })
 
 test('the repository has no CSS code-shape violations', () => {
