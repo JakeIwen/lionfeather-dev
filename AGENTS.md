@@ -48,6 +48,8 @@ external private checkout.
 - `src/styles/`: stylesheets by page area, imported in cascade order by
   `index.css`. Each area file keeps its own `@media` rules; `motion.css` stays last.
   `palette.css` holds every color.
+- `src/dev/`: development-only tools (the palette panel), loaded behind
+  `import.meta.env.DEV` and absent from the production bundle.
 - `public/`: intentionally public static files, including the downloadable resume.
 - `scripts/`: static server, launchd controller, tests, and build validation;
   not shipped to the browser.
@@ -148,8 +150,10 @@ polling enabled because native file events missed workspace edits on this Mac.
   that Jacob chose stays put; C scales with `--chroma` and H follows
   `--hue-neutral`, `--hue-brand`, or `--hue-accent`. Retheme by changing those
   knobs or adding a `:root[data-palette='name']` profile (knobs only). The
-  screenshot backdrops, pure white, and the tablet shadow are fixed. The hex
-  theme-color in `public/theme.js` and `index.html` is only the first-paint value.
+  screenshot backdrops, pure white, and the tablet shadow are fixed. In
+  `npm run dev`, the bottom-left Palette panel switches profiles, drags the knobs
+  live, and copies the result as CSS. The hex theme-color in `public/theme.js` and
+  `index.html` is only the first-paint value.
 
 ## Demonstrations and privacy
 
