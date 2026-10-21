@@ -132,7 +132,15 @@ polling enabled because native file events missed workspace edits on this Mac.
 - Appearance uses a header Soft/Dark control. `public/theme.js` applies the saved
   `lionfeather-theme-v1` choice before rendering, otherwise follows the system.
   `ThemeToggle.tsx` maintains it across routes and reloads, with graceful behavior
-  when storage is unavailable. Theme the UI without filtering screenshot pixels.
+  when storage is unavailable, and copies the computed paper color into the
+  theme-color meta. Theme the UI without filtering screenshot pixels.
+- Colors: components use only semantic tokens from `src/styles/palette.css`. Each
+  token is `oklch(L C H)` with L fixed, so the contrast against white and black
+  that Jacob chose stays put; C scales with `--chroma` and H follows
+  `--hue-neutral`, `--hue-brand`, or `--hue-accent`. Retheme by changing those
+  knobs or adding a `:root[data-palette='name']` profile (knobs only). The
+  screenshot backdrops, pure white, and the tablet shadow are fixed. The hex
+  theme-color in `public/theme.js` and `index.html` is only the first-paint value.
 
 ## Demonstrations and privacy
 

@@ -1,0 +1,134 @@
+/* Retheme by editing the four knobs or adding a data-palette profile.
+   Mode-specific profile overrides use :root[data-palette='x'][data-theme='dark']. */
+:root {
+  --hue-neutral: 120;
+  --hue-brand: 145;
+  --hue-accent: 40;
+  --chroma: 1;
+  color-scheme: light;
+
+  /* Mode-sensitive roles keep their lightness when a profile changes. */
+  --paper: oklch(0.967 calc(0.008 * var(--chroma)) calc(var(--hue-neutral) - 29));
+  --ink: oklch(0.294 calc(0.012 * var(--chroma)) var(--hue-brand));
+  --muted: oklch(0.539 calc(0.015 * var(--chroma)) var(--hue-neutral));
+  --line: oklch(0.896 calc(0.014 * var(--chroma)) var(--hue-neutral));
+  --brand: oklch(0.389 calc(0.037 * var(--chroma)) calc(var(--hue-brand) + 12));
+  --accent: oklch(0.523 calc(0.121 * var(--chroma)) var(--hue-accent));
+  --surface: oklch(0.945 calc(0.012 * var(--chroma)) var(--hue-neutral));
+  --surface-raised: oklch(0.977 calc(0.005 * var(--chroma)) var(--hue-neutral));
+  --surface-hover: oklch(0.934 calc(0.017 * var(--chroma)) var(--hue-neutral));
+  --surface-tint: oklch(0.926 calc(0.019 * var(--chroma)) var(--hue-neutral));
+  --surface-pressed: oklch(0.893 calc(0.027 * var(--chroma)) var(--hue-neutral));
+  --surface-inset: oklch(0.919 calc(0.017 * var(--chroma)) var(--hue-neutral));
+  --border-strong: oklch(0.801 calc(0.035 * var(--chroma)) calc(var(--hue-brand) - 14));
+  --border-link: oklch(0.749 calc(0.031 * var(--chroma)) calc(var(--hue-brand) - 14));
+  --text-subtle: oklch(0.513 calc(0.017 * var(--chroma)) var(--hue-neutral));
+  --text-secondary: oklch(0.5 calc(0.021 * var(--chroma)) var(--hue-brand));
+  --text-stack: oklch(0.438 calc(0.019 * var(--chroma)) var(--hue-brand));
+  --status: oklch(0.598 calc(0.082 * var(--chroma)) calc(var(--hue-brand) - 14));
+  --on-tint: oklch(0.475 calc(0.041 * var(--chroma)) var(--hue-brand));
+  --selection: oklch(0.881 calc(0.036 * var(--chroma)) calc(var(--hue-neutral) - 25));
+
+  /* These embedded dark panels and illustration colors stay stable across modes. */
+  --surface-bright: oklch(1 0 0);
+  --image-light: oklch(0.977 0.005 118);
+  --image-dark: oklch(0.215 0.019 235);
+  --inverse-deep: oklch(0.189 calc(0.01 * var(--chroma)) var(--hue-brand));
+  --inverse-inset: oklch(0.254 calc(0.029 * var(--chroma)) calc(var(--hue-brand) + 15));
+  --inverse-surface: oklch(0.308 calc(0.033 * var(--chroma)) calc(var(--hue-brand) + 18));
+  --inverse-ink: oklch(0.942 calc(0.015 * var(--chroma)) var(--hue-brand));
+  --inverse-muted: oklch(0.828 calc(0.031 * var(--chroma)) var(--hue-brand));
+  --inverse-link: oklch(0.918 calc(0.035 * var(--chroma)) calc(var(--hue-brand) - 15));
+  --inverse-accent: oklch(0.856 calc(0.066 * var(--chroma)) calc(var(--hue-accent) + 11));
+  --accent-soft: oklch(0.773 calc(0.085 * var(--chroma)) var(--hue-accent));
+  --illustration-ink: oklch(0.389 calc(0.037 * var(--chroma)) calc(var(--hue-brand) + 12));
+  --illustration-body: oklch(0.919 calc(0.016 * var(--chroma)) calc(var(--hue-neutral) - 17));
+  --illustration-panel: oklch(0.876 calc(0.025 * var(--chroma)) var(--hue-neutral));
+  --illustration-window: oklch(0.754 calc(0.031 * var(--chroma)) var(--hue-brand));
+  --illustration-glass: oklch(0.633 calc(0.041 * var(--chroma)) var(--hue-brand));
+  --illustration-accent: oklch(0.575 calc(0.129 * var(--chroma)) var(--hue-accent));
+  --diagram-line: oklch(0.66 calc(0.034 * var(--chroma)) calc(var(--hue-brand) - 12));
+  --marker-quiet: oklch(0.698 calc(0.028 * var(--chroma)) var(--hue-neutral));
+  --viewer-line: oklch(0.542 calc(0.031 * var(--chroma)) calc(var(--hue-brand) + 12));
+  --shadow-card: oklch(0.328 calc(0.028 * var(--chroma)) calc(var(--hue-brand) - 14) / 4%);
+  --shadow-control: oklch(0.321 calc(0.033 * var(--chroma)) var(--hue-brand) / 7%);
+  --shadow-image: oklch(0.389 calc(0.037 * var(--chroma)) calc(var(--hue-brand) + 12) / 8%);
+  --shadow-tablet: oklch(0 0 0 / 27%);
+  --status-halo: oklch(0.597 calc(0.058 * var(--chroma)) calc(var(--hue-brand) - 13) / 7%);
+  --viewer-backdrop: oklch(0.189 calc(0.01 * var(--chroma)) var(--hue-brand) / 96%);
+
+  /* Shared mixtures keep component-specific roles on the same small ramps. */
+  --viewer-control: color-mix(in oklch, var(--inverse-surface), var(--inverse-deep) 12%);
+  --viewer-ink: color-mix(in oklch, var(--inverse-ink), var(--surface-bright) 40%);
+  --border-soft: color-mix(in oklch, var(--line), var(--border-strong) 30%);
+  --section-line: var(--surface-inset);
+  --on-brand: var(--surface-bright);
+  --on-action: var(--brand);
+  --selection-ink: var(--ink);
+  --marker: color-mix(in oklch, var(--illustration-window), var(--marker-quiet) 25%);
+  --thumbnail-selected: var(--surface-raised);
+  --thumbnail-hover-border: var(--border-strong);
+  --diagram-fill: var(--surface-hover);
+  --diagram-shade: var(--surface-pressed);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --paper: oklch(0.245 calc(0.017 * var(--chroma)) calc(var(--hue-brand) + 18));
+  --ink: oklch(0.929 calc(0.017 * var(--chroma)) var(--hue-neutral));
+  --muted: oklch(0.782 calc(0.025 * var(--chroma)) var(--hue-brand));
+  --line: oklch(0.411 calc(0.033 * var(--chroma)) var(--hue-brand));
+  --brand: oklch(0.823 calc(0.064 * var(--chroma)) calc(var(--hue-brand) - 11));
+  --accent: oklch(0.773 calc(0.085 * var(--chroma)) var(--hue-accent));
+  --surface: oklch(0.314 calc(0.031 * var(--chroma)) var(--hue-brand));
+  --surface-raised: oklch(0.288 calc(0.027 * var(--chroma)) var(--hue-brand));
+  --surface-hover: oklch(0.382 calc(0.041 * var(--chroma)) var(--hue-brand));
+  --surface-tint: oklch(0.347 calc(0.043 * var(--chroma)) var(--hue-brand));
+  --surface-pressed: var(--surface-hover);
+  --surface-inset: oklch(0.226 calc(0.021 * var(--chroma)) var(--hue-brand));
+  --border-strong: var(--line);
+  --border-link: var(--line);
+  --text-subtle: var(--muted);
+  --text-secondary: oklch(0.835 calc(0.031 * var(--chroma)) var(--hue-brand));
+  --text-stack: var(--text-secondary);
+  --status: oklch(0.756 calc(0.091 * var(--chroma)) calc(var(--hue-brand) - 14));
+  --on-tint: oklch(0.851 calc(0.062 * var(--chroma)) calc(var(--hue-brand) - 14));
+  --selection: oklch(0.476 calc(0.05 * var(--chroma)) calc(var(--hue-brand) - 11));
+  --section-line: var(--line);
+  --on-brand: var(--inverse-inset);
+  --on-action: color-mix(in oklch, var(--inverse-link), var(--inverse-muted) 40%);
+  --selection-ink: var(--viewer-ink);
+  --marker: color-mix(in oklch, var(--diagram-line), var(--illustration-glass) 30%);
+  --thumbnail-selected: var(--surface-hover);
+  --thumbnail-hover-border: var(--marker-quiet);
+  --diagram-fill: var(--line);
+  --diagram-shade: var(--surface-tint);
+}
+
+:root[data-palette='blue-slate'] {
+  --hue-neutral: 245;
+  --hue-brand: 250;
+  --hue-accent: 55;
+  --chroma: 0.9;
+}
+
+:root[data-palette='clay'] {
+  --hue-neutral: 65;
+  --hue-brand: 50;
+  --hue-accent: 155;
+  --chroma: 0.85;
+}
+
+:root[data-palette='plum'] {
+  --hue-neutral: 305;
+  --hue-brand: 315;
+  --hue-accent: 70;
+  --chroma: 0.8;
+}
+
+:root[data-palette='teal'] {
+  --hue-neutral: 180;
+  --hue-brand: 190;
+  --hue-accent: 35;
+  --chroma: 0.95;
+}

@@ -20,10 +20,21 @@ export default function ThemeToggle() {
   const explicitChoice = useRef(savedTheme() !== null)
 
   useEffect(() => {
-    document.documentElement.dataset.theme = theme
-    document
-      .querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', theme === 'dark' ? '#19231e' : '#f6f4ee')
+    const root = document.documentElement
+    root.dataset.theme = theme
+    const syncThemeColor = () => {
+      document
+        .querySelector('meta[name="theme-color"]')
+        ?.setAttribute('content', getComputedStyle(root).backgroundColor)
+    }
+    syncThemeColor()
+    // Profile previews can change the paper color without changing appearance mode.
+    const observer = new MutationObserver(syncThemeColor)
+    observer.observe(root, {
+      attributes: true,
+      attributeFilter: ['data-theme', 'data-palette', 'style'],
+    })
+    return () => observer.disconnect()
   }, [theme])
 
   useEffect(() => {

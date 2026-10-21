@@ -1,10 +1,4 @@
 .screenshot-viewer {
-  --viewer-bg: #101512;
-  --viewer-control: #223028;
-  --viewer-ink: #f1f5ef;
-  --viewer-muted: #c2cec4;
-  --viewer-line: #617568;
-  --viewer-focus: #e4a489;
   position: fixed;
   inset: 0;
   width: 100%;
@@ -17,7 +11,7 @@
   padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
     env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
   overflow: hidden;
-  background: var(--viewer-bg);
+  background: var(--inverse-deep);
   color: var(--viewer-ink);
   /* The viewer stays dark in both themes, so native scrollbars should too. */
   color-scheme: dark;
@@ -30,7 +24,7 @@
 }
 
 .screenshot-viewer::backdrop {
-  background: #101512f5;
+  background: var(--viewer-backdrop);
 }
 
 .screenshot-viewer button,
@@ -51,7 +45,7 @@
 }
 
 .screenshot-viewer :focus-visible {
-  outline: 3px solid var(--viewer-focus);
+  outline: 3px solid var(--accent-soft);
   outline-offset: 2px;
 }
 
@@ -141,7 +135,7 @@
 
 .viewer-label span,
 .viewer-caption p {
-  color: var(--viewer-muted);
+  color: var(--inverse-muted);
 }
 
 .viewer-caption p {

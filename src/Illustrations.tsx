@@ -41,19 +41,19 @@ export function VanIllustration() {
       />
       <path
         d="M59 186v-66q0-24 25-24h183q14 0 23 15l27 44 13 12v25H60"
-        fill="#e6e5d9"
+        className="van-body"
         stroke="currentColor"
         strokeWidth="2"
       />
       <path
         d="M77 112h162v56H77z"
-        fill="#d4d9c7"
+        className="van-panel"
         stroke="currentColor"
         strokeWidth="1.5"
       />
       <path
         d="M250 113h19q7 0 13 10l18 32h-50z"
-        fill="#a6b4a1"
+        className="van-window"
         stroke="currentColor"
         strokeWidth="1.5"
       />
@@ -62,17 +62,19 @@ export function VanIllustration() {
         stroke="currentColor"
         strokeWidth="1.5"
       />
-      <rect x="88" y="119" width="35" height="25" rx="2" fill="#7b917b" />
-      <rect x="185" y="119" width="43" height="25" rx="2" fill="#7b917b" />
+      <g className="van-glass">
+        <rect x="88" y="119" width="35" height="25" rx="2" />
+        <rect x="185" y="119" width="43" height="25" rx="2" />
+      </g>
       <path
         d="M95 120v24m98-24v24M108 88h122M122 83h94v12h-94z"
         stroke="currentColor"
         strokeWidth="1.5"
       />
-      <circle cx="109" cy="189" r="19" fill="#344b3d" />
-      <circle cx="109" cy="189" r="10" fill="#e6e5d9" />
-      <circle cx="282" cy="189" r="19" fill="#344b3d" />
-      <circle cx="282" cy="189" r="10" fill="#e6e5d9" />
+      <circle cx="109" cy="189" r="19" fill="currentColor" />
+      <circle cx="109" cy="189" r="10" className="van-body" />
+      <circle cx="282" cy="189" r="19" fill="currentColor" />
+      <circle cx="282" cy="189" r="10" className="van-body" />
       <path
         d="M314 170h14v8h-14M64 150h5v17h-5"
         stroke="currentColor"
@@ -80,11 +82,11 @@ export function VanIllustration() {
       />
       <path
         d="M175 63q14-15 29 0m-36-8q21-23 44 0m-29 14q6-6 13 0"
-        stroke="#b75a3a"
+        className="van-signal"
         strokeWidth="2"
         strokeLinecap="round"
       />
-      <circle cx="189" cy="77" r="2.5" fill="#b75a3a" />
+      <circle cx="189" cy="77" r="2.5" className="van-signal-dot" />
       <path
         d="M55 64h19m-9-9v19M316 87h12m-6-6v12"
         stroke="currentColor"
