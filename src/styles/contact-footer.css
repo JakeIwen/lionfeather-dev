@@ -1,0 +1,113 @@
+.contact-section {
+  padding-block: 64px 72px;
+  display: grid;
+  justify-items: start;
+  gap: 0;
+}
+.contact-section h2 {
+  font-size: 44px;
+  letter-spacing: -1.8px;
+  font-weight: 500;
+}
+.contact-section p {
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--muted);
+  margin-top: 18px;
+}
+.contact-actions {
+  margin-top: 4px;
+}
+.contact-email {
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+  font-size: clamp(22px, 3.3vw, 40px);
+  letter-spacing: -1.2px;
+  line-height: 1.2;
+  color: var(--brand);
+  border-bottom: 1px solid var(--border-link);
+  padding-bottom: 10px;
+  margin-top: 22px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.contact-email svg {
+  width: 0.65em;
+  height: 0.65em;
+}
+.contact-email:hover {
+  color: var(--accent);
+}
+.copy-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 0;
+  padding: 12px 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+.copy-button:hover {
+  color: var(--brand);
+}
+.copy-status {
+  display: block;
+  font-size: 12px;
+  max-width: 300px;
+  min-height: 15px;
+  color: var(--brand);
+}
+.site-footer {
+  padding-block: 25px 30px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--muted);
+  gap: 20px;
+}
+.site-footer a {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.site-footer a:hover {
+  color: var(--accent);
+}
+@media (max-width: 800px) {
+  .contact-section h2 {
+    font-size: 36px;
+  }
+  .contact-section {
+    padding-block: 55px;
+  }
+}
+@media (max-width: 580px) {
+  .contact-section {
+    padding-block: 45px 35px;
+  }
+  .contact-section h2 {
+    font-size: 36px;
+  }
+  .contact-section p {
+    font-size: 13px;
+  }
+  .contact-email {
+    font-size: 21px;
+    letter-spacing: -0.5px;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .site-footer {
+    font-size: 10px;
+    padding-block: 20px;
+    align-items: center;
+  }
+}
+@media (max-width: 360px) {
+  .contact-email {
+    font-size: 18px;
+  }
+}

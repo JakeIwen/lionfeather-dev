@@ -38,7 +38,10 @@ external private checkout.
 
 ## Project map
 
-- `src/`: application, page components, project content, and styles.
+- `src/`: application, page components, and project content.
+- `src/styles/`: stylesheets by page area, imported in cascade order by
+  `index.css`. Each area file keeps its own `@media` rules; `motion.css` stays last.
+  `palette.css` holds every color.
 - `public/`: intentionally public static files, including the downloadable resume.
 - `scripts/`: static server, launchd controller, tests, and build validation;
   not shipped to the browser.
@@ -128,7 +131,7 @@ polling enabled because native file events missed workspace edits on this Mac.
   ratios. `ScreenshotFigure.tsx` shares the image/caption triggers; `screenshots.ts`
   defines their image records, `useSwipe.ts` shares touch detection, and
   `useScreenshotViewer.ts` / `useViewerDialog.ts` own history and modal lifecycle.
-  Viewer styles live in `screenshot-viewer.css`.
+  Viewer styles live in `src/styles/screenshot-viewer.css`.
 - Appearance uses a header Soft/Dark control. `public/theme.js` applies the saved
   `lionfeather-theme-v1` choice before rendering, otherwise follows the system.
   `ThemeToggle.tsx` maintains it across routes and reloads, with graceful behavior

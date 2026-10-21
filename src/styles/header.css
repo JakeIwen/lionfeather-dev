@@ -1,0 +1,148 @@
+.site-header {
+  height: 106px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  gap: 40px;
+}
+.wordmark {
+  display: flex;
+  align-items: center;
+  font-size: 28px;
+  letter-spacing: -1.2px;
+  font-weight: 650;
+}
+.wordmark svg {
+  width: 36px;
+  height: 36px;
+  margin-right: 6px;
+  color: var(--brand);
+}
+.wordmark-dot {
+  color: var(--accent);
+}
+.site-header nav {
+  display: flex;
+  gap: 33px;
+  align-items: center;
+  margin-left: auto;
+  font-size: 14px;
+  font-weight: 600;
+}
+.site-header nav a {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 0;
+}
+.header-contact {
+  display: flex;
+  gap: 17px;
+  align-items: center;
+  font-size: 14px;
+  padding: 11px 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  margin-left: 16px;
+  transition: background 0.2s;
+}
+.header-contact:hover {
+  background: var(--surface-hover);
+}
+.appearance-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.appearance-control button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 8px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+.appearance-control button[aria-pressed='true'] {
+  background: var(--surface-hover);
+  color: var(--brand);
+  box-shadow: 0 1px 3px var(--shadow-control);
+}
+@media (max-width: 800px) {
+  .site-header {
+    height: 87px;
+    gap: 20px;
+  }
+  .header-contact {
+    display: none;
+  }
+  .site-header nav {
+    gap: 23px;
+  }
+}
+@media (max-width: 580px) {
+  .site-header.container {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    height: auto;
+    padding-block: 16px;
+  }
+  .site-header nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+    justify-content: space-between;
+    margin-left: 0;
+    gap: 17px;
+    font-size: 12px;
+  }
+  .site-header .appearance-control {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .appearance-control button {
+    padding: 6px;
+    gap: 4px;
+    font-size: 11px;
+  }
+  .site-header {
+    height: 80px;
+    gap: 14px;
+  }
+  .wordmark {
+    font-size: 25px;
+  }
+  .wordmark svg {
+    height: 28px;
+    width: 28px;
+    margin-right: 4px;
+  }
+  .site-header nav svg {
+    width: 12px;
+  }
+}
+@media (max-width: 360px) {
+  .site-header {
+    height: auto;
+    min-height: 80px;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-block: 18px;
+  }
+  .site-header nav {
+    width: 100%;
+    margin-left: 0;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .wordmark {
+    font-size: 23px;
+  }
+}

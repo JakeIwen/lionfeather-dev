@@ -151,10 +151,3 @@
   min-height: 44px;
   flex-shrink: 0;
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .screenshot-viewer,
-  .screenshot-viewer * {
-    scroll-behavior: auto;
-  }
-}
