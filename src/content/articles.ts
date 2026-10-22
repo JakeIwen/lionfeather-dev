@@ -33,7 +33,7 @@ const tokenSurplus: Article = {
   blocks: [
     {
       kind: 'paragraph',
-      text: 'From late August to late October 2026 I had far more model capacity than I could normally justify: a ChatGPT Pro plan, several banked reset weeks on top of it, and, for the final month, a Claude plan as well. The allowance would have expired unused, so I spent it on two things: the environment my coding agents work in, and personal projects that had been sitting on a list for years.',
+      text: 'From late August to late October 2026 I had far more model capacity than I could normally justify: a ChatGPT Pro plan, several banked usage resets on top of it, and, for the final month, a Claude plan as well. The allowance would have expired unused, so I spent it on two things: the environment my coding agents work in, and personal projects that had been sitting on a list for years.',
     },
     {
       kind: 'paragraph',
