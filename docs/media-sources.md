@@ -64,3 +64,9 @@ copying. The public website does not connect to the vehicle or telemetry service
 - AI navigation and actual connection indicators are retained. These views show
   editable prompts, context selection, research, and design review.
 - These are static captures; the public site does not connect to the workspace.
+
+## Writing: Five years of project ideas in two months
+
+- `public/images/writing/tokens-per-week.png`: chart rendered on 2026-10-21 from Codex CLI and Claude Code usage logs on Jacob's Mac and Raspberry Pi, 22 August to 21 October 2026, PNG 1200 × 640. Inherited token totals copied into forked Codex sub-agent threads are excluded. The legend labels the second series "Claude-orchestrated sessions".
+- `public/images/writing/llm-switchboard.png`: screenshot of Jacob's LLM Switchboard app with example session names and folders, supplied by Jacob in October 2026, PNG 1440 × 1000.
+- The source bytes were unchanged; no `tEXt`, `iTXt`, `zTXt`, `eXIf`, or `tIME` metadata chunks were present.

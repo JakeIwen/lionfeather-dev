@@ -70,6 +70,28 @@ export const fieldworkScreenshots = {
 
 export type FieldworkScreen = keyof typeof fieldworkScreenshots
 
+const writingPath = '/images/writing/'
+export const writingScreenshots = {
+  tokensPerWeek: {
+    id: 'tokens-per-week',
+    label: 'Tokens per week',
+    src: `${writingPath}tokens-per-week.png`,
+    width: 1200,
+    height: 640,
+    context: 'Tokens per week · Mac and Raspberry Pi',
+    alt: 'Stacked weekly bar chart of model tokens from 22 August to 21 October 2026. Codex CLI alone reaches 3.5 billion in the week of 24 August. From late September, Claude-orchestrated sessions add to Codex, and the combined total peaks at 4.1 billion in the week of 12 October.',
+  },
+  switchboard: {
+    id: 'llm-switchboard',
+    label: 'LLM Switchboard',
+    src: `${writingPath}llm-switchboard.png`,
+    width: 1440,
+    height: 1000,
+    context: 'LLM Switchboard · Example sessions',
+    alt: 'LLM Switchboard listing Claude and Codex sessions with folder filters, kept-running toggles, and Remote Control status. Example session names are shown.',
+  },
+} satisfies Record<string, Screenshot>
+
 const telemetryPath = '/images/van-telemetry/'
 export const telemetryScreenshots: Screenshot[] = [
   {

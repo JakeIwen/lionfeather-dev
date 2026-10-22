@@ -54,19 +54,23 @@ viewer because nothing else uses them.
 - `src/main.tsx`: application entry for fonts, styles, the development palette
   panel, and `<App />`.
 - `src/App.tsx`: layout shell and `<Routes>` only.
-- `src/pages/`: route components for the home, project, recommendation, and
-  not-found pages.
+- `src/pages/`: route components for the home, project, article, recommendation,
+  and not-found pages. `ArticlePage.tsx` renders long-form writing.
+- `src/pages/article/`: article-only body, block, inline-text, list, and table
+  renderers.
 - `src/pages/home/`: sections and components used only by the homepage, such as
-  the van illustration beside the hero.
+  the van illustration beside the hero and the text-forward `WritingFeature.tsx`.
 - `src/components/`: shared components grouped by concern.
 - `src/components/layout/`: header, feather mark, footer, theme toggle, and
   page-position components.
 - `src/components/screenshots/`: shared screenshot controls, viewer, and hooks.
+- `src/components/writing/`: article reading-time and publication-date formatting
+  shared by the article page and homepage card.
 - `src/components/projects/`: project previews, figures, galleries, and signal
   discovery components. `projectMedia.tsx` maps each project slug to its
   homepage card image and case-study figures; add a project's media there.
 - `src/content/`: public links, project write-ups, recommendation letter, and
-  screenshot records.
+  screenshot records. `articles.ts` defines the article records and typed blocks.
 - `src/routes.ts`: route paths and route helpers.
 - `src/styles/`: the global layer, imported in order by `index.css`: `palette.css`
   (every color), `base.css` (resets, elements, and primitives used across folders),
@@ -106,6 +110,8 @@ polling enabled because native file events missed workspace edits on this Mac.
 
 ## Content and design
 
+- Long-form articles live in `src/content/articles.ts` and render at
+  `/writing/<slug>`.
 - Keep Jacob Iwen prominent; Lionfeather is the secondary identity.
 - Lead with specific engineering work and feature the van dashboard alongside
   professional production systems.

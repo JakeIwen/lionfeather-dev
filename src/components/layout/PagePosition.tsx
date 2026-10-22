@@ -1,15 +1,18 @@
 import { useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
+import { articles } from '../../content/articles'
 import { projects } from '../../content/projects'
-import { projectPath, recommendationPath } from '../../routes'
+import { articlePath, projectPath, recommendationPath } from '../../routes'
 
 export function PagePosition() {
   const { pathname, hash } = useLocation()
   const previousPath = useRef(pathname)
   useEffect(() => {
     const project = projects.find((item) => pathname === projectPath(item.slug))
-    document.title = project
-      ? `${project.title} · Jacob Iwen`
+    const article = articles.find((item) => pathname === articlePath(item.slug))
+    const titledPage = article ?? project
+    document.title = titledPage
+      ? `${titledPage.title} · Jacob Iwen`
       : pathname === recommendationPath
         ? 'Letter of recommendation · Jacob Iwen'
         : 'Jacob Iwen · Lionfeather'

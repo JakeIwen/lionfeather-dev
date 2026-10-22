@@ -3,6 +3,7 @@ import { FieldworkFeature } from './FieldworkFeature'
 import { PipelineFeature } from './PipelineFeature'
 import { ProjectCard } from './ProjectCard'
 import { TelemetryFeature } from './TelemetryFeature'
+import { WritingFeature } from './WritingFeature'
 import './SelectedWork.css'
 
 export function SelectedWork() {
@@ -28,6 +29,7 @@ export function SelectedWork() {
       <PipelineFeature />
       <TelemetryFeature />
       <FieldworkFeature />
+      <WritingFeature />
     </section>
   )
 }
