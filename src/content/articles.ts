@@ -33,6 +33,10 @@ const tokenSurplus: Article = {
   blocks: [
     {
       kind: 'paragraph',
+      text: "I find myself in professional transition at either the worst, or perhaps the best, possible time in the last decade. Either way, my personal programming grind has only accelerated in this time. After seeing what modern AI could do reverse engineering my vehicle's internal communication network to employ a never-before-made fix, I was hooked.",
+    },
+    {
+      kind: 'paragraph',
       text: 'From late August to late October 2026 I had far more model capacity than I could normally justify: a ChatGPT Pro plan, several banked usage resets on top of it, and, for the final month, a Claude plan as well. The allowance would have expired unused, so I spent it on two things: the environment my coding agents work in, and personal projects that had been sitting on a list for years.',
     },
     {
@@ -133,7 +137,11 @@ const tokenSurplus: Article = {
     },
     {
       kind: 'paragraph',
-      text: "If you have capacity to spend, write your rules into AGENTS.md and CLAUDE.md first; whatever model you use next inherits them. I'm happy to share the rule files and prompts behind any of this.",
+      text: "The takeaway here is to write your rules into AGENTS.md and CLAUDE.md first; whatever model you use next inherits them. I'm happy to share the rule files and prompts behind any of this.",
+    },
+    {
+      kind: 'paragraph',
+      text: "At this point in my journey, I feel my AI environment is as curated as I need it to be and am ready to once again direct the majority of my time back to building and maintaining software, now twice as robust at 5x the pace. ",
     },
   ],
 }
