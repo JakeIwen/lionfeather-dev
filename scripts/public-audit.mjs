@@ -8,7 +8,7 @@ const fail = (message) => {
 }
 export const digest = (bytes) =>
   createHash('sha256').update(bytes).digest('hex')
-const textFile = /\.(html|css|js|txt|svg)$/
+const textFile = /\.(html|css|js|txt|svg|xml)$/
 const privatePath =
   /(^|\/)(\.[^/]+|AGENTS[^/]*|[^/]*\.private\.[^/]*)(\/|$)|\.(map|pem|key|p12|sqlite|db|zip|bak|log)$/i
 const forbidden = [
@@ -77,8 +77,11 @@ export function checkDeploymentConfig(root) {
   if (
     config.assets?.directory !== './dist' ||
     config.assets?.not_found_handling !== 'single-page-application' ||
+    (config.assets?.html_handling !== undefined &&
+      config.assets.html_handling !== 'auto-trailing-slash') ||
     Object.keys(config.assets).some(
-      (key) => !['directory', 'not_found_handling'].includes(key),
+      (key) =>
+        !['directory', 'not_found_handling', 'html_handling'].includes(key),
     ) ||
     config.workers_dev !== false ||
     config.preview_urls !== false ||
@@ -115,9 +118,18 @@ export function auditArtifacts(root, inventory) {
     if (!publicFiles.includes(name))
       fail(`Reviewed public asset is missing: ${name}`)
   }
+  for (const name of inventory.generated) {
+    if (!/\.(html|xml)$/.test(name))
+      fail(`Generated artifact must be text: ${name}`)
+    if (!distFiles.includes(name))
+      fail(`Generated artifact is missing: ${name}`)
+  }
   for (const name of distFiles) {
     const bytes = readFileSync(join(root, 'dist', name))
-    if (!Object.hasOwn(inventory.public, name) && name !== 'index.html') {
+    if (
+      !Object.hasOwn(inventory.public, name) &&
+      !inventory.generated.includes(name)
+    ) {
       if (Object.hasOwn(inventory.fonts, name)) {
         if (digest(bytes) !== inventory.fonts[name])
           fail(`Font changed; review required: ${name}`)

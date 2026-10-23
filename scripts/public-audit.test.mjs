@@ -31,6 +31,7 @@ function fixture(t) {
   )
   const inventory = {
     public: { 'Jacob-Iwen-Resume.pdf': digest(pdf) },
+    generated: ['index.html'],
     fonts: {},
   }
   return { root, inventory }
@@ -54,6 +55,30 @@ for (const name of [
     assert.throws(() => auditArtifacts(root, inventory), /Blocked|Unexpected/)
   })
 }
+
+test('generated route HTML and XML are inventoried, required, and scanned', (t) => {
+  const { root, inventory } = fixture(t)
+  inventory.generated.push('writing.html', 'feed.xml')
+  writeFileSync(join(root, 'dist/writing.html'), '<title>Writing</title>')
+  assert.throws(
+    () => auditArtifacts(root, inventory),
+    /Generated artifact is missing/,
+  )
+  writeFileSync(
+    join(root, 'dist/feed.xml'),
+    '<rss><title>Writing</title></rss>',
+  )
+  assert.equal(auditArtifacts(root, inventory), 6)
+  for (const name of ['writing.html', 'feed.xml']) {
+    const path = join(root, 'dist', name)
+    writeFileSync(path, '<description>192.168.1.2</description>')
+    assert.throws(
+      () => auditArtifacts(root, inventory),
+      /Blocked local device address/,
+    )
+    writeFileSync(path, '<title>Public</title>')
+  }
+})
 
 test('blocks changed binary assets even when copied into the build', (t) => {
   const { root, inventory } = fixture(t)
@@ -131,6 +156,16 @@ test('deployment cannot silently expand to repository files or a backend', (t) =
     JSON.stringify(config).replace(/}$/, ',}'),
   )
   checkDeploymentConfig(root)
+  save({
+    ...config,
+    assets: { ...config.assets, html_handling: 'auto-trailing-slash' },
+  })
+  checkDeploymentConfig(root)
+  save({
+    ...config,
+    assets: { ...config.assets, html_handling: 'force-trailing-slash' },
+  })
+  assert.throws(() => checkDeploymentConfig(root), /only dist/)
   save({ ...config, assets: { ...config.assets, directory: '.' } })
   assert.throws(() => checkDeploymentConfig(root), /only dist/)
   save({ ...config, main: 'private-server.js' })

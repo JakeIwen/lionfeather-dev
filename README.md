@@ -76,6 +76,9 @@ email copying, and the resume download in a browser.
 - `src/pages/home/`: homepage sections, including project features,
   recommendation, about, and contact, plus the original SVG van illustration
   beside the hero.
+- `src/pages/home/AdditionalWork.tsx` and `AdditionalWork.css`: compact
+  additional-work list after Selected work, sharing the section-heading styles
+  from `SelectedWork.css`.
 - `src/components/layout/`: shared header, original SVG feather mark, footer,
   Soft/Dark theme toggle, and page-position components. `public/theme.js` applies the saved appearance
   before rendering; screenshot pixels stay unchanged.
@@ -90,6 +93,19 @@ email copying, and the resume download in a browser.
 - `src/components/BoldText.tsx`: bold text rendering for content strings.
 - `src/content/`: project write-ups, public contact links, Henry Broddle's
   recommendation letter, and screenshot records.
+- `src/content/additionalWork.ts`: typed titles, summaries, and optional external
+  links for the additional-work list.
+- `src/pages/WritingPage.tsx` and `WritingPage.css`: newest-first `/writing` index.
+- `src/content/articles.ts`: article data; `unlisted` hides an article from the
+  index and feed without removing its direct URL.
+- `src/content/listedArticles.ts`: shared listed-article ordering for the index
+  and RSS feed.
+- `src/content/pageMeta.ts`: content-derived static routes and shared metadata;
+  `src/content/site.ts` owns the public origin, site name, and home description.
+- `build/prerender/`: Vite generation of route-specific HTML heads and `/feed.xml`,
+  with separate head/RSS renderers and markup escaping.
+- `scripts/prerender.test.mjs`: temporary production-build checks, including XML
+  parsing with Python 3's standard library.
 - `src/routes.ts`: route paths and route helpers.
 - `src/styles/`: the global style layer (color palette, base rules, shared
   screenshot primitives, reduced motion). Each component's styles sit beside it
@@ -102,8 +118,13 @@ contact-form service, or live device connection is included.
 ## Deployment
 
 Cloudflare Workers Static Assets is configured for **https://lionfeather.dev**
-in `wrangler.jsonc`. Only `dist/` is uploaded. Single-page application routing
-supports direct links such as `/work/van-dashboard`. Cloudflare hosts the files
+in `wrangler.jsonc`. Only `dist/` is uploaded. Direct links such as
+`/work/van-dashboard` and `/writing/agent-sessions` serve prerendered HTML heads
+with route-specific previews, canonical URLs, and RSS discovery; the React app
+still renders the page body. Generated `<path>.html` files and explicit
+`auto-trailing-slash` HTML handling keep extensionless URLs free of redirects.
+Unknown routes retain the single-page application fallback. `/writing` lists
+published, listed articles and `/feed.xml` provides RSS 2.0. Cloudflare hosts the files
 independently of the Mac's local service and manages the domain's DNS and HTTPS
 certificate. No server-side Worker script or paid Workers plan is needed.
 
@@ -147,7 +168,8 @@ does not need the resume repository or this file.
 `scripts/public-assets.json` lists reviewed public files and pins the hashes of
 images, the approved resume, fonts, and security headers. Adding files or changing
 those bytes blocks the build until the content and metadata are reviewed and the
-inventory is deliberately updated. Do not regenerate hashes just to pass a check.
+inventory is deliberately updated. Generated HTML and XML are explicitly listed
+and scanned as text rather than hash-pinned. Do not regenerate hashes just to pass a check.
 Inspect image pixels and PDF text/links as well as metadata; text scanning cannot
 find all sensitive content inside binary files. Keep audit extracts outside
 `public/`, under ignored `.local/`.

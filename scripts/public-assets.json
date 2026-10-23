@@ -21,6 +21,19 @@
     "images/writing/tokens-per-week.png": "7b78a0865f132ea9f6625b3479a0e0e7bca5424c52e7c55ef1c7f48d24a8bb96",
     "theme.js": null
   },
+  "generated": [
+    "index.html",
+    "writing.html",
+    "recommendation.html",
+    "work/van-dashboard.html",
+    "work/form-engine.html",
+    "work/production-pipelines.html",
+    "work/fieldwork.html",
+    "work/van-telemetry.html",
+    "writing/agent-sessions.html",
+    "writing/token-surplus.html",
+    "feed.xml"
+  ],
   "fonts": {
     "assets/instrument-serif-latin-400-italic-DKMiL14s.woff2": "5a51946dfffa82972bc98745359c46761515641fda557c25116459a9f83da4a7",
     "assets/instrument-serif-latin-400-italic-u__WvvIK.woff": "9bc25f743ba6bf9091d37de465dedb2d2cb0c0614738bec1c551922fb2794d1d",

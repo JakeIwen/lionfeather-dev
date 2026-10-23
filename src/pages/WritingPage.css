@@ -1,0 +1,47 @@
+.writing-page {
+  padding-block: 55px 80px;
+}
+.writing-page h1 {
+  font-family: var(--serif);
+  font-size: 46px;
+  font-weight: 400;
+}
+.writing-list {
+  max-width: 760px;
+  margin-top: 32px;
+  padding: 0;
+  list-style: none;
+}
+.writing-item {
+  padding-block: 26px;
+  border-top: 1px solid var(--line);
+}
+.writing-item h2 {
+  font-size: 24px;
+  line-height: 1.4;
+}
+.writing-link:hover {
+  color: var(--accent);
+}
+.writing-date {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.writing-summary {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.7;
+}
+@media (max-width: 580px) {
+  .writing-page {
+    padding-block: 32px 50px;
+  }
+  .writing-page h1 {
+    font-size: 38px;
+  }
+  .writing-item h2 {
+    font-size: 21px;
+  }
+}

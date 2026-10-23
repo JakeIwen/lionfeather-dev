@@ -35,6 +35,7 @@ const TYPES = {
   '.woff2': 'font/woff2',
   '.pdf': 'application/pdf',
   '.txt': 'text/plain; charset=utf-8',
+  '.xml': 'application/rss+xml; charset=utf-8',
 }
 
 export function readRecord(stateDir) {
@@ -183,6 +184,12 @@ export async function startSiteServer({
     }
     try {
       let file = publicFile(publicRoot, parts.length ? parts : ['index.html'])
+      if (!file && parts.length && !extname(pathname)) {
+        file = publicFile(publicRoot, [
+          ...parts.slice(0, -1),
+          `${parts.at(-1)}.html`,
+        ])
+      }
       // Only extensionless browser navigation gets the SPA fallback. Missing
       // assets and private filenames must stay genuine 404s.
       if (

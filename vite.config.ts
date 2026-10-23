@@ -1,8 +1,9 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { prerender } from './build/prerender/prerender'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), prerender()],
   server: {
     // Polling keeps local edits visible in workspaces where native events are lost.
     watch: {

@@ -1,4 +1,5 @@
 import { About } from './home/About'
+import { AdditionalWork } from './home/AdditionalWork'
 import { Contact } from './home/Contact'
 import { Hero } from './home/Hero'
 import { RecommendationSection } from './home/RecommendationSection'
@@ -11,6 +12,7 @@ export function HomePage() {
       <Hero />
       <StackStrip />
       <SelectedWork />
+      <AdditionalWork />
       <RecommendationSection />
       <About />
       <Contact />

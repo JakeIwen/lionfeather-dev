@@ -56,10 +56,23 @@ viewer because nothing else uses them.
 - `src/App.tsx`: layout shell and `<Routes>` only.
 - `src/pages/`: route components for the home, project, article, recommendation,
   and not-found pages. `ArticlePage.tsx` renders long-form writing.
+- `src/pages/WritingPage.tsx` and `WritingPage.css`: `/writing`, a newest-first
+  list of listed articles, using the shared date and reading-time formatters.
+- `src/content/listedArticles.ts`: newest-first articles excluding `unlisted`;
+  shared by the writing index and feed. Unlisted articles retain direct URLs.
+- `src/content/pageMeta.ts`: shared route metadata and static paths, derived from
+  the content records; `src/content/site.ts` owns the public origin/name/description.
+- `build/prerender/`: Vite plugin, head and RSS renderers, and markup escaping.
+  Builds emit `index.html`, extensionless-route `.html` siblings, and `/feed.xml`.
+  `scripts/prerender.test.mjs` builds into a temporary directory and checks those
+  artifacts; XML parsing uses Python 3's standard library.
 - `src/pages/article/`: article-only body, block, inline-text, list, and table
   renderers.
 - `src/pages/home/`: sections and components used only by the homepage, such as
   the van illustration beside the hero and the text-forward `WritingFeature.tsx`.
+- `src/pages/home/AdditionalWork.tsx` and `AdditionalWork.css`: the compact
+  additional-work list after Selected work; imports `SelectedWork.css` to share
+  its section-heading styles.
 - `src/components/`: shared components grouped by concern.
 - `src/components/layout/`: header, feather mark, footer, theme toggle, and
   page-position components.
@@ -71,6 +84,8 @@ viewer because nothing else uses them.
   homepage card image and case-study figures; add a project's media there.
 - `src/content/`: public links, project write-ups, recommendation letter, and
   screenshot records. `articles.ts` defines the article records and typed blocks.
+- `src/content/additionalWork.ts`: typed titles, summaries, and optional external
+  links for the homepage's additional-work list.
 - `src/routes.ts`: route paths and route helpers.
 - `src/styles/`: the global layer, imported in order by `index.css`: `palette.css`
   (every color), `base.css` (resets, elements, and primitives used across folders),
@@ -86,6 +101,9 @@ viewer because nothing else uses them.
 Only the generated `dist/` directory is eligible for static deployment. Do not
 serve or upload the repository root. `wrangler.jsonc` configures Cloudflare Workers
 Static Assets for `lionfeather.dev`, with SPA routing and no server-side Worker.
+`html_handling: auto-trailing-slash` serves generated `<path>.html` at the
+extensionless URL without redirecting; do not emit nested `index.html` files.
+The public inventory lists generated HTML/XML for text scanning, not hash pinning.
 Wrangler manages the custom domain's DNS and certificate. The `www` hostname is
 not configured. Verify live deployment status; configuration is not publication.
 

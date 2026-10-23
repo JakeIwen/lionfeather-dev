@@ -108,6 +108,35 @@ test('serves built pages, SPA deep links, assets, and PDF HEAD without exposing 
   }
 })
 
+test('serves extensionless prerendered pages before the SPA fallback and serves the feed', async (t) => {
+  const app = await fixture(t)
+  mkdirSync(join(app.dist, 'writing'))
+  const pages = {
+    'writing.html': '<title>Writing index</title>',
+    'writing/agent-sessions.html': '<title>Article page</title>',
+  }
+  for (const [file, html] of Object.entries(pages)) {
+    writeFileSync(join(app.dist, file), html)
+    for (const method of ['GET', 'HEAD']) {
+      const response = await raw(app, `/${file.slice(0, -5)}`, { method })
+      assert.equal(response.status, 200)
+      assert.equal(response.headers.location, undefined)
+      assert.match(response.headers['content-type'], /text\/html/)
+      assert.equal(response.body, method === 'GET' ? html : '')
+    }
+  }
+  writeFileSync(join(app.dist, 'feed.xml'), '<rss version="2.0"/>')
+  const feed = await raw(app, '/feed.xml')
+  assert.equal(feed.status, 200)
+  assert.match(feed.headers['content-type'], /application\/rss\+xml/)
+  assert.match(feed.body, /<rss/)
+  symlinkSync(
+    join(app.root, 'AGENTS.private.md'),
+    join(app.dist, 'escape.html'),
+  )
+  assert.equal((await raw(app, '/escape')).status, 404)
+})
+
 test('denies traversal, malformed paths, symlinks, foreign origins and state-changing static requests', async (t) => {
   const app = await fixture(t)
   symlinkSync(

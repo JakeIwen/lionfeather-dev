@@ -7,7 +7,7 @@ import { articlePath } from '../../routes'
 import './WritingFeature.css'
 
 export function WritingFeature() {
-  const article = articles.find((item) => item.slug === 'token-surplus')!
+  const article = articles.find((item) => item.slug === 'agent-sessions')!
   return (
     <Link className="writing-feature" to={articlePath(article.slug)}>
       <div className="writing-feature-copy">
