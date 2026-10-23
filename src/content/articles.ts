@@ -96,7 +96,7 @@ const tokenSurplus: Article = {
     },
     {
       kind: 'paragraph',
-      text: "Regardless, I had accumulated four OpenAI usage resets and meant to cash them in at the 20x rate. The allowance would have expired unused, so I spent it on two things: the environment my coding agents work in ([the rules and tooling that came out of it](/writing/agent-sessions)), and personal projects that had been sitting on a list for years ([additional work](/#additional-work)). I also added the Claude 5x plan early, so I could configure and experiment with its environment in tandem.",
+      text: "Regardless, I had accumulated four OpenAI usage resets and meant to cash them in at the 20x rate. The allowance would have expired unused, so I spent it on two things: the environment my coding agents work in ([the rules and tooling that came out of it](/writing/agent-sessions)), and personal projects that had been sitting on a list for years ([additional work](/#additional-work)). I also added the Claude Max 5x plan early, so I could configure and experiment with its environment in tandem.",
     },
     { kind: 'heading', text: 'What the tokens went to' },
     {
