@@ -1,6 +1,7 @@
 import { ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { email, resumeUrl } from '../../content/site'
+import { writingPath } from '../../routes'
 import { Feather } from './Feather'
 import { ThemeToggle } from './ThemeToggle'
 import './ThemeToggle.css'
@@ -20,6 +21,7 @@ export function Header() {
       <nav aria-label="Main navigation">
         <Link to="/#work">Work</Link>
         <Link to="/#about">About</Link>
+        <Link to={writingPath}>Writing</Link>
         <a href={resumeUrl} target="_blank" rel="noreferrer">
           Resume <ArrowUpRight size={14} />
         </a>
