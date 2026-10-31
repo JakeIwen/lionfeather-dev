@@ -1,0 +1,36 @@
+.range-control {
+  display: inline-flex;
+  padding: 3px;
+  gap: 2px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.range-control button {
+  min-height: 38px;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 600;
+}
+.range-control button[aria-pressed='true'] {
+  background: var(--surface-hover);
+  color: var(--brand);
+  box-shadow: 0 1px 3px var(--shadow-control);
+}
+.range-control button:focus-visible {
+  outline-offset: 1px;
+}
+@media (max-width: 580px) {
+  .range-control {
+    display: flex;
+    width: 100%;
+  }
+  .range-control button {
+    flex: 1;
+    min-height: 44px;
+    padding-inline: 6px;
+  }
+}

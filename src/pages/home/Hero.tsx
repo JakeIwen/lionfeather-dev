@@ -1,10 +1,13 @@
 import { ArrowDown, ArrowUpRight } from 'lucide-react'
 import { resumeUrl } from '../../content/site'
+import { useSiteSettings } from '../../settings/currentSiteSettings'
+import { showsSelectedWork } from '../../settings/siteSettings'
 import { VanIllustration } from './VanIllustration'
 import './VanIllustration.css'
 import './Hero.css'
 
 export function Hero() {
+  const showsWork = showsSelectedWork(useSiteSettings())
   return (
     <section className="hero container" aria-labelledby="intro-title">
       <div className="hero-copy">
@@ -22,9 +25,11 @@ export function Hero() {
           interface to the database.
         </p>
         <div className="hero-actions">
-          <a className="button button-dark" href="#work">
-            Explore my work <ArrowDown size={16} />
-          </a>
+          {showsWork && (
+            <a className="button button-dark" href="#work">
+              Explore my work <ArrowDown size={16} />
+            </a>
+          )}
           <a
             className="text-link"
             href={resumeUrl}

@@ -1,0 +1,17 @@
+.metrics-tables {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px 40px;
+}
+.metrics-table-wide {
+  grid-column: 1 / -1;
+}
+.event-target {
+  padding-left: 18px;
+  color: var(--muted);
+}
+@media (max-width: 760px) {
+  .metrics-tables {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

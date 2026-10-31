@@ -4,10 +4,12 @@ import { articleReadingTime } from '../../components/writing/articleReadingTime'
 import { formatArticleDate } from '../../components/writing/formatArticleDate'
 import { articles } from '../../content/articles'
 import { articlePath } from '../../routes'
+import { useSiteSettings } from '../../settings/currentSiteSettings'
 import './WritingFeature.css'
 
 export function WritingFeature() {
-  const article = articles.find((item) => item.slug === 'agent-sessions')!
+  const { featuredArticle } = useSiteSettings()
+  const article = articles.find((item) => item.slug === featuredArticle)!
   return (
     <Link className="writing-feature" to={articlePath(article.slug)}>
       <div className="writing-feature-copy">

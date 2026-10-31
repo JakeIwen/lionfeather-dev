@@ -1,0 +1,77 @@
+.order-editor h3 {
+  font-size: 17px;
+  font-weight: 650;
+}
+.order-list {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.order-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 16px;
+  min-height: 52px;
+  padding-block: 4px;
+  border-top: 1px solid var(--line);
+}
+.order-name {
+  flex: 1 1 220px;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.order-row-hidden .order-name {
+  color: var(--muted);
+  opacity: 0.7;
+}
+.order-tag {
+  display: inline-block;
+  margin-left: 10px;
+  white-space: nowrap;
+  padding: 1px 7px;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  vertical-align: 1px;
+}
+.order-visible {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  cursor: pointer;
+  font-size: 15px;
+}
+.order-visible input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--brand);
+}
+.order-moves {
+  display: inline-flex;
+  gap: 6px;
+}
+.admin-button.order-move {
+  width: 40px;
+  min-width: 40px;
+  padding: 0;
+}
+@media (max-width: 580px) {
+  .admin-button.order-move {
+    width: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .order-row {
+    flex-wrap: nowrap;
+    gap: 4px 8px;
+  }
+  .order-name {
+    flex-basis: 0;
+  }
+}

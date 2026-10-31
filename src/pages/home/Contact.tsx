@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { ArrowUpRight, Check, Copy } from 'lucide-react'
+import { recordEvent } from '../../analytics/analyticsBeacon'
 import { email } from '../../content/site'
 import './Contact.css'
 
@@ -9,6 +10,7 @@ export function Contact() {
     try {
       await navigator.clipboard.writeText(email)
       setCopyStatus('Email copied')
+      recordEvent('copy-email')
     } catch {
       setCopyStatus(
         'Select the email address to copy it, or use the email link.',

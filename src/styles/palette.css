@@ -1,13 +1,15 @@
-/* Retheme by editing the four knobs or adding a data-palette profile.
-   Mode-specific profile overrides use :root[data-palette='x'][data-theme='dark']. */
+/* Every color derives from four knobs: --hue-neutral, --hue-brand, --hue-accent and --chroma.
+   The values below are the Clay theme, the first of builtinThemes in src/appearance/siteTheme.ts
+   and the fallback when the Worker injects no theme. Other themes are knob sets there, applied
+   by the Worker's first-paint style, the admin theme editor and the development theme editor. */
 :root {
-  --hue-neutral: 120;
-  --hue-brand: 145;
-  --hue-accent: 40;
-  --chroma: 1;
+  --hue-neutral: 65;
+  --hue-brand: 50;
+  --hue-accent: 155;
+  --chroma: 0.85;
   color-scheme: light;
 
-  /* Mode-sensitive roles keep their lightness when a profile changes. */
+  /* Mode-sensitive roles keep their lightness when a theme changes. */
   --paper: oklch(0.967 calc(0.008 * var(--chroma)) calc(var(--hue-neutral) - 29));
   --ink: oklch(0.294 calc(0.012 * var(--chroma)) var(--hue-brand));
   --muted: oklch(0.539 calc(0.015 * var(--chroma)) var(--hue-neutral));
@@ -28,6 +30,11 @@
   --status: oklch(0.598 calc(0.082 * var(--chroma)) calc(var(--hue-brand) - 14));
   --on-tint: oklch(0.475 calc(0.041 * var(--chroma)) var(--hue-brand));
   --selection: oklch(0.881 calc(0.036 * var(--chroma)) calc(var(--hue-neutral) - 25));
+
+  /* Admin page: errors keep a fixed red hue, chart series differ in lightness as well as hue. */
+  --danger: oklch(0.5 0.16 27);
+  --chart-views: oklch(0.64 calc(0.05 * var(--chroma)) var(--hue-brand));
+  --chart-visitors: oklch(0.4 calc(0.1 * var(--chroma)) var(--hue-accent));
 
   /* These embedded dark panels and illustration colors stay stable across modes. */
   --surface-bright: oklch(1 0 0);
@@ -94,6 +101,9 @@
   --status: oklch(0.756 calc(0.091 * var(--chroma)) calc(var(--hue-brand) - 14));
   --on-tint: oklch(0.851 calc(0.062 * var(--chroma)) calc(var(--hue-brand) - 14));
   --selection: oklch(0.476 calc(0.05 * var(--chroma)) calc(var(--hue-brand) - 11));
+  --danger: oklch(0.75 0.13 27);
+  --chart-views: oklch(0.55 calc(0.06 * var(--chroma)) var(--hue-brand));
+  --chart-visitors: oklch(0.85 calc(0.1 * var(--chroma)) var(--hue-accent));
   --section-line: var(--line);
   --on-brand: var(--inverse-inset);
   --on-action: color-mix(in oklch, var(--inverse-link), var(--inverse-muted) 40%);
@@ -105,30 +115,19 @@
   --diagram-shade: var(--surface-tint);
 }
 
-:root[data-palette='blue-slate'] {
-  --hue-neutral: 245;
-  --hue-brand: 250;
-  --hue-accent: 55;
-  --chroma: 0.9;
-}
-
-:root[data-palette='clay'] {
-  --hue-neutral: 65;
-  --hue-brand: 50;
-  --hue-accent: 155;
-  --chroma: 0.85;
-}
-
-:root[data-palette='plum'] {
-  --hue-neutral: 305;
-  --hue-brand: 315;
-  --hue-accent: 70;
-  --chroma: 0.8;
-}
-
-:root[data-palette='teal'] {
-  --hue-neutral: 180;
-  --hue-brand: 190;
-  --hue-accent: 35;
-  --chroma: 0.95;
+/* theme-kit's editor pane has no palette of its own; it takes these. */
+theme-editor {
+  --te-bg: var(--paper);
+  --te-surface: var(--surface-raised);
+  --te-hover: var(--surface-hover);
+  --te-selected: var(--surface-tint);
+  --te-field: var(--paper);
+  --te-text: var(--ink);
+  --te-muted: var(--muted);
+  --te-border: var(--line);
+  --te-control-border: var(--border-strong);
+  --te-accent: var(--brand);
+  --te-focus: var(--accent);
+  --te-danger: var(--danger);
+  --te-shadow: -12px 0 32px var(--shadow-control);
 }

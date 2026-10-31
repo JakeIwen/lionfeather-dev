@@ -29,12 +29,19 @@ external private checkout.
 - `npm run check:resume`: confirm the public resume matches the current public
   master named by the resume repository's content master; see the README.
 - `npm run cloudflare:login`: authorize the Cloudflare CLI through browser consent.
+- `npm run access:admin`: create or update the owner-only Access app on `/admin`
+  and print its audience tag for `ACCESS_AUD` in `wrangler.jsonc`.
+- `npm run db:migrate`: apply `migrations/` to the production D1 database.
 - `npm run deploy:check`: build, run the resume check, and dry-run the deployment.
 - `npm run deploy`: build, check public artifacts and the resume, and publish to
   lionfeather.dev.
 - `npm start`: serve the existing production build on loopback port 5174.
 - `npm test`: the whole suite: static-serving boundaries, lifecycle ownership,
-  public-asset audit, resume source, and the stylesheet rules on the real tree.
+  public-asset audit, resume source, the stylesheet rules on the real tree, and
+  the Worker (`scripts/worker-*.test.mjs`): `worker-harness.mjs` bundles it with
+  esbuild and runs it in workerd through Miniflare with the checked-in
+  `wrangler.jsonc`, a fixture `dist`, an in-memory D1 migrated from `migrations/`,
+  and a test Access key (`access-token-fixture.mjs`).
 - `npm run service:prepare`: build and validate a local boot-service plist.
 - `npm run service:install`: build, install the macOS boot service, and verify
   automatic restart. Run from normal Terminal as the user, not under sudo.
@@ -51,9 +58,27 @@ and data and copy in `src/content/`. Components use named exports with one
 component per file and a matching filename; screenshot hooks stay beside the
 viewer because nothing else uses them.
 
-- `src/main.tsx`: application entry for fonts, styles, the development palette
-  panel, and `<App />`.
-- `src/App.tsx`: layout shell and `<Routes>` only.
+- `src/main.tsx`: application entry for fonts, styles, the development theme
+  editor, and `<App />`.
+- `src/App.tsx`: layout shell and `<Routes>` only; the admin route is lazy-loaded.
+- `src/settings/siteSettings.ts`: the owner's site settings (homepage section,
+  Selected work and Additional work order and visibility, featured article,
+  analytics switch): type, defaults, normalization and write validation, shared by
+  the Worker and the app. `currentSiteSettings.ts` is the page's settings store: the copy the Worker
+  injected (defaults when served without it), replaced after an admin save so
+  in-app navigation shows the new settings. Selected work cards
+  next to each other share a row; the container owns the spacing between blocks.
+- `src/appearance/`: `siteTheme.ts` (theme-kit knob specs and built-in themes, Clay
+  first) and `appearanceMode.ts` (the Soft/Dark store shared by the header toggle
+  and the theme editor).
+- `src/analytics/`: `analyticsContract.ts` (beacon payloads, limits, and the
+  metrics report shape), `analyticsBeacon.ts` (views, visible time, and link events)
+  and `PageAnalytics.tsx` (route hook).
+- `src/pages/admin/`: the owner-only `/admin` page: metrics, layout settings, and
+  the theme-kit editor backed by the Worker.
+- `worker/`: the Cloudflare Worker in front of the static assets: page injection of
+  settings and theme knobs, the `/api/collect` beacon endpoint, the Access-verified
+  admin API, and the daily retention prune. `migrations/` holds its D1 schema.
 - `src/pages/`: route components for the home, project, article, recommendation,
   and not-found pages. `ArticlePage.tsx` renders long-form writing.
 - `src/pages/WritingPage.tsx` and `WritingPage.css`: `/writing`, a newest-first
@@ -91,16 +116,30 @@ viewer because nothing else uses them.
   (every color), `base.css` (resets, elements, and primitives used across folders),
   `screenshot-primitives.css`, and `motion.css` last. Component styles live beside
   their components; see Styles below.
-- `src/dev/`: development-only tools (the palette panel), loaded behind
-  `import.meta.env.DEV` and absent from the production bundle.
+- `src/dev/`: development-only tools (the theme-kit editor on a local store),
+  loaded behind `import.meta.env.DEV` and absent from the production bundle.
 - `public/`: intentionally public static files, including the downloadable resume.
-- `scripts/`: static server, launchd controller, tests, and build validation;
-  not shipped to the browser.
+- `scripts/`: static server, launchd controller, tests, build validation, and
+  `configure-admin-access.mjs` (the owner-only Access app on `/admin`); not shipped
+  to the browser.
 - `dist/`: generated site; never edit or commit it.
 
 Only the generated `dist/` directory is eligible for static deployment. Do not
 serve or upload the repository root. `wrangler.jsonc` configures Cloudflare Workers
-Static Assets for `lionfeather.dev`, with SPA routing and no server-side Worker.
+Static Assets for `lionfeather.dev`, with SPA routing and the `worker/` script in
+front of pages, `/api/*` and `/admin/*` (static files skip it), bound to the D1
+database `lionfeather-site`. `checkDeploymentConfig` in `scripts/public-audit.mjs`
+pins that reviewed shape; a new binding or var needs a deliberate update there.
+The Worker was added on 2026-10-31 for the admin area and analytics Jacob asked
+for; before that the site was static-only.
+
+The admin area (`/admin` and `/admin/api/*`) sits behind a dedicated owner-only
+Cloudflare Access app (email one-time PIN, `npm run access:admin`), and the Worker
+independently verifies the Access JWT (`ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`,
+`OWNER_EMAIL`) and the Origin of writes; an empty `ACCESS_AUD` fails closed.
+Apply new migrations to production with `npm run db:migrate` before deploying the
+code that needs them.
+
 `html_handling: auto-trailing-slash` serves generated `<path>.html` at the
 extensionless URL without redirecting; do not emit nested `index.html` files.
 The public inventory lists generated HTML/XML for text scanning, not hash pinning.
@@ -205,18 +244,23 @@ polling enabled because native file events missed workspace edits on this Mac.
   comparison of both builds, not by reading.
 - Appearance uses a header Soft/Dark control. `public/theme.js` applies the saved
   `lionfeather-theme-v1` choice before rendering, otherwise follows the system.
-  `src/components/layout/ThemeToggle.tsx` maintains it across routes and
-  reloads, with graceful behavior when storage is unavailable, and copies the
-  computed paper color into the theme-color meta. Theme the UI without filtering screenshot pixels.
+  `src/appearance/appearanceMode.ts` holds the mode for the header's
+  `ThemeToggle.tsx` and the theme editor, with graceful behavior when storage is
+  unavailable; the toggle copies the computed paper color into the theme-color
+  meta. Theme the UI without filtering screenshot pixels.
 - Colors: components use only semantic tokens from `src/styles/palette.css`. Each
   token is `oklch(L C H)` with L fixed, so the contrast against white and black
   that Jacob chose stays put; C scales with `--chroma` and H follows
-  `--hue-neutral`, `--hue-brand`, or `--hue-accent`. Retheme by changing those
-  knobs or adding a `:root[data-palette='name']` profile (knobs only). The
+  `--hue-neutral`, `--hue-brand`, or `--hue-accent`. Those four knobs are the
+  shared theme-kit model (`theme-kit@github:JakeIwen/theme-kit`, as in Critter and
+  Fieldwork). The `:root` knobs are Clay's, so a page served without the Worker
+  looks like the default; the former `data-palette` profiles are built-in themes
+  in `src/appearance/siteTheme.ts`. The owner picks the live theme in the admin
+  theme editor; the Worker writes its knobs into each page for first paint. The
   screenshot backdrops, pure white, and the tablet shadow are fixed. In
-  `npm run dev`, the bottom-left Palette panel switches profiles, drags the knobs
-  live, and copies the result as CSS. The hex theme-color in `public/theme.js` and
-  `index.html` is only the first-paint value.
+  `npm run dev`, the bottom-left Theme button opens the same editor on a local
+  store. The hex theme-color in `public/theme.js` and `index.html` is only the
+  first-paint value.
 
 ## Demonstrations and privacy
 
@@ -236,11 +280,18 @@ polling enabled because native file events missed workspace edits on this Mac.
 - `scripts/public-audit.mjs` enforces the upload boundary, inventory, and common
   secret/private-address checks. Binary hashes preserve reviewed bytes; they do
   not replace reviewing image pixels or PDF text, links, and metadata.
-- Cloudflare `_headers` blocks runtime connections and external subresources.
-  Verify it using Wrangler or the public host; the local macOS server does not
-  interpret `_headers`. Keep Wrangler CLI telemetry disabled.
+- Cloudflare `_headers` allows connections only to the site itself (the beacon
+  and the admin API) and blocks external subresources. Verify it using Wrangler or
+  the public host; the local macOS server does not interpret `_headers`. Keep
+  Wrangler CLI telemetry disabled.
 - Keep fonts and illustrations local so the site works without third-party
-  runtime requests. Do not add analytics or tracking without a relevant request.
+  runtime requests.
+- Visitor metrics are first-party and cookieless, at Jacob's request (2026-10-31):
+  no third-party analytics, no cookies or client-side ids, no stored IP address or
+  user agent. The Worker keys visitors by a hash with a per-day salt it deletes the
+  next day, so days can't be linked. The beacon honors Global Privacy Control and
+  Do Not Track, skips admin pages and the owner's excluded browser, and sends only
+  from pages the Worker served. Keep those properties when extending metrics.
 
 ## Verification and working agreements
 

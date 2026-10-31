@@ -1,0 +1,47 @@
+.admin-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+}
+.admin-switch input {
+  position: relative;
+  flex-shrink: 0;
+  width: 44px;
+  height: 26px;
+  margin: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 13px;
+  background: var(--surface-inset);
+  cursor: pointer;
+  appearance: none;
+  transition: background 0.15s;
+}
+.admin-switch input::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--muted);
+  transition:
+    transform 0.15s,
+    background 0.15s;
+}
+.admin-switch input:checked {
+  border-color: var(--brand);
+  background: var(--brand);
+}
+.admin-switch input:checked::before {
+  background: var(--paper);
+  transform: translateX(18px);
+}
+.admin-switch input:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}

@@ -19,6 +19,11 @@
   font-size: 1.15em;
   color: var(--brand);
 }
+.work-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
 .project-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -1,4 +1,6 @@
+import { lazy, Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
+import { PageAnalytics } from './analytics/PageAnalytics'
 import { Footer } from './components/layout/Footer'
 import { Header } from './components/layout/Header'
 import { PagePosition } from './components/layout/PagePosition'
@@ -9,6 +11,7 @@ import { ProjectPage } from './pages/ProjectPage'
 import { RecommendationPage } from './pages/RecommendationPage'
 import { WritingPage } from './pages/WritingPage'
 import {
+  adminPath,
   articleRoute,
   homePath,
   projectRoute,
@@ -17,6 +20,13 @@ import {
 } from './routes'
 import './App.css'
 
+// Only the owner opens it, so visitors never download its code.
+const AdminPage = lazy(() =>
+  import('./pages/admin/AdminPage').then((module) => ({
+    default: module.AdminPage,
+  })),
+)
+
 export function App() {
   return (
     <>
@@ -24,6 +34,7 @@ export function App() {
         Skip to content
       </a>
       <PagePosition />
+      <PageAnalytics />
       <Header />
       <main id="main" tabIndex={-1}>
         <Routes>
@@ -32,6 +43,14 @@ export function App() {
           <Route path={projectRoute} element={<ProjectPage />} />
           <Route path={articleRoute} element={<ArticlePage />} />
           <Route path={recommendationPath} element={<RecommendationPage />} />
+          <Route
+            path={adminPath}
+            element={
+              <Suspense fallback={null}>
+                <AdminPage />
+              </Suspense>
+            }
+          />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>

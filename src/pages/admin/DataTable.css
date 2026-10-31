@@ -1,0 +1,51 @@
+.data-table {
+  min-width: 0;
+}
+.data-table h3 {
+  font-size: 17px;
+  font-weight: 650;
+}
+.data-table-empty {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 15px;
+}
+.data-table-scroll {
+  margin-top: 8px;
+  overflow-x: auto;
+}
+.data-table-scroll:focus-visible {
+  outline-offset: 2px;
+}
+.data-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+.data-table th,
+.data-table td {
+  padding: 8px 12px 8px 0;
+  border-top: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  font-weight: 400;
+  white-space: nowrap;
+}
+.data-table thead th {
+  border-top: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+.data-table tbody th {
+  min-width: 7em;
+  font-weight: 500;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.data-table .data-table-numeric {
+  padding-right: 0;
+  padding-left: 12px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}

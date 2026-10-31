@@ -1,9 +1,15 @@
 import { ArrowUpRight } from 'lucide-react'
 import { additionalWork } from '../../content/additionalWork'
+import { useSiteSettings } from '../../settings/currentSiteSettings'
+import { visibleIds } from '../../settings/siteSettings'
 import './SelectedWork.css'
 import './AdditionalWork.css'
 
 export function AdditionalWork() {
+  const items = visibleIds(useSiteSettings().additionalWork).map((id) =>
+    additionalWork.find((item) => item.id === id)!,
+  )
+  if (items.length === 0) return null
   return (
     <section
       className="additional-work-section container"
@@ -19,8 +25,8 @@ export function AdditionalWork() {
         </div>
       </div>
       <ul className="additional-work-list">
-        {additionalWork.map((item) => (
-          <li key={item.title} className="additional-work-item">
+        {items.map((item) => (
+          <li key={item.id} className="additional-work-item">
             <h3 className="additional-work-title">
               {item.href ? (
                 <a

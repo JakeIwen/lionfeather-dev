@@ -2,7 +2,6 @@
   display: grid;
   grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
   align-items: center;
-  margin-top: 30px;
   border: 1px solid var(--line);
   border-radius: 5px;
   overflow: hidden;

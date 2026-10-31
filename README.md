@@ -2,7 +2,8 @@
 
 Jacob Iwen's personal engineering website. Built with React, TypeScript, and
 React Router, with Vite running on Node.js. The production build is a static
-site.
+site behind a small Cloudflare Worker that applies the owner's settings and
+theme, counts visits, and serves the owner-only admin page at `/admin`.
 
 ![Lionfeather portfolio homepage](docs/images/homepage.png)
 
@@ -68,8 +69,8 @@ email copying, and the resume download in a browser.
 
 ## Content
 
-- `src/main.tsx`: application entry for fonts, styles, the development palette
-  panel, and `<App />`.
+- `src/main.tsx`: application entry for fonts, styles, the development theme
+  editor, and `<App />`.
 - `src/App.tsx`: layout shell and route rendering.
 - `src/pages/`: route components for the homepage, project pages, recommendation
   letter, and 404 page.
@@ -112,8 +113,12 @@ email copying, and the resume download in a browser.
   as `Name.css`.
 - `public/Jacob-Iwen-Resume.pdf`: public resume download.
 
-Fonts are packaged locally. No analytics, tracking, external font service,
-contact-form service, or live device connection is included.
+Fonts are packaged locally. No third-party analytics, tracking, external font
+service, contact-form service, or live device connection is included. Visit
+counts are first-party and cookieless: the Worker stores the page, a referrer
+host, country, device class and browser family under a visitor hash whose salt
+changes and is deleted daily, and the page sends nothing when the browser sets
+Global Privacy Control or Do Not Track.
 
 ## Deployment
 
@@ -126,7 +131,15 @@ still renders the page body. Generated `<path>.html` files and explicit
 Unknown routes retain the single-page application fallback. `/writing` lists
 published, listed articles and `/feed.xml` provides RSS 2.0. Cloudflare hosts the files
 independently of the Mac's local service and manages the domain's DNS and HTTPS
-certificate. No server-side Worker script or paid Workers plan is needed.
+certificate. `worker/index.ts` runs in front of pages, `/api/*` and `/admin/*`
+(static files skip it) on the free Workers plan, with the D1 database
+`lionfeather-site` for settings and visit counts.
+
+`/admin` is behind a dedicated owner-only Cloudflare Access app (email one-time
+PIN), created or updated by `npm run access:admin`, which prints the audience tag
+that `ACCESS_AUD` in `wrangler.jsonc` must carry. The Worker checks the Access
+token on every admin API request as well, and fails closed without it. Apply new
+D1 migrations with `npm run db:migrate` before deploying code that needs them.
 
 First, authorize Wrangler from Terminal using the Cloudflare account that owns
 `lionfeather.dev` (browser sign-in and consent are required):
@@ -174,12 +187,14 @@ Inspect image pixels and PDF text/links as well as metadata; text scanning canno
 find all sensitive content inside binary files. Keep audit extracts outside
 `public/`, under ignored `.local/`.
 
-The deployment check also requires `dist/` as the only upload directory and rejects
-unreviewed Wrangler options, including backend code, environment bindings, and
+The deployment check also requires `dist/` as the only upload directory, pins the
+reviewed Worker entry, D1 binding, cron and variables, and rejects other
+unreviewed Wrangler options, including other backend code, environment bindings, and
 build commands. Source maps and private files are excluded. CLI telemetry is off.
 
-Cloudflare's `public/_headers` policy blocks browser API calls, WebSockets,
-form submissions, embedded pages, and external subresources. Local bundled and
+Cloudflare's `public/_headers` policy blocks browser connections to other sites,
+form submissions, embedded pages, and external subresources; the page may connect
+only to its own origin, for the visit beacon and the admin API. Local bundled and
 inline fonts remain allowed. External links still work when deliberately opened,
 without sending a referrer. The local macOS static server does not interpret this
 Cloudflare-specific file; validate these headers through Wrangler or the deployed
