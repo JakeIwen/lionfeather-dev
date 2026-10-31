@@ -136,12 +136,29 @@ test('detects credentials and private addresses without echoing them', () => {
   }
 })
 
-test('deployment cannot silently expand to repository files or a backend', (t) => {
+test('deployment is limited to the reviewed Worker shape', (t) => {
   const { root } = fixture(t)
   const config = {
+    main: './worker/index.ts',
     assets: {
       directory: './dist',
+      binding: 'ASSETS',
       not_found_handling: 'single-page-application',
+      run_worker_first: ['/*', '!/assets/*'],
+    },
+    d1_databases: [
+      {
+        binding: 'DB',
+        database_name: 'lionfeather-site',
+        database_id: '082f0e94-cd70-4c8d-b36b-7fa59d8f0b50',
+        migrations_dir: 'migrations',
+      },
+    ],
+    triggers: { crons: ['17 4 * * *'] },
+    vars: {
+      ACCESS_TEAM_DOMAIN: 'team.example',
+      ACCESS_AUD: '',
+      OWNER_EMAIL: 'a@b.c',
     },
     workers_dev: false,
     preview_urls: false,
@@ -149,6 +166,10 @@ test('deployment cannot silently expand to repository files or a backend', (t) =
   }
   const save = (value) =>
     writeFileSync(join(root, 'wrangler.jsonc'), JSON.stringify(value))
+  const rejects = (value, pattern) => {
+    save(value)
+    assert.throws(() => checkDeploymentConfig(root), pattern)
+  }
   save(config)
   checkDeploymentConfig(root)
   writeFileSync(
@@ -161,15 +182,73 @@ test('deployment cannot silently expand to repository files or a backend', (t) =
     assets: { ...config.assets, html_handling: 'auto-trailing-slash' },
   })
   checkDeploymentConfig(root)
-  save({
-    ...config,
-    assets: { ...config.assets, html_handling: 'force-trailing-slash' },
-  })
-  assert.throws(() => checkDeploymentConfig(root), /only dist/)
-  save({ ...config, assets: { ...config.assets, directory: '.' } })
-  assert.throws(() => checkDeploymentConfig(root), /only dist/)
-  save({ ...config, main: 'private-server.js' })
-  assert.throws(() => checkDeploymentConfig(root), /static-only/)
-  save({ ...config, vars: { PRIVATE_VALUE: 'example' } })
-  assert.throws(() => checkDeploymentConfig(root), /static-only/)
+
+  rejects(
+    {
+      ...config,
+      assets: { ...config.assets, html_handling: 'force-trailing-slash' },
+    },
+    /only dist/,
+  )
+  rejects(
+    { ...config, assets: { ...config.assets, directory: '.' } },
+    /only dist/,
+  )
+  rejects(
+    { ...config, assets: { ...config.assets, binding: 'FILES' } },
+    /only dist/,
+  )
+  rejects({ ...config, preview_urls: true }, /only dist/)
+  rejects(
+    { ...config, assets: { ...config.assets, run_worker_first: ['*.js'] } },
+    /run_worker_first/,
+  )
+  rejects({ ...config, main: 'private-server.js' }, /reviewed Worker/)
+  rejects(
+    { ...config, kv_namespaces: [{ binding: 'KV', id: 'x' }] },
+    /reviewed Worker/,
+  )
+  rejects(
+    { ...config, services: [{ binding: 'S', service: 'other' }] },
+    /reviewed Worker/,
+  )
+  rejects(
+    { ...config, vars: { ...config.vars, PRIVATE_VALUE: 'example' } },
+    /vars/,
+  )
+  rejects({ ...config, vars: { ACCESS_TEAM_DOMAIN: 'team.example' } }, /vars/)
+  rejects(
+    {
+      ...config,
+      d1_databases: [
+        ...config.d1_databases,
+        { ...config.d1_databases[0], binding: 'OTHER' },
+      ],
+    },
+    /only the DB database/,
+  )
+  rejects(
+    {
+      ...config,
+      d1_databases: [{ ...config.d1_databases[0], binding: 'ANALYTICS' }],
+    },
+    /only the DB database/,
+  )
+  rejects(
+    { ...config, triggers: { crons: ['0 * * * *', '1 * * * *'] } },
+    /cron/,
+  )
+  rejects(
+    { ...config, triggers: { crons: ['0 * * * *'], other: true } },
+    /cron/,
+  )
+  // The old static-only shape no longer matches the reviewed deployment.
+  const {
+    main: _main,
+    d1_databases: _d1,
+    triggers: _triggers,
+    vars: _vars,
+    ...staticOnly
+  } = config
+  rejects(staticOnly, /reviewed Worker/)
 })

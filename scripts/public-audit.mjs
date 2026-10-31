@@ -53,6 +53,104 @@ function files(directory, prefix = '') {
   })
 }
 
+// The reviewed Worker: one entry point in front of dist/, one D1 database, a
+// daily cron and three plain-text vars. Anything else is a change to review.
+const reviewedKeys = [
+  '$schema',
+  'name',
+  'main',
+  'compatibility_date',
+  'workers_dev',
+  'preview_urls',
+  'send_metrics',
+  'assets',
+  'routes',
+  'd1_databases',
+  'triggers',
+  'vars',
+]
+const reviewedAssetKeys = [
+  'directory',
+  'binding',
+  'not_found_handling',
+  'html_handling',
+  'run_worker_first',
+]
+const reviewedD1Keys = [
+  'binding',
+  'database_name',
+  'database_id',
+  'migrations_dir',
+]
+const reviewedVars = ['ACCESS_TEAM_DOMAIN', 'ACCESS_AUD', 'OWNER_EMAIL']
+const onlyKeys = (value, allowed) =>
+  Object.keys(value).every((key) => allowed.includes(key))
+const sameKeys = (value, expected) =>
+  onlyKeys(value, expected) && expected.every((key) => key in value)
+const isObject = (value) =>
+  typeof value === 'object' && value !== null && !Array.isArray(value)
+
+function checkAssetsConfig(assets) {
+  if (
+    !isObject(assets) ||
+    !onlyKeys(assets, reviewedAssetKeys) ||
+    assets.directory !== './dist' ||
+    assets.binding !== 'ASSETS' ||
+    assets.not_found_handling !== 'single-page-application' ||
+    (assets.html_handling !== undefined &&
+      assets.html_handling !== 'auto-trailing-slash')
+  ) {
+    fail(
+      'Deployment must upload only dist/, with previews and CLI telemetry disabled.',
+    )
+  }
+  const workerFirst = assets.run_worker_first
+  if (
+    workerFirst !== undefined &&
+    !(
+      Array.isArray(workerFirst) &&
+      workerFirst.every(
+        (rule) => typeof rule === 'string' && /^!?\/[\w./*-]*$/.test(rule),
+      )
+    )
+  ) {
+    fail('Unreviewed Wrangler setting: run_worker_first must be path rules.')
+  }
+}
+
+function checkWorkerBindings(config) {
+  const [database, ...others] = config.d1_databases ?? []
+  if (
+    others.length ||
+    !isObject(database) ||
+    !onlyKeys(database, reviewedD1Keys) ||
+    database.binding !== 'DB' ||
+    database.database_name !== 'lionfeather-site' ||
+    !/^[0-9a-f-]{36}$/.test(database.database_id ?? '') ||
+    (database.migrations_dir !== undefined &&
+      database.migrations_dir !== 'migrations')
+  ) {
+    fail('Unreviewed Wrangler setting: only the DB database may be bound.')
+  }
+  if (
+    !isObject(config.vars) ||
+    !sameKeys(config.vars, reviewedVars) ||
+    Object.values(config.vars).some((value) => typeof value !== 'string')
+  ) {
+    fail(`Unreviewed Wrangler setting: vars must be exactly ${reviewedVars}.`)
+  }
+  const crons = config.triggers?.crons
+  if (
+    !isObject(config.triggers) ||
+    !sameKeys(config.triggers, ['crons']) ||
+    !Array.isArray(crons) ||
+    crons.length !== 1 ||
+    typeof crons[0] !== 'string'
+  ) {
+    fail('Unreviewed Wrangler setting: exactly one cron trigger is allowed.')
+  }
+}
+
 export function checkDeploymentConfig(root) {
   const errors = []
   const config = parse(
@@ -61,28 +159,13 @@ export function checkDeploymentConfig(root) {
     { allowTrailingComma: true },
   )
   if (errors.length) fail('Invalid Wrangler configuration.')
-  const allowed = [
-    '$schema',
-    'name',
-    'compatibility_date',
-    'workers_dev',
-    'preview_urls',
-    'send_metrics',
-    'assets',
-    'routes',
-  ]
-  if (Object.keys(config).some((key) => !allowed.includes(key))) {
-    fail('Unreviewed Wrangler setting: deployment must remain static-only.')
+  if (!onlyKeys(config, reviewedKeys) || config.main !== './worker/index.ts') {
+    fail(
+      'Unreviewed Wrangler setting: deployment is limited to the reviewed Worker.',
+    )
   }
+  checkAssetsConfig(config.assets)
   if (
-    config.assets?.directory !== './dist' ||
-    config.assets?.not_found_handling !== 'single-page-application' ||
-    (config.assets?.html_handling !== undefined &&
-      config.assets.html_handling !== 'auto-trailing-slash') ||
-    Object.keys(config.assets).some(
-      (key) =>
-        !['directory', 'not_found_handling', 'html_handling'].includes(key),
-    ) ||
     config.workers_dev !== false ||
     config.preview_urls !== false ||
     config.send_metrics !== false
@@ -91,6 +174,7 @@ export function checkDeploymentConfig(root) {
       'Deployment must upload only dist/, with previews and CLI telemetry disabled.',
     )
   }
+  checkWorkerBindings(config)
 }
 
 export function auditArtifacts(root, inventory) {

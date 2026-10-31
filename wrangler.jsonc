@@ -1,14 +1,45 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "lionfeather-dev",
+  "main": "./worker/index.ts",
   "compatibility_date": "2026-09-30",
   "workers_dev": false,
   "preview_urls": false,
   "send_metrics": false,
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
     "not_found_handling": "single-page-application",
     "html_handling": "auto-trailing-slash",
+    // The Worker handles every page and /api and /admin; these files are served
+    // straight from the assets. New public files are still served if missing
+    // here, just through the Worker.
+    "run_worker_first": [
+      "/*",
+      "!/assets/*",
+      "!/images/*",
+      "!/theme.js",
+      "!/favicon.svg",
+      "!/feed.xml",
+      "!/font-licenses.txt",
+      "!/Jacob-Iwen-Resume.pdf",
+    ],
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "lionfeather-site",
+      "database_id": "082f0e94-cd70-4c8d-b36b-7fa59d8f0b50",
+      "migrations_dir": "migrations",
+    },
+  ],
+  // Daily prune of old events and past days' salts (04:17 UTC).
+  "triggers": { "crons": ["17 4 * * *"] },
+  "vars": {
+    "ACCESS_TEAM_DOMAIN": "proud-base-5e35.cloudflareaccess.com",
+    // The Access application's audience tag; empty rejects every admin request.
+    "ACCESS_AUD": "79cbb749889871b637611049cb2f647fc1ceae78bd11539b5ecc001d624c3e3f",
+    "OWNER_EMAIL": "lionfeatherdev@gmail.com",
   },
   "routes": [{ "pattern": "lionfeather.dev", "custom_domain": true }],
 }
