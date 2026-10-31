@@ -21,7 +21,7 @@ function tilesOf({ totals }: MetricsReport): Tile[] {
     {
       label: 'Avg engaged per view',
       value: formatDuration(totals.avgEngagedSeconds),
-      tip: 'Mean visible time per view, over views that recorded any.',
+      tip: 'Engaged time divided by all views, including views with none.',
     },
     { label: 'Resume opens', value: formatCount(totals.resumeOpens) },
     { label: 'Outbound clicks', value: formatCount(totals.outboundClicks) },
