@@ -1,10 +1,9 @@
 import { ArrowLeft, ArrowUpRight, Mail } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
-import { articleReadingTime } from '../components/writing/articleReadingTime'
-import { formatArticleDate } from '../components/writing/formatArticleDate'
 import { articles } from '../content/articles'
 import { email } from '../content/site'
 import { ArticleBody } from './article/ArticleBody'
+import { ArticleHeading } from './article/ArticleHeading'
 import { NotFoundPage } from './NotFoundPage'
 import './ArticlePage.css'
 
@@ -18,20 +17,7 @@ export function ArticlePage() {
       <Link className="article-back-link" to="/#work">
         <ArrowLeft size={15} aria-hidden="true" /> All work
       </Link>
-      <header className="article-heading">
-        <p className="article-byline eyebrow">
-          <span className="article-category">WRITING</span>
-          <span aria-hidden="true">·</span>
-          <time dateTime={article.published}>
-            {formatArticleDate(article.published)}
-          </time>
-          <span aria-hidden="true">·</span>
-          <span>{articleReadingTime(article.blocks)}</span>
-        </p>
-        <h1>{article.title}</h1>
-        <p className="article-dek">{article.dek}</p>
-        <p className="article-tags">{article.tags.join(' · ')}</p>
-      </header>
+      <ArticleHeading article={article} />
       <ArticleBody article={article} key={article.slug} />
       <footer className="article-contact">
         <p>Contact</p>
