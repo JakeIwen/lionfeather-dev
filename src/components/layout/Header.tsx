@@ -1,7 +1,8 @@
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, Settings } from 'lucide-react'
+import { useOwnerBrowser } from '../../articleEdits/ownerBrowser'
 import { Link } from 'react-router-dom'
 import { email, resumeUrl } from '../../content/site'
-import { writingPath } from '../../routes'
+import { adminSettingsPath, writingPath } from '../../routes'
 import { useSiteSettings } from '../../settings/currentSiteSettings'
 import { showsSelectedWork, visibleIds } from '../../settings/siteSettings'
 import { Feather } from './Feather'
@@ -14,6 +15,7 @@ export function Header() {
   const settings = useSiteSettings()
   const showsWork = showsSelectedWork(settings)
   const showsAbout = visibleIds(settings.homeSections).includes('about')
+  const owner = useOwnerBrowser()
   return (
     <header className="site-header container">
       <Link
@@ -31,6 +33,16 @@ export function Header() {
         <a href={resumeUrl} target="_blank" rel="noreferrer">
           Resume <ArrowUpRight size={14} />
         </a>
+        {owner && (
+          <Link
+            className="header-settings"
+            to={adminSettingsPath}
+            aria-label="Settings"
+            title="Settings"
+          >
+            <Settings size={16} aria-hidden="true" />
+          </Link>
+        )}
       </nav>
       <ThemeToggle className="header-appearance" />
       <a className="header-contact" href={`mailto:${email}`}>

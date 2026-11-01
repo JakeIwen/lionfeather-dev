@@ -1,8 +1,7 @@
 import { ArrowLeft, ArrowUpRight, Mail, PenLine } from 'lucide-react'
-import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useArticles } from '../articleEdits/currentArticles'
-import { isOwnerBrowser } from '../articleEdits/ownerBrowser'
+import { useOwnerBrowser } from '../articleEdits/ownerBrowser'
 import { email } from '../content/site'
 import { adminArticlePath } from '../routes'
 import { ArticleBody } from './article/ArticleBody'
@@ -12,7 +11,7 @@ import './ArticlePage.css'
 
 export function ArticlePage() {
   const { slug } = useParams()
-  const [owner] = useState(isOwnerBrowser)
+  const owner = useOwnerBrowser()
   const article = useArticles().find((item) => item.slug === slug)
   if (!article) return <NotFoundPage />
 

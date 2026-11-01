@@ -38,6 +38,11 @@
   gap: 5px;
   padding: 8px 0;
 }
+.site-header nav .header-settings {
+  padding: 8px;
+  margin-inline: -8px;
+  color: var(--muted);
+}
 .header-contact {
   display: flex;
   gap: 17px;
@@ -94,6 +99,11 @@
   }
   .site-header nav svg {
     width: 12px;
+  }
+  /* The last link in a full-width row ends at the header's edge. */
+  .site-header nav .header-settings {
+    margin-right: 0;
+    padding-right: 0;
   }
 }
 @media (max-width: 360px) {
