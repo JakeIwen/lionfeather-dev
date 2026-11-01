@@ -1,6 +1,15 @@
-// Serves the site's HTML pages with the owner's saved settings and active
-// theme written into <head>, so the first paint already matches them.
+// Serves the site's HTML pages with the owner's saved settings, active theme
+// and article edits written into <head>, so the first paint already matches
+// them. An edited article's own page also gets its new title and summary in
+// the head's metadata.
 import { formatKnob, knobKeys, type ActiveTheme } from 'theme-kit/core'
+import {
+  articleEditsElementId,
+  type ArticleEdit,
+  type ArticleEdits,
+} from '../src/articleEdits/articleEdit'
+import { isArticleSlug } from '../src/content/articles'
+import { articlePageTitle } from '../src/content/pageMeta'
 import {
   settingsElementId,
   type SiteSettings,
@@ -24,12 +33,45 @@ export function themeStyleTag({ knobs }: ActiveTheme): string {
 // stays inert data under any HTML parsing.
 const unsafeInScript = /[<>&\u2028\u2029]/g
 
-export function settingsScriptTag(settings: SiteSettings): string {
-  const json = JSON.stringify(settings).replace(
+function jsonScriptTag(id: string, value: unknown): string {
+  const json = JSON.stringify(value).replace(
     unsafeInScript,
     (char) => `\\u${char.charCodeAt(0).toString(16).padStart(4, '0')}`,
   )
-  return `<script type="application/json" id="${settingsElementId}">${json}</script>`
+  return `<script type="application/json" id="${id}">${json}</script>`
+}
+
+export const settingsScriptTag = (settings: SiteSettings) =>
+  jsonScriptTag(settingsElementId, settings)
+
+export const articleEditsScriptTag = (edits: ArticleEdits) =>
+  jsonScriptTag(articleEditsElementId, edits)
+
+const articlePagePath = /^\/writing\/([^/]+?)(?:\.html)?\/?$/
+
+/** The saved edit of the article this path shows, if it has one. */
+function editOfPage(pathname: string, edits: ArticleEdits) {
+  const slug = articlePagePath.exec(pathname)?.[1]
+  return isArticleSlug(slug) ? edits[slug] : undefined
+}
+
+/** Rewrites the prerendered title and summary metadata to the edit's. */
+function withEditedHead(rewriter: HTMLRewriter, edit: ArticleEdit) {
+  const content = (value: string) => ({
+    element(element: Element) {
+      element.setAttribute('content', value)
+    },
+  })
+  return rewriter
+    .on('title', {
+      element(element) {
+        element.setInnerContent(articlePageTitle(edit.title))
+      },
+    })
+    .on('meta[property="og:title"]', content(articlePageTitle(edit.title)))
+    .on('meta[name="description"]', content(edit.dek))
+    .on('meta[property="og:description"]', content(edit.dek))
+    .on('meta[property="article:published_time"]', content(edit.published))
 }
 
 const revalidationHeaders = ['if-none-match', 'if-modified-since']
@@ -46,7 +88,7 @@ export async function servePage(request: Request, env: Env): Promise<Response> {
   if (!response.headers.get('content-type')?.startsWith('text/html'))
     return response
 
-  const { settings, appearance } = await currentSiteState(env.DB)
+  const { settings, appearance, articleEdits } = await currentSiteState(env.DB)
   const out = new Headers(response.headers)
   for (const name of ['etag', 'last-modified', 'content-length'])
     out.delete(name)
@@ -58,13 +100,18 @@ export async function servePage(request: Request, env: Env): Promise<Response> {
   }
   if (request.method === 'HEAD') return new Response(null, init)
 
-  const tags = themeStyleTag(appearance.active) + settingsScriptTag(settings)
-  const rewritten = new HTMLRewriter()
-    .on('head', {
-      element(head) {
-        head.append(tags, { html: true })
-      },
-    })
-    .transform(response)
+  const tags =
+    themeStyleTag(appearance.active) +
+    settingsScriptTag(settings) +
+    articleEditsScriptTag(articleEdits)
+  const rewriter = new HTMLRewriter().on('head', {
+    element(head) {
+      head.append(tags, { html: true })
+    },
+  })
+  const edit = editOfPage(new URL(request.url).pathname, articleEdits)
+  const rewritten = (
+    edit ? withEditedHead(rewriter, edit) : rewriter
+  ).transform(response)
   return new Response(rewritten.body, init)
 }

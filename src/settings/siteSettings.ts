@@ -3,7 +3,7 @@
 // every page; the app reads them through currentSiteSettings.ts. Both sides normalize, so
 // content added after a save appears in its default place.
 import { additionalWork } from '../content/additionalWork'
-import { articles, type ArticleSlug } from '../content/articles'
+import { isArticleSlug, type ArticleSlug } from '../content/articles'
 import type { ProjectSlug } from '../content/projects'
 import { isRecord } from '../jsonValues'
 
@@ -74,11 +74,7 @@ export type SiteSettings = {
 export const settingsElementId = 'site-settings'
 
 const additionalWorkIds = additionalWork.map((item) => item.id)
-const articleSlugs: readonly string[] = articles.map((article) => article.slug)
 const defaultFeaturedArticle: ArticleSlug = 'agent-sessions'
-
-const isArticleSlug = (value: unknown): value is ArticleSlug =>
-  typeof value === 'string' && articleSlugs.includes(value)
 
 const shown = <Id extends string>(ids: readonly Id[]): OrderedItem<Id>[] =>
   ids.map((id) => ({ id, visible: true }))

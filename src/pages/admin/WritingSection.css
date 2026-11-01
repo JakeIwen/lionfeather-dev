@@ -1,0 +1,19 @@
+.writing-admin-list {
+  display: grid;
+  gap: 14px;
+  max-width: 760px;
+  padding: 0;
+  list-style: none;
+}
+.writing-admin-item {
+  display: grid;
+  gap: 2px;
+}
+.writing-admin-link {
+  color: var(--brand);
+  font-size: 17px;
+  font-weight: 650;
+}
+.writing-admin-link:hover {
+  color: var(--accent);
+}

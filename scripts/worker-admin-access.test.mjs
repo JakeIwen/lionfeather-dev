@@ -203,7 +203,7 @@ test('malformed and oversize admin bodies are rejected', async () => {
   assert.equal((await put('{"settings":')).status, 400)
   assert.equal((await put('')).status, 400)
   assert.equal(
-    (await put(JSON.stringify({ settings: 'x'.repeat(70 * 1024) }))).status,
+    (await put(JSON.stringify({ settings: 'x'.repeat(260 * 1024) }))).status,
     413,
   )
 })

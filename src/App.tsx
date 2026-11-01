@@ -11,6 +11,7 @@ import { ProjectPage } from './pages/ProjectPage'
 import { RecommendationPage } from './pages/RecommendationPage'
 import { WritingPage } from './pages/WritingPage'
 import {
+  adminArticleRoute,
   adminPath,
   articleRoute,
   homePath,
@@ -24,6 +25,12 @@ import './App.css'
 const AdminPage = lazy(() =>
   import('./pages/admin/AdminPage').then((module) => ({
     default: module.AdminPage,
+  })),
+)
+
+const ArticleEditorPage = lazy(() =>
+  import('./pages/admin/ArticleEditorPage').then((module) => ({
+    default: module.ArticleEditorPage,
   })),
 )
 
@@ -48,6 +55,14 @@ export function App() {
             element={
               <Suspense fallback={null}>
                 <AdminPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path={adminArticleRoute}
+            element={
+              <Suspense fallback={null}>
+                <ArticleEditorPage />
               </Suspense>
             }
           />

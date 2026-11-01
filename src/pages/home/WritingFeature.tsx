@@ -2,14 +2,14 @@ import { ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { articleReadingTime } from '../../components/writing/articleReadingTime'
 import { formatArticleDate } from '../../components/writing/formatArticleDate'
-import { articles } from '../../content/articles'
+import { useArticles } from '../../articleEdits/currentArticles'
 import { articlePath } from '../../routes'
 import { useSiteSettings } from '../../settings/currentSiteSettings'
 import './WritingFeature.css'
 
 export function WritingFeature() {
   const { featuredArticle } = useSiteSettings()
-  const article = articles.find((item) => item.slug === featuredArticle)!
+  const article = useArticles().find((item) => item.slug === featuredArticle)!
   return (
     <Link className="writing-feature" to={articlePath(article.slug)}>
       <div className="writing-feature-copy">

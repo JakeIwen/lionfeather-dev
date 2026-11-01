@@ -1,4 +1,5 @@
-import { articles, type ArticleSlug } from '../../content/articles'
+import { useArticles } from '../../articleEdits/currentArticles'
+import type { ArticleSlug } from '../../content/articles'
 import './admin.css'
 
 export function FeaturedArticleSelect({
@@ -8,6 +9,7 @@ export function FeaturedArticleSelect({
   value: ArticleSlug
   onChange: (slug: ArticleSlug) => void
 }) {
+  const articles = useArticles()
   return (
     <label className="admin-field">
       <span>Featured article</span>

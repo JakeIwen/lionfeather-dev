@@ -25,6 +25,9 @@ export type PageMeta = {
   published?: string
 }
 
+// The Worker writes an edited article's title into its page with this too.
+export const articlePageTitle = (title: string) => `${title} · Jacob Iwen`
+
 const projectImages: Partial<Record<ProjectSlug, string>> = {
   'van-dashboard': dashboardScreenshot.src,
   'form-engine': formEngineImage.src,
@@ -62,7 +65,7 @@ const pages: PageMeta[] = [
     image: projectImages[project.slug],
   })),
   ...articles.map((article): PageMeta => ({
-    title: `${article.title} · Jacob Iwen`,
+    title: articlePageTitle(article.title),
     description: article.dek,
     canonicalPath: articlePath(article.slug),
     type: 'article',

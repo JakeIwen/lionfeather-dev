@@ -5,6 +5,13 @@ import type {
   MetricsRangeDays,
   MetricsReport,
 } from '../../analytics/analyticsContract'
+import {
+  normalizeArticleEdits,
+  type ArticleEdit,
+  type ArticleEditFields,
+  type ArticleEdits,
+} from '../../articleEdits/articleEdit'
+import type { ArticleSlug } from '../../content/articles'
 import { adminApi } from '../../routes'
 import {
   normalizeSiteSettings,
@@ -122,4 +129,26 @@ export async function getMetrics(
   if (typeof report !== 'object' || report === null || !('totals' in report))
     throw new AdminRequestError('The metrics response was not a report.')
   return report as MetricsReport
+}
+
+export async function getArticleEdits(): Promise<ArticleEdits> {
+  return normalizeArticleEdits(await adminRequest(adminApi.articles))
+}
+
+export async function saveArticleEdit(
+  slug: ArticleSlug,
+  article: ArticleEditFields,
+): Promise<ArticleEdit> {
+  const saved = await adminRequest(adminApi.article(slug), {
+    method: 'PUT',
+    body: { article },
+  })
+  const edit = normalizeArticleEdits({ [slug]: saved })[slug]
+  if (!edit)
+    throw new AdminRequestError('The server sent back an unreadable article.')
+  return edit
+}
+
+export async function deleteArticleEdit(slug: ArticleSlug): Promise<void> {
+  await adminRequest(adminApi.article(slug), { method: 'DELETE' })
 }

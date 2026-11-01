@@ -5,6 +5,7 @@ import { LayoutSection } from './LayoutSection'
 import { MetricsSection } from './MetricsSection'
 import { SignedOutNotice } from './SignedOutNotice'
 import { useSession } from './useSession'
+import { WritingSection } from './WritingSection'
 import './admin.css'
 
 const adminTitle = 'Admin · Lionfeather'
@@ -30,6 +31,7 @@ export function AdminPage() {
       {signedOut ? <SignedOutNotice /> : null}
       <MetricsSection />
       <LayoutSection />
+      <WritingSection />
       <AppearanceSection />
     </section>
   )

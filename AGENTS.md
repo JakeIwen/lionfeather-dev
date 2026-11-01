@@ -74,8 +74,17 @@ viewer because nothing else uses them.
 - `src/analytics/`: `analyticsContract.ts` (beacon payloads, limits, and the
   metrics report shape), `analyticsBeacon.ts` (views, visible time, and link events)
   and `PageAnalytics.tsx` (route hook).
-- `src/pages/admin/`: the owner-only `/admin` page: metrics, layout settings, and
-  the theme-kit editor backed by the Worker.
+- `src/pages/admin/`: the owner-only `/admin` page: metrics, layout settings, the
+  writing list, and the theme-kit editor backed by the Worker; and
+  `ArticleEditorPage.tsx` at `/admin/writing/<slug>`, which puts a Markdown editor
+  beside a live preview of the article.
+- `src/articleEdits/`: articles edited on the site. `articleMarkdown.ts` is the
+  editing format (parse with line-numbered problems, and serialize the code's
+  blocks); `articleEdit.ts` is the stored record, its validation and how it lays
+  over the code's article, shared by the Worker and the app; `currentArticles.ts`
+  is the page's article store (code articles plus injected edits, replaced after a
+  save); `ownerBrowser.ts` marks a browser that has signed in to the admin, so
+  article pages show an Edit link there.
 - `worker/`: the Cloudflare Worker in front of the static assets: page injection of
   settings and theme knobs, the `/api/collect` beacon endpoint, the Access-verified
   admin API, and the daily retention prune. `migrations/` holds its D1 schema.
@@ -85,6 +94,8 @@ viewer because nothing else uses them.
   list of listed articles, using the shared date and reading-time formatters.
 - `src/content/listedArticles.ts`: newest-first articles excluding `unlisted`;
   shared by the writing index and feed. Unlisted articles retain direct URLs.
+  Pages read articles through `useArticles()` so site edits show; the build (feed,
+  prerendered heads) uses the code's versions.
 - `src/content/pageMeta.ts`: shared route metadata and static paths, derived from
   the content records; `src/content/site.ts` owns the public origin/name/description.
 - `build/prerender/`: Vite plugin, head and RSS renderers, and markup escaping.
@@ -168,7 +179,12 @@ polling enabled because native file events missed workspace edits on this Mac.
 ## Content and design
 
 - Long-form articles live in `src/content/articles.ts` and render at
-  `/writing/<slug>`.
+  `/writing/<slug>`. The owner can also edit them on the site (Edit link on the
+  article, or Admin → Writing): a saved edit lives in D1 (`article_edits`) and
+  replaces the code's version on every page until "Restore code version" discards
+  it, so a later change to `articles.ts` stays hidden while an edit exists. The
+  Worker writes the edit's title and summary into the article page's head; the
+  RSS feed is static and keeps the code's title and summary.
 - Keep Jacob Iwen prominent; Lionfeather is the secondary identity.
 - Lead with specific engineering work and feature the van dashboard alongside
   professional production systems.

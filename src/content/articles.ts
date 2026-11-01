@@ -38,7 +38,7 @@ const agentSessions: Article = {
     },
     {
       kind: 'paragraph',
-      text: "From late August to late October 2026 I had far more model capacity than I could normally justify ([how that happened](/writing/token-surplus)), so I spent it on the environment my coding agents work in and on projects that had been sitting on a list for years ([additional work](/#additional-work)). What I wanted to learn was what an agent-heavy workflow needs to stay reliable when several sessions run at once.",
+      text: 'From late August to late October 2026 I had far more model capacity than I could normally justify ([how that happened](/writing/token-surplus)), so I spent it on the environment my coding agents work in and on projects that had been sitting on a list for years ([additional work](/#additional-work)). What I wanted to learn was what an agent-heavy workflow needs to stay reliable when several sessions run at once.',
     },
     { kind: 'heading', text: 'How the work was split' },
     {
@@ -85,7 +85,8 @@ const agentSessions: Article = {
 
 const tokenSurplus: Article = {
   slug: 'token-surplus',
-  title: 'An Extraordinary Burn: Saving Surplus Usage from Being Returned to OpenAI',
+  title:
+    'An Extraordinary Burn: Saving Surplus Usage from Being Returned to OpenAI',
   dek: 'Why I run a plan on each side, what two months of surplus tokens went to, and what the token count does and does not tell you.',
   published: '2026-10-22',
   tags: ['Codex', 'Claude Code', 'Plans and usage'],
@@ -96,7 +97,7 @@ const tokenSurplus: Article = {
     },
     {
       kind: 'paragraph',
-      text: "Regardless, I had accumulated four OpenAI usage resets and meant to cash them in at the 20x rate. The allowance would have expired unused, so I spent it on two things: the environment my coding agents work in ([the rules and tooling that came out of it](/writing/agent-sessions)), and personal projects that had been sitting on a list for years ([additional work](/#additional-work)). I also added the Claude Max 5x plan early, so I could configure and experiment with its environment in tandem.",
+      text: 'Regardless, I had accumulated four OpenAI usage resets and meant to cash them in at the 20x rate. The allowance would have expired unused, so I spent it on two things: the environment my coding agents work in ([the rules and tooling that came out of it](/writing/agent-sessions)), and personal projects that had been sitting on a list for years ([additional work](/#additional-work)). I also added the Claude Max 5x plan early, so I could configure and experiment with its environment in tandem.',
     },
     { kind: 'heading', text: 'What the tokens went to' },
     {
@@ -138,9 +139,14 @@ const tokenSurplus: Article = {
     },
     {
       kind: 'paragraph',
-      text: "Knowing where the tokens go is not a skill anyone hires for. It mattered here because the surplus was real and expiring, and because the plan limits, not the token totals, decide when the work stops. The surplus is spent, the environment is set, and the next allowance goes to building things with it.",
+      text: 'Knowing where the tokens go is not a skill anyone hires for. It mattered here because the surplus was real and expiring, and because the plan limits, not the token totals, decide when the work stops. The surplus is spent, the environment is set, and the next allowance goes to building things with it.',
     },
   ],
 }
 
 export const articles: Article[] = [agentSessions, tokenSurplus]
+
+const articleSlugs: readonly string[] = articles.map((article) => article.slug)
+
+export const isArticleSlug = (value: unknown): value is ArticleSlug =>
+  typeof value === 'string' && articleSlugs.includes(value)

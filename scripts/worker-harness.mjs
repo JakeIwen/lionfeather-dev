@@ -34,14 +34,27 @@ export const siteOrigin = 'https://lionfeather.dev'
 export const browserAgent =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
 
-const page = (title) =>
-  `<!doctype html><html lang="en"><head><meta charset="UTF-8"><title>${title}</title><link rel="stylesheet" href="/assets/app-12345678.css"></head><body><div id="root"></div></body></html>`
+const page = (title, meta = '') =>
+  `<!doctype html><html lang="en"><head><meta charset="UTF-8"><title>${title}</title>${meta}<link rel="stylesheet" href="/assets/app-12345678.css"></head><body><div id="root"></div></body></html>`
 
-/** A dist with two pages, a hashed asset, a plain file and the real _headers. */
+// The metadata tags the prerender writes into an article page's head.
+const articleMeta = [
+  '<meta name="description" content="Fixture summary" />',
+  '<meta property="og:title" content="Fixture article · Jacob Iwen" />',
+  '<meta property="og:description" content="Fixture summary" />',
+  '<meta property="article:published_time" content="2026-10-21" />',
+].join('')
+
+/** A dist with three pages, a hashed asset, a plain file and the real _headers. */
 function writeFixtureDist(directory) {
   mkdirSync(join(directory, 'assets'), { recursive: true })
   writeFileSync(join(directory, 'index.html'), page('Fixture home'))
   writeFileSync(join(directory, 'writing.html'), page('Fixture writing'))
+  mkdirSync(join(directory, 'writing'))
+  writeFileSync(
+    join(directory, 'writing/agent-sessions.html'),
+    page('Fixture article · Jacob Iwen', articleMeta),
+  )
   writeFileSync(join(directory, 'assets/app-12345678.css'), 'body{margin:0}')
   writeFileSync(
     join(directory, 'theme.js'),

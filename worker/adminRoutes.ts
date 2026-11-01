@@ -3,6 +3,12 @@
 import { adminApi, adminPath } from '../src/routes'
 import { accessTokenHeader, verifyOwnerToken } from './accessJwt'
 import {
+  articleSlugFromPath,
+  deleteArticle,
+  getArticleEdits,
+  putArticleEdit,
+} from './adminArticles'
+import {
   deleteTheme,
   getAppearance,
   putActiveTheme,
@@ -18,18 +24,50 @@ import { readLimitedText } from './limitedBody'
 
 export const adminApiPrefix = `${adminPath}/api/`
 
-// Settings and themes are small; this bounds what an admin write can hold.
-const adminBodyLimitBytes = 64 * 1024
+// An article's Markdown is the largest admin write; this bounds what one can
+// hold (articleEditLimits caps the Markdown itself).
+const adminBodyLimitBytes = 256 * 1024
 
 type Handler = (context: AdminContext) => Promise<Response> | Response
 type Method = 'GET' | 'PUT' | 'POST' | 'DELETE'
+type Methods = Partial<Record<Method, Handler>>
 
-const fixedRoutes: Record<string, Partial<Record<Method, Handler>>> = {
+const fixedRoutes: Record<string, Methods> = {
   [adminApi.session]: { GET: ({ email }) => jsonResponse({ email }) },
   [adminApi.settings]: { GET: getSettings, PUT: putSettings },
   [adminApi.appearance]: { GET: getAppearance },
   [adminApi.appearanceActive]: { PUT: putActiveTheme },
   [adminApi.metrics]: { GET: getMetrics },
+  [adminApi.articles]: { GET: getArticleEdits },
+}
+
+// Routes that end in an id: /appearance/themes/:id and /articles/:slug.
+const paramRoutes: {
+  param: (pathname: string) => string | undefined
+  methods: (param: string) => Methods
+}[] = [
+  {
+    param: themeIdFromPath,
+    methods: (id) => ({
+      PUT: (context) => putTheme(context, id),
+      DELETE: (context) => deleteTheme(context, id),
+    }),
+  },
+  {
+    param: articleSlugFromPath,
+    methods: (slug) => ({
+      PUT: (context) => putArticleEdit(context, slug),
+      DELETE: (context) => deleteArticle(context, slug),
+    }),
+  },
+]
+
+function methodsFor(pathname: string): Methods | undefined {
+  for (const route of paramRoutes) {
+    const param = route.param(pathname)
+    if (param !== undefined) return route.methods(param)
+  }
+  return fixedRoutes[pathname]
 }
 
 const mutating = new Set(['PUT', 'POST', 'DELETE'])
@@ -48,14 +86,7 @@ function resolve(
   method: string,
   pathname: string,
 ): { handler?: Handler; allowed: string[] } {
-  const themeId = themeIdFromPath(pathname)
-  const methods: Partial<Record<Method, Handler>> | undefined =
-    themeId === undefined
-      ? fixedRoutes[pathname]
-      : {
-          PUT: (context) => putTheme(context, themeId),
-          DELETE: (context) => deleteTheme(context, themeId),
-        }
+  const methods = methodsFor(pathname)
   return {
     handler: methods?.[method as Method],
     allowed: methods ? Object.keys(methods) : [],

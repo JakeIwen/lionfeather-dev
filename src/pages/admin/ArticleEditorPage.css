@@ -1,0 +1,137 @@
+/* Wider than .container so the editor and a full-width preview sit side by side. */
+.article-editor {
+  width: min(1640px, calc(100% - 48px));
+  margin-inline: auto;
+  padding-block: 32px 60px;
+}
+.article-editor-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 24px;
+}
+.article-editor-head h1 {
+  margin-right: auto;
+  font-family: var(--serif);
+  font-size: 38px;
+  font-weight: 400;
+}
+.article-editor-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-block: 10px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.article-editor-link:hover {
+  color: var(--accent);
+}
+.article-editor-panes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 40px;
+  margin-top: 20px;
+}
+/* The form stays in view while the preview scrolls with the page. */
+.article-editor-form {
+  position: sticky;
+  top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: calc(100dvh - 32px);
+  min-height: 560px;
+}
+.article-editor-field {
+  display: grid;
+  gap: 6px;
+}
+.article-editor-field > span,
+.article-editor-label {
+  font-size: 14px;
+  font-weight: 650;
+}
+.article-editor-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.article-editor-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+}
+.article-editor-input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.article-editor-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+.article-editor-markdown {
+  flex: 1;
+  min-height: 240px;
+  resize: none;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.article-editor-problems {
+  max-height: 7.5em;
+  overflow-y: auto;
+  padding-left: 18px;
+  color: var(--danger);
+  font-size: 14px;
+}
+.article-editor-actions {
+  margin-top: 0;
+}
+.article-editor-preview {
+  min-width: 0;
+  padding-left: 40px;
+  border-left: 1px solid var(--line);
+}
+@media (max-width: 1000px) {
+  .article-editor-panes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .article-editor-form {
+    position: static;
+    height: auto;
+    min-height: 0;
+  }
+  .article-editor-markdown {
+    min-height: 60vh;
+    resize: vertical;
+  }
+  .article-editor-preview {
+    padding-left: 0;
+    padding-top: 8px;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+}
+@media (max-width: 580px) {
+  .article-editor {
+    width: calc(100% - 32px);
+    padding-block: 24px 40px;
+  }
+  .article-editor-head h1 {
+    font-size: 32px;
+  }
+  .article-editor-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,11 +1,18 @@
-// The owner's saved site settings and appearance, one JSON row each in D1.
-// A missing or unreadable row means the defaults.
+// The owner's saved site settings and appearance, one JSON row each in D1,
+// and the articles edited on the site, one row each. A missing or unreadable
+// row means the defaults.
 import { normalizeActiveTheme, normalizeThemes } from 'theme-kit/core'
 import {
   defaultSiteSettings,
   normalizeSiteSettings,
   type SiteSettings,
 } from '../src/settings/siteSettings'
+import {
+  normalizeArticleEdits,
+  type ArticleEditFields,
+  type ArticleEdits,
+} from '../src/articleEdits/articleEdit'
+import type { ArticleSlug } from '../src/content/articles'
 import {
   defaultActiveTheme,
   isBuiltinTheme,
@@ -19,9 +26,14 @@ const appearanceKey = 'appearance'
 // through this isolate clear it; other isolates catch up within the window.
 const memoMs = 10_000
 
-export type SiteState = { settings: SiteSettings; appearance: Appearance }
+export type SiteState = {
+  settings: SiteSettings
+  appearance: Appearance
+  articleEdits: ArticleEdits
+}
 
 type StoredRow = { key: string; value: string }
+type ArticleRow = { slug: string; value: string; updated_at: number }
 
 function parseStored(rows: StoredRow[], key: string): unknown {
   const row = rows.find((candidate) => candidate.key === key)
@@ -33,12 +45,28 @@ function parseStored(rows: StoredRow[], key: string): unknown {
   }
 }
 
-/** Reads both rows from D1; the admin API uses this so it never sees a memo. */
+/** Each stored edit with its save time; normalizing drops unreadable rows. */
+function parseArticleRows(rows: ArticleRow[]): ArticleEdits {
+  const stored: Record<string, unknown> = {}
+  for (const row of rows) {
+    try {
+      stored[row.slug] = { ...JSON.parse(row.value), updatedAt: row.updated_at }
+    } catch {
+      /* An unreadable row leaves the code's version in place. */
+    }
+  }
+  return normalizeArticleEdits(stored)
+}
+
+/** Reads the saved rows from D1; the admin API uses this so it never sees a memo. */
 export async function loadSiteState(db: D1Database): Promise<SiteState> {
-  const { results } = await db
-    .prepare('SELECT key, value FROM settings WHERE key IN (?1, ?2)')
-    .bind(settingsKey, appearanceKey)
-    .all<StoredRow>()
+  const [settingsRows, articleRows] = await db.batch([
+    db
+      .prepare('SELECT key, value FROM settings WHERE key IN (?1, ?2)')
+      .bind(settingsKey, appearanceKey),
+    db.prepare('SELECT slug, value, updated_at FROM article_edits'),
+  ])
+  const results = settingsRows!.results as StoredRow[]
   const appearance = parseStored(results, appearanceKey) as
     { active?: unknown; themes?: unknown } | undefined
   return {
@@ -54,6 +82,7 @@ export async function loadSiteState(db: D1Database): Promise<SiteState> {
         (theme) => !isBuiltinTheme(theme.id),
       ),
     },
+    articleEdits: parseArticleRows(articleRows!.results as ArticleRow[]),
   }
 }
 
@@ -81,6 +110,7 @@ export async function currentSiteState(
     return {
       settings: defaultSiteSettings(),
       appearance: { active: defaultActiveTheme(), themes: [] },
+      articleEdits: {},
     }
   }
 }
@@ -101,3 +131,24 @@ export const saveSiteSettings = (db: D1Database, settings: SiteSettings) =>
 
 export const saveAppearance = (db: D1Database, appearance: Appearance) =>
   saveRow(db, appearanceKey, appearance)
+
+export async function saveArticleEdit(
+  db: D1Database,
+  slug: ArticleSlug,
+  fields: ArticleEditFields,
+  updatedAt: number,
+) {
+  await db
+    .prepare(
+      `INSERT INTO article_edits (slug, value, updated_at) VALUES (?1, ?2, ?3)
+       ON CONFLICT (slug) DO UPDATE SET value = ?2, updated_at = ?3`,
+    )
+    .bind(slug, JSON.stringify(fields), updatedAt)
+    .run()
+  forgetSiteState()
+}
+
+export async function deleteArticleEdit(db: D1Database, slug: ArticleSlug) {
+  await db.prepare('DELETE FROM article_edits WHERE slug = ?1').bind(slug).run()
+  forgetSiteState()
+}

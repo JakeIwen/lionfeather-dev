@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom'
 import { articleReadingTime } from '../components/writing/articleReadingTime'
 import { formatArticleDate } from '../components/writing/formatArticleDate'
-import { listedArticles } from '../content/listedArticles'
+import { useArticles } from '../articleEdits/currentArticles'
+import { listArticles } from '../content/listedArticles'
 import { articlePath } from '../routes'
 import './WritingPage.css'
 
 export function WritingPage() {
+  const listedArticles = listArticles(useArticles())
   return (
     <section className="writing-page container" aria-labelledby="writing-title">
       <h1 id="writing-title">Writing</h1>

@@ -1,7 +1,10 @@
-import { ArrowLeft, ArrowUpRight, Mail } from 'lucide-react'
+import { ArrowLeft, ArrowUpRight, Mail, PenLine } from 'lucide-react'
+import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { articles } from '../content/articles'
+import { useArticles } from '../articleEdits/currentArticles'
+import { isOwnerBrowser } from '../articleEdits/ownerBrowser'
 import { email } from '../content/site'
+import { adminArticlePath } from '../routes'
 import { ArticleBody } from './article/ArticleBody'
 import { ArticleHeading } from './article/ArticleHeading'
 import { NotFoundPage } from './NotFoundPage'
@@ -9,14 +12,25 @@ import './ArticlePage.css'
 
 export function ArticlePage() {
   const { slug } = useParams()
-  const article = articles.find((item) => item.slug === slug)
+  const [owner] = useState(isOwnerBrowser)
+  const article = useArticles().find((item) => item.slug === slug)
   if (!article) return <NotFoundPage />
 
   return (
     <article className="article-page container">
-      <Link className="article-back-link" to="/#work">
-        <ArrowLeft size={15} aria-hidden="true" /> All work
-      </Link>
+      <div className="article-links">
+        <Link className="article-back-link" to="/#work">
+          <ArrowLeft size={15} aria-hidden="true" /> All work
+        </Link>
+        {owner ? (
+          <Link
+            className="article-back-link"
+            to={adminArticlePath(article.slug)}
+          >
+            <PenLine size={15} aria-hidden="true" /> Edit
+          </Link>
+        ) : null}
+      </div>
       <ArticleHeading article={article} />
       <ArticleBody article={article} key={article.slug} />
       <footer className="article-contact">
