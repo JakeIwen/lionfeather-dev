@@ -45,8 +45,11 @@ function Finding({
   onApply: () => void
 }) {
   const [applied, setApplied] = useState(false)
+  // Apply replaces the quote, so it must name exactly one place in the draft.
   const applicable =
-    !applied && finding.quote !== '' && markdown.includes(finding.quote)
+    !applied &&
+    finding.quote !== '' &&
+    markdown.split(finding.quote).length === 2
   return (
     <li className="review-finding">
       {finding.quote ? (

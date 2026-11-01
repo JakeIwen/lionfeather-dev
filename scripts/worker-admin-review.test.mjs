@@ -9,10 +9,10 @@ const token = {
 }
 const catalog = {
   models: [
-    { id: 'claude-fable-5-1', label: 'Fable 5.1', efforts: ['low', 'high'] },
+    { id: 'fable', label: 'Fable 5.1', efforts: ['low', 'high'] },
     { id: 'claude-sonnet-5-5', label: 'Sonnet 5.5', efforts: ['low'] },
   ],
-  defaultModel: 'claude-fable-5-1',
+  defaultModel: 'fable',
   defaultEffort: 'high',
 }
 const reviewLines = [
@@ -81,7 +81,7 @@ test('the model list comes from the service, sent with the service token', async
 
 test('review settings default to Fable at high effort and save against the catalog', async () => {
   assert.deepEqual(await (await worker.admin(adminApi.reviewSettings)).json(), {
-    model: 'claude-fable-5-1',
+    model: 'fable',
     effort: 'high',
   })
   const put = (review) =>
@@ -115,7 +115,7 @@ test('a review streams the service lines back and sends the live version for com
     .map((line) => JSON.parse(line))
   assert.deepEqual(lines, reviewLines)
   const sent = received.find((request) => request.url.endsWith('/review'))
-  assert.equal(sent.body.model, 'claude-fable-5-1')
+  assert.equal(sent.body.model, 'fable')
   assert.equal(sent.body.effort, 'high')
   assert.deepEqual(sent.body.article, draft)
   assert.match(sent.body.previous.markdown, /reverse-engineer my van/)

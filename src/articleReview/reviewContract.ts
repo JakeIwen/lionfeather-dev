@@ -8,8 +8,9 @@ export type ReviewSettings = { model: string; effort: string }
 
 export const reviewSettingsKey = 'review'
 
+// `fable` is the Agent SDK's alias for the newest Fable on the owner's plan.
 export const defaultReviewSettings = (): ReviewSettings => ({
-  model: 'claude-fable-5-1',
+  model: 'fable',
   effort: 'high',
 })
 
