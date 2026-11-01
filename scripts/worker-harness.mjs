@@ -31,6 +31,7 @@ import {
 
 const root = fileURLToPath(new URL('../', import.meta.url))
 export const siteOrigin = 'https://lionfeather.dev'
+export const reviewServiceUrl = 'https://review.lionfeather.dev'
 export const browserAgent =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
 
@@ -130,11 +131,14 @@ function configuredWorker(distDirectory) {
 }
 
 /**
- * Serves the Access signing keys the way Cloudflare does, and nothing else:
- * the Worker must not call out anywhere else.
+ * Serves the Access signing keys the way Cloudflare does, and hands requests
+ * for the review service to `reviewService` when a test gives one. The
+ * Worker must not call out anywhere else.
  */
-function accessKeysService(signingKey, requests, available) {
+function accessKeysService(signingKey, requests, available, reviewService) {
   return (request) => {
+    if (reviewService && request.url.startsWith(reviewServiceUrl))
+      return reviewService(request)
     if (request.url !== certsUrl)
       return new MiniflareResponse('Unexpected outbound request', {
         status: 502,
@@ -190,12 +194,14 @@ function clientFor(miniflare, signingKey, bindings) {
  * Starts the Worker with a fresh in-memory D1. `bindings` overrides
  * wrangler.jsonc vars (the checked-in ACCESS_AUD is empty, so tests that want
  * a working admin set it). `assets`, a function, replaces the fixture assets so
- * a test can see what the Worker asks of them.
+ * a test can see what the Worker asks of them. `reviewService`, a function,
+ * answers the Worker's calls to the review service.
  */
 export async function startWorker({
   bindings = {},
   withAccessKeys = true,
   assets,
+  reviewService,
 } = {}) {
   const workDirectory = mkdtempSync(join(tmpdir(), 'lionfeather-worker-'))
   const distDirectory = join(workDirectory, 'dist')
@@ -219,6 +225,7 @@ export async function startWorker({
             signingKey,
             certsRequests,
             withAccessKeys,
+            reviewService,
           ),
         },
       ],

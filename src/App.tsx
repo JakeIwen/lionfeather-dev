@@ -13,6 +13,7 @@ import { WritingPage } from './pages/WritingPage'
 import {
   adminArticleRoute,
   adminPath,
+  adminSettingsPath,
   articleRoute,
   homePath,
   projectRoute,
@@ -25,6 +26,12 @@ import './App.css'
 const AdminPage = lazy(() =>
   import('./pages/admin/AdminPage').then((module) => ({
     default: module.AdminPage,
+  })),
+)
+
+const AdminSettingsPage = lazy(() =>
+  import('./pages/admin/AdminSettingsPage').then((module) => ({
+    default: module.AdminSettingsPage,
   })),
 )
 
@@ -55,6 +62,14 @@ export function App() {
             element={
               <Suspense fallback={null}>
                 <AdminPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path={adminSettingsPath}
+            element={
+              <Suspense fallback={null}>
+                <AdminSettingsPage />
               </Suspense>
             }
           />

@@ -1,5 +1,5 @@
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
-import { useEffect, useState, useSyncExternalStore } from 'react'
+import { useEffect, useSyncExternalStore } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { withArticleEdit } from '../../articleEdits/articleEdit'
 import { parseArticleMarkdown } from '../../articleEdits/articleMarkdown'
@@ -11,8 +11,11 @@ import { NotFoundPage } from '../NotFoundPage'
 import { isSignedOut, subscribeSignedOut } from './adminClient'
 import { ArticleEditorActions } from './ArticleEditorActions'
 import { ArticleEditorFields } from './ArticleEditorFields'
+import { ArticleReviewPanel } from './ArticleReviewPanel'
 import { SignedOutNotice } from './SignedOutNotice'
 import { draftFields, useArticleDraft } from './useArticleDraft'
+import { useArticleReview } from './useArticleReview'
+import { useDocumentTitle } from './useDocumentTitle'
 import { useSession } from './useSession'
 import './admin.css'
 import './ArticleEditorPage.css'
@@ -30,12 +33,8 @@ function ArticleEditor({ article }: { article: Article }) {
   const signedOut = useSyncExternalStore(subscribeSignedOut, isSignedOut)
   const draftState = useArticleDraft(article)
   const { draft, loadError, save } = draftState
-  const [previous] = useState(() => document.title)
-
-  useEffect(() => {
-    document.title = `Edit · ${draft?.title ?? article.title}`
-  }, [draft?.title, article.title])
-  useEffect(() => () => void (document.title = previous), [previous])
+  const review = useArticleReview(article.slug)
+  useDocumentTitle(`Edit · ${draft?.title ?? article.title}`)
 
   // Cmd-S or Ctrl-S saves instead of saving the page as a file.
   useEffect(() => {
@@ -85,13 +84,33 @@ function ArticleEditor({ article }: { article: Article }) {
                 problems={problems}
                 onChange={draftState.change}
               />
-              <ArticleEditorActions {...draftState} problems={problems} />
+              <ArticleEditorActions
+                {...draftState}
+                problems={problems}
+                reviewing={review.state.kind === 'running'}
+                onReview={() => fields && void review.start(fields)}
+              />
             </>
           ) : loadError ? null : (
             <p className="admin-note">Loading the article…</p>
           )}
         </form>
         <div className="article-editor-preview" aria-label="Preview">
+          <ArticleReviewPanel
+            state={review.state}
+            markdown={draft?.markdown ?? ''}
+            onApply={(finding) =>
+              draft &&
+              draftState.change({
+                markdown: draft.markdown.replace(
+                  finding.quote,
+                  () => finding.suggestion,
+                ),
+              })
+            }
+            onCancel={review.cancel}
+            onDismiss={review.dismiss}
+          />
           <ArticleHeading article={preview} />
           <ArticleBody article={preview} />
         </div>

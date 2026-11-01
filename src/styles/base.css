@@ -10,6 +10,7 @@ html {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   --serif: 'Instrument Serif', Georgia, serif;
+  --mono: ui-monospace, Menlo, monospace;
   scroll-behavior: smooth;
   scroll-padding-top: 35px;
 }

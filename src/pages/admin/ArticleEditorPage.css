@@ -84,7 +84,7 @@
   flex: 1;
   min-height: 240px;
   resize: none;
-  font-family: ui-monospace, Menlo, monospace;
+  font-family: var(--mono);
   font-size: 14px;
   line-height: 1.6;
 }

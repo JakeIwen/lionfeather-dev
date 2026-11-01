@@ -14,6 +14,11 @@ import {
 } from '../src/articleEdits/articleEdit'
 import type { ArticleSlug } from '../src/content/articles'
 import {
+  normalizeReviewSettings,
+  reviewSettingsKey,
+  type ReviewSettings,
+} from '../src/articleReview/reviewContract'
+import {
   defaultActiveTheme,
   isBuiltinTheme,
   siteKnobs,
@@ -131,6 +136,22 @@ export const saveSiteSettings = (db: D1Database, settings: SiteSettings) =>
 
 export const saveAppearance = (db: D1Database, appearance: Appearance) =>
   saveRow(db, appearanceKey, appearance)
+
+/** The owner's review model choice; the admin API reads it fresh each time. */
+export async function loadReviewSettings(
+  db: D1Database,
+): Promise<ReviewSettings> {
+  const row = await db
+    .prepare('SELECT key, value FROM settings WHERE key = ?1')
+    .bind(reviewSettingsKey)
+    .first<StoredRow>()
+  return normalizeReviewSettings(
+    parseStored(row ? [row] : [], reviewSettingsKey),
+  )
+}
+
+export const saveReviewSettings = (db: D1Database, settings: ReviewSettings) =>
+  saveRow(db, reviewSettingsKey, settings)
 
 export async function saveArticleEdit(
   db: D1Database,

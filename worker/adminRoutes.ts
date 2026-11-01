@@ -17,6 +17,13 @@ import {
 } from './adminAppearance'
 import { BadRequest, type AdminContext } from './adminContext'
 import { getMetrics } from './adminMetrics'
+import {
+  getReviewModels,
+  getReviewSettings,
+  postArticleReview,
+  putReviewSettings,
+  reviewSlugFromPath,
+} from './adminReview'
 import { getSettings, putSettings } from './adminSettings'
 import type { Env } from './env'
 import { errorResponse, jsonResponse } from './jsonResponse'
@@ -39,9 +46,12 @@ const fixedRoutes: Record<string, Methods> = {
   [adminApi.appearanceActive]: { PUT: putActiveTheme },
   [adminApi.metrics]: { GET: getMetrics },
   [adminApi.articles]: { GET: getArticleEdits },
+  [adminApi.reviewModels]: { GET: getReviewModels },
+  [adminApi.reviewSettings]: { GET: getReviewSettings, PUT: putReviewSettings },
 }
 
-// Routes that end in an id: /appearance/themes/:id and /articles/:slug.
+// Routes with an id: /appearance/themes/:id, /articles/:slug and
+// /articles/:slug/review.
 const paramRoutes: {
   param: (pathname: string) => string | undefined
   methods: (param: string) => Methods
@@ -51,6 +61,12 @@ const paramRoutes: {
     methods: (id) => ({
       PUT: (context) => putTheme(context, id),
       DELETE: (context) => deleteTheme(context, id),
+    }),
+  },
+  {
+    param: (pathname) => reviewSlugFromPath(pathname, adminApi.articles),
+    methods: (slug) => ({
+      POST: (context) => postArticleReview(context, slug),
     }),
   },
   {

@@ -19,6 +19,7 @@ export function articlePath(slug: ArticleSlug) {
 // Owner-only: Cloudflare Access guards everything under adminPath, and the
 // Worker checks the Access token on every admin API request as well.
 export const adminPath = '/admin'
+export const adminSettingsPath = '/admin/settings'
 export const adminArticleRoute = '/admin/writing/:slug'
 export function adminArticlePath(slug: ArticleSlug) {
   return `/admin/writing/${slug}`
@@ -32,6 +33,10 @@ export const adminApi = {
     `/admin/api/appearance/themes/${encodeURIComponent(id)}`,
   metrics: '/admin/api/metrics',
   articles: '/admin/api/articles',
+  articleReview: (slug: string) =>
+    `/admin/api/articles/${encodeURIComponent(slug)}/review`,
+  reviewModels: '/admin/api/review/models',
+  reviewSettings: '/admin/api/review/settings',
   article: (slug: string) => `/admin/api/articles/${encodeURIComponent(slug)}`,
 } as const
 export const collectPath = '/api/collect'

@@ -159,6 +159,7 @@ test('deployment is limited to the reviewed Worker shape', (t) => {
       ACCESS_TEAM_DOMAIN: 'team.example',
       ACCESS_AUD: '',
       OWNER_EMAIL: 'a@b.c',
+      REVIEW_SERVICE_URL: 'https://review.example',
     },
     workers_dev: false,
     preview_urls: false,

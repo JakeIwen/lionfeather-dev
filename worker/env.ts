@@ -8,4 +8,10 @@ export type Env = {
   // empty value rejects every admin request.
   ACCESS_AUD: string
   OWNER_EMAIL: string
+  // The article review service on the Hetzner server, behind its own Access
+  // app that admits only this Worker's service token.
+  REVIEW_SERVICE_URL: string
+  // Secrets (wrangler secret put); unset means Review answers 503.
+  REVIEW_ACCESS_CLIENT_ID?: string
+  REVIEW_ACCESS_CLIENT_SECRET?: string
 }

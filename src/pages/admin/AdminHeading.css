@@ -1,0 +1,18 @@
+.admin-nav {
+  display: flex;
+  gap: 4px;
+}
+.admin-nav-link {
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 600;
+}
+.admin-nav-link:hover {
+  color: var(--ink);
+}
+.admin-nav-link[aria-current='page'] {
+  background: var(--surface-hover);
+  color: var(--ink);
+}

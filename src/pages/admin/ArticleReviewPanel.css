@@ -1,0 +1,57 @@
+/* Stays in view while the preview scrolls under it. */
+.review-panel {
+  position: sticky;
+  top: 16px;
+  z-index: 2;
+  display: grid;
+  gap: 12px;
+  max-height: 50vh;
+  overflow-y: auto;
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: var(--surface-raised);
+  font-size: 15px;
+  line-height: 1.6;
+}
+.review-panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  font-weight: 650;
+}
+.review-summary {
+  color: var(--muted);
+}
+.review-findings {
+  display: grid;
+  gap: 16px;
+  padding-left: 22px;
+}
+.review-finding {
+  display: grid;
+  justify-items: start;
+  gap: 6px;
+}
+.review-quote {
+  margin: 0;
+  padding-left: 10px;
+  border-left: 3px solid var(--line);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 13px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.review-suggestion {
+  color: var(--accent);
+}
+@media (max-width: 1000px) {
+  .review-panel {
+    position: static;
+    max-height: none;
+  }
+}

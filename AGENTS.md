@@ -42,6 +42,9 @@ external private checkout.
   esbuild and runs it in workerd through Miniflare with the checked-in
   `wrangler.jsonc`, a fixture `dist`, an in-memory D1 migrated from `migrations/`,
   and a test Access key (`access-token-fixture.mjs`).
+- `npm test` also runs `review-service/test/*.test.mjs`; `npm test` inside
+  `review-service/` runs just those (it needs `npm install` there only to start the
+  service, not for its tests).
 - `npm run service:prepare`: build and validate a local boot-service plist.
 - `npm run service:install`: build, install the macOS boot service, and verify
   automatic restart. Run from normal Terminal as the user, not under sudo.
@@ -74,10 +77,17 @@ viewer because nothing else uses them.
 - `src/analytics/`: `analyticsContract.ts` (beacon payloads, limits, and the
   metrics report shape), `analyticsBeacon.ts` (views, visible time, and link events)
   and `PageAnalytics.tsx` (route hook).
-- `src/pages/admin/`: the owner-only `/admin` page: metrics, layout settings, the
-  writing list, and the theme-kit editor backed by the Worker; and
-  `ArticleEditorPage.tsx` at `/admin/writing/<slug>`, which puts a Markdown editor
-  beside a live preview of the article.
+- `src/pages/admin/`: the owner-only admin pages, sharing `AdminHeading.tsx`:
+  `/admin` (metrics and the writing list), `/admin/settings` (article review model,
+  the theme-kit editor, homepage layout), and `ArticleEditorPage.tsx` at
+  `/admin/writing/<slug>`, which puts a Markdown editor beside a live preview of
+  the article, with a Review button whose findings can be applied to the draft.
+- `src/articleReview/reviewContract.ts`: the AI review's settings, model catalog
+  and streamed lines, shared by the Worker and the app. The review runs on the
+  review service on the Hetzner server (on Jacob's Claude plan); the Worker
+  proxies to it (`worker/reviewService.ts`, `worker/adminReview.ts`) with an
+  Access service token held in the `REVIEW_ACCESS_CLIENT_ID` and
+  `REVIEW_ACCESS_CLIENT_SECRET` Worker secrets. Without them Review answers 503.
 - `src/articleEdits/`: articles edited on the site. `articleMarkdown.ts` is the
   editing format (parse with line-numbered problems, and serialize the code's
   blocks); `articleEdit.ts` is the stored record, its validation and how it lays
@@ -88,6 +98,14 @@ viewer because nothing else uses them.
 - `worker/`: the Cloudflare Worker in front of the static assets: page injection of
   settings and theme knobs, the `/api/collect` beacon endpoint, the Access-verified
   admin API, and the daily retention prune. `migrations/` holds its D1 schema.
+- `review-service/`: the article-review service that runs on the `lionfeather-apps`
+  server (`review.lionfeather.dev`), not in the Worker or the Vite build, with its
+  own `package.json` and lockfile. The Worker's Review button calls it through
+  Cloudflare Access with a service token. `src/main.mjs` wires `access/` (Access
+  JWT check), `claude/` (Agent SDK model catalog and reviewer, on Jacob's Claude
+  subscription), `review/` (prompt, request and output rules) and `http/` (guard
+  and the `/healthz`, `/models`, `/review` routes). Hosting files live in
+  `lionfeather-edge/apps/review/`.
 - `src/pages/`: route components for the home, project, article, recommendation,
   and not-found pages. `ArticlePage.tsx` renders long-form writing.
 - `src/pages/WritingPage.tsx` and `WritingPage.css`: `/writing`, a newest-first

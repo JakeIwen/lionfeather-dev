@@ -54,7 +54,7 @@ function files(directory, prefix = '') {
 }
 
 // The reviewed Worker: one entry point in front of dist/, one D1 database, a
-// daily cron and three plain-text vars. Anything else is a change to review.
+// daily cron and four plain-text vars. Anything else is a change to review.
 const reviewedKeys = [
   '$schema',
   'name',
@@ -82,7 +82,12 @@ const reviewedD1Keys = [
   'database_id',
   'migrations_dir',
 ]
-const reviewedVars = ['ACCESS_TEAM_DOMAIN', 'ACCESS_AUD', 'OWNER_EMAIL']
+const reviewedVars = [
+  'ACCESS_TEAM_DOMAIN',
+  'ACCESS_AUD',
+  'OWNER_EMAIL',
+  'REVIEW_SERVICE_URL',
+]
 const onlyKeys = (value, allowed) =>
   Object.keys(value).every((key) => allowed.includes(key))
 const sameKeys = (value, expected) =>

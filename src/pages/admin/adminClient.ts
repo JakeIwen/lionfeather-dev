@@ -11,6 +11,13 @@ import {
   type ArticleEditFields,
   type ArticleEdits,
 } from '../../articleEdits/articleEdit'
+import {
+  normalizeReviewSettings,
+  parseReviewCatalog,
+  type ReviewCatalog,
+  type ReviewLine,
+  type ReviewSettings,
+} from '../../articleReview/reviewContract'
 import type { ArticleSlug } from '../../content/articles'
 import { adminApi } from '../../routes'
 import {
@@ -52,7 +59,7 @@ export function subscribeSignedOut(listener: () => void) {
 }
 
 type RequestOptions = {
-  method?: 'GET' | 'PUT' | 'DELETE'
+  method?: 'GET' | 'PUT' | 'POST' | 'DELETE'
   body?: unknown
   signal?: AbortSignal
 }
@@ -151,4 +158,78 @@ export async function saveArticleEdit(
 
 export async function deleteArticleEdit(slug: ArticleSlug): Promise<void> {
   await adminRequest(adminApi.article(slug), { method: 'DELETE' })
+}
+
+export async function getReviewCatalog(): Promise<ReviewCatalog> {
+  const catalog = parseReviewCatalog(await adminRequest(adminApi.reviewModels))
+  if (!catalog) throw new AdminRequestError('The model list was not readable.')
+  return catalog
+}
+
+export async function getReviewSettings(): Promise<ReviewSettings> {
+  return normalizeReviewSettings(await adminRequest(adminApi.reviewSettings))
+}
+
+export async function saveReviewSettings(
+  review: ReviewSettings,
+): Promise<ReviewSettings> {
+  const saved = await adminRequest(adminApi.reviewSettings, {
+    method: 'PUT',
+    body: { review },
+  })
+  return normalizeReviewSettings(saved)
+}
+
+/**
+ * Sends a draft for review and calls `onLine` with each line the review
+ * streams back (started, progress, then a result or an error).
+ */
+export async function streamArticleReview(
+  slug: ArticleSlug,
+  article: ArticleEditFields,
+  onLine: (line: ReviewLine) => void,
+  signal: AbortSignal,
+): Promise<void> {
+  let response: Response
+  try {
+    response = await fetch(adminApi.articleReview(slug), {
+      method: 'POST',
+      credentials: 'same-origin',
+      redirect: 'manual',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ article }),
+      signal,
+    })
+  } catch (error) {
+    if (signal.aborted) throw error
+    throw new AdminRequestError('Could not reach the server.')
+  }
+  if (response.type === 'opaqueredirect' || response.status === 401) {
+    setSignedOut(true)
+    throw new SignedOutError()
+  }
+  if (!response.ok || !response.body) {
+    const payload: unknown = await response.json().catch(() => undefined)
+    throw new AdminRequestError(
+      errorMessage(payload) ?? `The server answered ${response.status}.`,
+    )
+  }
+  setSignedOut(false)
+  const reader = response.body.pipeThrough(new TextDecoderStream()).getReader()
+  let buffered = ''
+  for (;;) {
+    const { done, value } = await reader.read()
+    if (value) buffered += value
+    const lines = buffered.split('\n')
+    buffered = done ? '' : lines.pop()!
+    for (const line of lines) {
+      if (!line.trim()) continue
+      try {
+        onLine(JSON.parse(line) as ReviewLine)
+      } catch {
+        throw new AdminRequestError('The review sent an unreadable line.')
+      }
+    }
+    if (done) return
+  }
 }

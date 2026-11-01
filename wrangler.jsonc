@@ -40,6 +40,9 @@
     // The Access application's audience tag; empty rejects every admin request.
     "ACCESS_AUD": "79cbb749889871b637611049cb2f647fc1ceae78bd11539b5ecc001d624c3e3f",
     "OWNER_EMAIL": "lionfeatherdev@gmail.com",
+    // The article review service (review-service/); its Access service token
+    // is the REVIEW_ACCESS_CLIENT_ID/SECRET secrets.
+    "REVIEW_SERVICE_URL": "https://review.lionfeather.dev",
   },
   "routes": [{ "pattern": "lionfeather.dev", "custom_domain": true }],
 }

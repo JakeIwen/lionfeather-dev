@@ -22,6 +22,8 @@ export function ArticleEditorActions({
   problems,
   revert,
   discard,
+  reviewing,
+  onReview,
 }: {
   edit: ArticleEdit | null | undefined
   dirty: boolean
@@ -29,6 +31,8 @@ export function ArticleEditorActions({
   problems: MarkdownProblem[]
   revert: () => void
   discard: () => Promise<void>
+  reviewing: boolean
+  onReview: () => void
 }) {
   const [confirming, setConfirming] = useState(false)
   const busy = status.kind === 'saving'
@@ -55,6 +59,15 @@ export function ArticleEditorActions({
         disabled={!dirty || busy}
       >
         Revert
+      </button>
+      <button
+        type="button"
+        className="admin-button"
+        onClick={onReview}
+        disabled={reviewing}
+        title="Have the review model check this draft before you save it"
+      >
+        {reviewing ? 'Reviewing…' : 'Review'}
       </button>
       {edit ? (
         <button
