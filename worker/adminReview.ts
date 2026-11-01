@@ -1,16 +1,17 @@
 // Review endpoints: the model catalog and the owner's choice, and a review of
 // an article draft, streamed back from the review service as it runs.
 import {
+  articleEditFields,
   articleEditFieldsOf,
-  articleEditLimits,
-  type ArticleEditFields,
+  isArticleEditShape,
 } from '../src/articleEdits/articleEdit'
 import {
   normalizeReviewSettings,
   reviewSettingsProblem,
 } from '../src/articleReview/reviewContract'
 import { articles, isArticleSlug } from '../src/content/articles'
-import { fieldOf, isRecord } from '../src/jsonValues'
+import { fieldOf } from '../src/jsonValues'
+import { adminApi } from '../src/routes'
 import type { AdminContext } from './adminContext'
 import { errorResponse, jsonResponse } from './jsonResponse'
 import {
@@ -44,28 +45,12 @@ export async function putReviewSettings({ env, json }: AdminContext) {
 }
 
 /** The slug in /admin/api/articles/:slug/review, or undefined. */
-export function reviewSlugFromPath(
-  pathname: string,
-  articlesPath: string,
-): string | undefined {
-  const prefix = `${articlesPath}/`
+export function reviewSlugFromPath(pathname: string): string | undefined {
+  const prefix = `${adminApi.articles}/`
   if (!pathname.startsWith(prefix) || !pathname.endsWith(reviewSuffix))
     return undefined
   const slug = pathname.slice(prefix.length, -reviewSuffix.length)
   return slug && !slug.includes('/') ? slug : undefined
-}
-
-// A draft under review may still have Markdown problems; it only needs the
-// right shape and size.
-function draftFields(value: unknown): ArticleEditFields | undefined {
-  if (!isRecord(value)) return undefined
-  const { title, dek, tags, published, markdown } = value
-  const text = [title, dek, published, markdown]
-  if (!text.every((field) => typeof field === 'string')) return undefined
-  if ((markdown as string).length > articleEditLimits.markdown) return undefined
-  if (!Array.isArray(tags) || !tags.every((tag) => typeof tag === 'string'))
-    return undefined
-  return value as ArticleEditFields
 }
 
 export async function postArticleReview(
@@ -75,15 +60,15 @@ export async function postArticleReview(
   const article = articles.find((item) => item.slug === slug)
   if (!isArticleSlug(slug) || !article)
     return errorResponse(404, `No article with slug ${slug}.`)
-  const draft = draftFields(fieldOf(await context.json(), 'article'))
-  if (!draft) return errorResponse(400, 'The draft is not an article.')
+  const draft = fieldOf(await context.json(), 'article')
+  if (!isArticleEditShape(draft))
+    return errorResponse(400, 'The draft is not an article.')
   const { env } = context
   const saved = (await loadSiteState(env.DB)).articleEdits[slug]
   // The version visitors see now, so the review can focus on what changed.
-  const { updatedAt: _updatedAt, ...previous } = saved ?? {
-    ...articleEditFieldsOf(article),
-    updatedAt: 0,
-  }
+  const previous = saved
+    ? articleEditFields(saved)
+    : articleEditFieldsOf(article)
   const { model, effort } = await loadReviewSettings(env.DB)
   const response = await reviewServiceFetch(env, reviewSuffix, {
     method: 'POST',

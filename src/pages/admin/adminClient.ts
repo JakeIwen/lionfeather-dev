@@ -39,6 +39,10 @@ export class AdminRequestError extends Error {
   }
 }
 
+/** A failure as text for the admin UI. */
+export const failureMessage = (error: unknown, fallback: string) =>
+  error instanceof Error ? error.message : fallback
+
 // Shared so every section can show one Sign in notice, whichever request found out.
 let signedOut = false
 const signedOutListeners = new Set<() => void>()

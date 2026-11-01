@@ -50,6 +50,23 @@ function textProblem(
   return undefined
 }
 
+/**
+ * Whether the value has an article's fields and fits the size limit, whatever
+ * its content; a draft sent for review only needs this much.
+ */
+export function isArticleEditShape(value: unknown): value is ArticleEditFields {
+  if (!isRecord(value)) return false
+  const { title, dek, tags, published, markdown } = value
+  return (
+    [title, dek, published, markdown].every(
+      (field) => typeof field === 'string',
+    ) &&
+    (markdown as string).length <= articleEditLimits.markdown &&
+    Array.isArray(tags) &&
+    tags.every((tag) => typeof tag === 'string')
+  )
+}
+
 /** Why a write is rejected, or undefined when it can be saved. */
 export function articleEditProblem(value: unknown): string | undefined {
   if (!isRecord(value)) return 'The article must be an object.'

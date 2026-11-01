@@ -9,6 +9,7 @@ import { replaceArticleEdit } from '../../articleEdits/currentArticles'
 import type { Article } from '../../content/articles'
 import {
   deleteArticleEdit,
+  failureMessage,
   getArticleEdits,
   saveArticleEdit,
 } from './adminClient'
@@ -34,9 +35,6 @@ const idle: SaveStatus = { kind: 'idle', text: '' }
 
 const sameDraft = (a: ArticleDraft, b: ArticleDraft) =>
   JSON.stringify(a) === JSON.stringify(b)
-
-const messageOf = (error: unknown, fallback: string) =>
-  error instanceof Error ? error.message : fallback
 
 /**
  * The article as saved (the owner's site edit, or the code's version when
@@ -68,7 +66,8 @@ export function useArticleDraft(article: Article) {
         setDraft(start)
       },
       (error) => {
-        if (current) setLoadError(messageOf(error, 'The article did not load.'))
+        if (current)
+          setLoadError(failureMessage(error, 'The article did not load.'))
       },
     )
     return () => {
@@ -105,7 +104,7 @@ export function useArticleDraft(article: Article) {
       } catch (error) {
         setStatus({
           kind: 'error',
-          text: `Not saved. ${messageOf(error, 'The save failed.')}`,
+          text: `Not saved. ${failureMessage(error, 'The save failed.')}`,
         })
       } finally {
         busy.current = false

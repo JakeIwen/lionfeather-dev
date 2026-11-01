@@ -5,7 +5,7 @@ import type {
   ReviewLine,
 } from '../../articleReview/reviewContract'
 import type { ArticleSlug } from '../../content/articles'
-import { streamArticleReview } from './adminClient'
+import { failureMessage, streamArticleReview } from './adminClient'
 
 export type ReviewState =
   | { kind: 'idle' }
@@ -19,9 +19,6 @@ export type ReviewState =
       findings: ReviewFinding[]
     }
   | { kind: 'error'; message: string }
-
-const messageOf = (error: unknown) =>
-  error instanceof Error ? error.message : 'The review failed.'
 
 /** One review at a time of the current draft, cancellable, with its result. */
 export function useArticleReview(slug: ArticleSlug) {
@@ -64,7 +61,10 @@ export function useArticleReview(slug: ArticleSlug) {
         setState(
           abort.signal.aborted
             ? { kind: 'idle' }
-            : { kind: 'error', message: messageOf(error) },
+            : {
+                kind: 'error',
+                message: failureMessage(error, 'The review failed.'),
+              },
         )
       } finally {
         controller.current = null

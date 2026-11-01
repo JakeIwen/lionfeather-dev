@@ -64,7 +64,7 @@ const paramRoutes: {
     }),
   },
   {
-    param: (pathname) => reviewSlugFromPath(pathname, adminApi.articles),
+    param: reviewSlugFromPath,
     methods: (slug) => ({
       POST: (context) => postArticleReview(context, slug),
     }),

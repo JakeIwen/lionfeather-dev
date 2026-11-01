@@ -1,68 +1,24 @@
-import { useEffect, useState } from 'react'
-import type {
-  ReviewCatalog,
-  ReviewSettings,
-} from '../../articleReview/reviewContract'
-import {
-  getReviewCatalog,
-  getReviewSettings,
-  saveReviewSettings,
-} from './adminClient'
+import { withModel } from '../../articleReview/reviewContract'
 import { InfoTip } from './InfoTip'
+import { useReviewSettingsDraft } from './useReviewSettingsDraft'
 import './admin.css'
-
-const messageOf = (error: unknown, fallback: string) =>
-  error instanceof Error ? error.message : fallback
 
 const reviewHelp =
   'The Review button in the article editor sends the draft to this model on the review server, which runs on your Claude plan. Higher effort is slower and more thorough.'
 
 /** The model and effort the article Review button uses. */
 export function ReviewSection() {
-  const [catalog, setCatalog] = useState<ReviewCatalog>()
-  const [saved, setSaved] = useState<ReviewSettings>()
-  const [draft, setDraft] = useState<ReviewSettings>()
-  const [catalogError, setCatalogError] = useState('')
-  const [status, setStatus] = useState('')
-
-  useEffect(() => {
-    let current = true
-    getReviewSettings().then(
-      (settings) => {
-        if (!current) return
-        setSaved(settings)
-        setDraft(settings)
-      },
-      (error) => current && setStatus(messageOf(error, 'Not loaded.')),
-    )
-    getReviewCatalog().then(
-      (models) => current && setCatalog(models),
-      (error) =>
-        current &&
-        setCatalogError(messageOf(error, 'The model list did not load.')),
-    )
-    return () => {
-      current = false
-    }
-  }, [])
-
-  const model = catalog?.models.find((entry) => entry.id === draft?.model)
-  const dirty =
-    draft !== undefined &&
-    (draft.model !== saved?.model || draft.effort !== saved?.effort)
-
-  async function save() {
-    if (!draft) return
-    setStatus('Saving…')
-    try {
-      const next = await saveReviewSettings(draft)
-      setSaved(next)
-      setDraft(next)
-      setStatus('Saved.')
-    } catch (error) {
-      setStatus(`Not saved. ${messageOf(error, 'The save failed.')}`)
-    }
-  }
+  const {
+    catalog,
+    catalogError,
+    saved,
+    draft,
+    model,
+    dirty,
+    status,
+    change,
+    save,
+  } = useReviewSettingsDraft()
 
   return (
     <section className="admin-section" aria-labelledby="review-title">
@@ -91,12 +47,7 @@ export function ReviewSection() {
                 const next = catalog.models.find(
                   (entry) => entry.id === event.target.value,
                 )
-                if (!next) return
-                const effort = next.efforts.includes(draft.effort)
-                  ? draft.effort
-                  : (next.efforts.at(-1) ?? draft.effort)
-                setDraft({ model: next.id, effort })
-                setStatus('')
+                if (next) change(withModel(draft, next))
               }}
             >
               {model ? null : (
@@ -114,10 +65,9 @@ export function ReviewSection() {
             <select
               className="admin-select"
               value={draft.effort}
-              onChange={(event) => {
-                setDraft({ ...draft, effort: event.target.value })
-                setStatus('')
-              }}
+              onChange={(event) =>
+                change({ ...draft, effort: event.target.value })
+              }
             >
               {(model?.efforts ?? [draft.effort]).map((effort) => (
                 <option key={effort} value={effort}>

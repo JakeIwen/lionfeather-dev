@@ -67,6 +67,20 @@ export function reviewSettingsProblem(
   return undefined
 }
 
+/**
+ * The settings with `model` chosen, keeping the effort when that model
+ * supports it and otherwise taking its highest.
+ */
+export const withModel = (
+  settings: ReviewSettings,
+  model: ReviewModel,
+): ReviewSettings => ({
+  model: model.id,
+  effort: model.efforts.includes(settings.effort)
+    ? settings.effort
+    : (model.efforts.at(-1) ?? settings.effort),
+})
+
 /** A catalog from the service, or undefined when it doesn't have that shape. */
 export function parseReviewCatalog(value: unknown): ReviewCatalog | undefined {
   if (!isRecord(value) || !Array.isArray(value.models)) return undefined
