@@ -17,7 +17,7 @@
 }
 .section-heading h2 em {
   font-size: 1.15em;
-  color: var(--brand-vivid);
+  color: var(--brand);
 }
 .work-blocks {
   display: flex;

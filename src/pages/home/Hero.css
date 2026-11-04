@@ -29,7 +29,7 @@
 .hero h1 em {
   font-size: 0.78em;
   letter-spacing: -1.2px;
-  color: var(--brand-vivid);
+  color: var(--brand);
   line-height: 1.15;
 }
 .hero-description {

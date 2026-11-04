@@ -10,25 +10,23 @@
   color-scheme: light;
 
   /* Mode-sensitive roles keep their lightness when a theme changes. */
-  --paper: oklch(0.967 calc(0.008 * var(--chroma)) calc(var(--hue-neutral) - 29));
-  --ink: oklch(0.294 calc(0.012 * var(--chroma)) var(--hue-brand));
-  --muted: oklch(0.539 calc(0.015 * var(--chroma)) var(--hue-neutral));
-  --line: oklch(0.896 calc(0.014 * var(--chroma)) var(--hue-neutral));
-  --brand: oklch(0.389 calc(0.037 * var(--chroma)) calc(var(--hue-brand) + 12));
+  --paper: oklch(0.967 calc(0.011 * var(--chroma)) calc(var(--hue-neutral) - 29));
+  --ink: oklch(0.294 calc(0.025 * var(--chroma)) var(--hue-brand));
+  --muted: oklch(0.539 calc(0.03 * var(--chroma)) var(--hue-neutral));
+  --line: oklch(0.896 calc(0.022 * var(--chroma)) var(--hue-neutral));
+  --brand: oklch(0.389 calc(0.061 * var(--chroma)) calc(var(--hue-brand) + 12));
   --accent: oklch(0.523 calc(0.121 * var(--chroma)) var(--hue-accent));
-  /* The brand hue at the theme editor's Brand swatch levels, for the mark, the hero line and the
-     primary action; --brand stays near-neutral for the many labels and links that use it. */
-  --brand-vivid: oklch(0.45 calc(0.09 * var(--chroma)) var(--hue-brand));
+  /* The primary button's tinted fill. */
   --action: oklch(0.905 calc(0.028 * var(--chroma)) var(--hue-brand));
   --action-hover: oklch(0.875 calc(0.04 * var(--chroma)) var(--hue-brand));
-  --surface: oklch(0.945 calc(0.012 * var(--chroma)) var(--hue-neutral));
+  --surface: oklch(0.945 calc(0.016 * var(--chroma)) var(--hue-neutral));
   --surface-raised: oklch(0.977 calc(0.005 * var(--chroma)) var(--hue-neutral));
-  --surface-hover: oklch(0.934 calc(0.017 * var(--chroma)) var(--hue-neutral));
-  --surface-tint: oklch(0.926 calc(0.019 * var(--chroma)) var(--hue-neutral));
+  --surface-hover: oklch(0.934 calc(0.021 * var(--chroma)) var(--hue-neutral));
+  --surface-tint: oklch(0.926 calc(0.03 * var(--chroma)) var(--hue-brand));
   --surface-pressed: oklch(0.893 calc(0.027 * var(--chroma)) var(--hue-neutral));
   --surface-inset: oklch(0.919 calc(0.017 * var(--chroma)) var(--hue-neutral));
-  --border-strong: oklch(0.801 calc(0.035 * var(--chroma)) calc(var(--hue-brand) - 14));
-  --border-link: oklch(0.749 calc(0.031 * var(--chroma)) calc(var(--hue-brand) - 14));
+  --border-strong: oklch(0.801 calc(0.035 * var(--chroma)) calc(var(--hue-neutral) + 5));
+  --border-link: oklch(0.749 calc(0.031 * var(--chroma)) calc(var(--hue-neutral) + 5));
   --text-subtle: oklch(0.513 calc(0.017 * var(--chroma)) var(--hue-neutral));
   --text-secondary: oklch(0.5 calc(0.021 * var(--chroma)) var(--hue-brand));
   --text-stack: oklch(0.438 calc(0.019 * var(--chroma)) var(--hue-brand));
@@ -75,7 +73,7 @@
   --border-soft: color-mix(in oklch, var(--line), var(--border-strong) 30%);
   --section-line: var(--surface-inset);
   --on-brand: var(--surface-bright);
-  --on-action: var(--brand-vivid);
+  --on-action: var(--brand);
   --selection-ink: var(--ink);
   --marker: color-mix(in oklch, var(--illustration-window), var(--marker-quiet) 25%);
   --thumbnail-selected: var(--surface-raised);
@@ -86,25 +84,24 @@
 
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --paper: oklch(0.245 calc(0.017 * var(--chroma)) calc(var(--hue-brand) + 18));
+  --paper: oklch(0.245 calc(0.01 * var(--chroma)) calc(var(--hue-neutral) + 25));
   --ink: oklch(0.929 calc(0.017 * var(--chroma)) var(--hue-neutral));
-  --muted: oklch(0.782 calc(0.025 * var(--chroma)) var(--hue-brand));
-  --line: oklch(0.411 calc(0.033 * var(--chroma)) var(--hue-brand));
+  --muted: oklch(0.782 calc(0.025 * var(--chroma)) calc(var(--hue-neutral) + 5));
+  --line: oklch(0.411 calc(0.025 * var(--chroma)) calc(var(--hue-neutral) + 8));
   --brand: oklch(0.823 calc(0.064 * var(--chroma)) calc(var(--hue-brand) - 11));
   --accent: oklch(0.773 calc(0.085 * var(--chroma)) var(--hue-accent));
-  --brand-vivid: oklch(0.8 calc(0.08 * var(--chroma)) var(--hue-brand));
   --action: oklch(0.38 calc(0.075 * var(--chroma)) var(--hue-brand));
   --action-hover: oklch(0.43 calc(0.085 * var(--chroma)) var(--hue-brand));
-  --surface: oklch(0.314 calc(0.031 * var(--chroma)) var(--hue-brand));
-  --surface-raised: oklch(0.288 calc(0.027 * var(--chroma)) var(--hue-brand));
-  --surface-hover: oklch(0.382 calc(0.041 * var(--chroma)) var(--hue-brand));
+  --surface: oklch(0.314 calc(0.02 * var(--chroma)) calc(var(--hue-neutral) + 14));
+  --surface-raised: oklch(0.288 calc(0.015 * var(--chroma)) calc(var(--hue-neutral) + 20));
+  --surface-hover: oklch(0.382 calc(0.029 * var(--chroma)) calc(var(--hue-neutral) + 12));
   --surface-tint: oklch(0.347 calc(0.043 * var(--chroma)) var(--hue-brand));
   --surface-pressed: var(--surface-hover);
-  --surface-inset: oklch(0.226 calc(0.021 * var(--chroma)) var(--hue-brand));
+  --surface-inset: oklch(0.226 calc(0.012 * var(--chroma)) calc(var(--hue-neutral) + 20));
   --border-strong: var(--line);
   --border-link: var(--line);
   --text-subtle: var(--muted);
-  --text-secondary: oklch(0.835 calc(0.031 * var(--chroma)) var(--hue-brand));
+  --text-secondary: oklch(0.835 calc(0.025 * var(--chroma)) calc(var(--hue-neutral) + 5));
   --text-stack: var(--text-secondary);
   --status: oklch(0.756 calc(0.091 * var(--chroma)) calc(var(--hue-brand) - 14));
   --on-tint: oklch(0.851 calc(0.062 * var(--chroma)) calc(var(--hue-brand) - 14));
