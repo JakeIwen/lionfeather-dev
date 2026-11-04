@@ -353,6 +353,11 @@ test('pages are served unchanged when production is unreachable, errs, or lacks 
     [bare.origin, {}],
     [tampered.origin, {}],
     [hangs.origin, { liveOptions: { timeoutMs: 150 } }],
+    // A fetch that ignores its abort signal and never settles.
+    [
+      hangs.origin,
+      { liveOptions: { timeoutMs: 150, fetchPage: () => new Promise(() => {}) } },
+    ],
   ]
   for (const [liveOrigin, options] of cases) {
     const app = await fixture(t, { liveOrigin, ...options })

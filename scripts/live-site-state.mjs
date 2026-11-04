@@ -67,17 +67,32 @@ export function createLiveSiteState({
   let pending = null
   let failing = false
 
+  async function fetchHomepage() {
+    const response = await fetchPage(`${origin}/`, {
+      headers: {
+        Accept: 'text/html',
+        'User-Agent': 'lionfeather-local-server',
+      },
+      signal: AbortSignal.timeout(timeoutMs),
+    })
+    if (!response.ok) throw new Error(`HTTP ${response.status}`)
+    return response.text()
+  }
+
   async function pull() {
+    let timer
     try {
-      const response = await fetchPage(`${origin}/`, {
-        headers: {
-          Accept: 'text/html',
-          'User-Agent': 'lionfeather-local-server',
-        },
-        signal: AbortSignal.timeout(timeoutMs),
+      // Under launchd a fetch was seen to never settle, its abort signal
+      // included, which held every page; this timer bounds the pull on its own.
+      const deadline = new Promise((_, reject) => {
+        timer = setTimeout(
+          () => reject(new Error(`no answer within ${timeoutMs} ms`)),
+          timeoutMs,
+        )
       })
-      if (!response.ok) throw new Error(`HTTP ${response.status}`)
-      const found = extractInjectedTags(await response.text())
+      const found = extractInjectedTags(
+        await Promise.race([fetchHomepage(), deadline]),
+      )
       if (!found) throw new Error('the page carried no injected state')
       tags = found
       expiresAt = Date.now() + ttlMs
@@ -90,6 +105,7 @@ export function createLiveSiteState({
         log(`Serving without live site state from ${origin}: ${error.message}`)
       failing = true
     } finally {
+      clearTimeout(timer)
       pending = null
     }
   }
