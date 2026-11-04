@@ -14,6 +14,11 @@ import {
 import { extname, join, resolve, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parseArgs } from 'node:util'
+import {
+  LIVE_ORIGIN,
+  createLiveSiteState,
+  injectHeadTags,
+} from './live-site-state.mjs'
 
 export const ROOT = fileURLToPath(new URL('../', import.meta.url))
 export const APP = 'lionfeather-org'
@@ -37,6 +42,9 @@ const TYPES = {
   '.txt': 'text/plain; charset=utf-8',
   '.xml': 'application/rss+xml; charset=utf-8',
 }
+
+const isAdminPath = (pathname) =>
+  pathname === '/admin' || pathname.startsWith('/admin/')
 
 export function readRecord(stateDir) {
   try {
@@ -73,6 +81,10 @@ export async function startSiteServer({
   stateDir = join(ROOT, '.local/service'),
   port = PORT,
   managed = false,
+  // Production, whose theme, settings and article edits this server shows and
+  // whose /admin it sends the owner to. null serves the build as it is.
+  liveOrigin = LIVE_ORIGIN,
+  liveOptions = {},
 } = {}) {
   if (lstatSync(dist).isSymbolicLink())
     throw new Error('The build directory must not be a symlink.')
@@ -80,6 +92,11 @@ export async function startSiteServer({
   if (!publicFile(publicRoot, ['index.html']))
     throw new Error('Build the site first with npm run build.')
   mkdirSync(stateDir, { recursive: true, mode: 0o700 })
+  const liveState = liveOrigin
+    ? createLiveSiteState({ origin: liveOrigin, ...liveOptions })
+    : null
+  // Pull now, so the first page doesn't wait on production.
+  void liveState?.headTags()
   const instance = randomBytes(16).toString('hex')
   const token = randomBytes(32).toString('hex')
   let record
@@ -108,7 +125,7 @@ export async function startSiteServer({
     return closePromise
   }
 
-  const server = createServer((request, response) => {
+  const server = createServer(async (request, response) => {
     response.setHeader('X-Content-Type-Options', 'nosniff')
     response.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin')
     response.setHeader('Cache-Control', 'no-store')
@@ -182,6 +199,17 @@ export async function startSiteServer({
       send(404, 'Not found')
       return
     }
+    // The admin API needs Cloudflare Access and the production database, so
+    // its pages only work on the live site.
+    if (liveOrigin && isAdminPath(pathname)) {
+      if (pathname.startsWith('/admin/api/')) {
+        send(404, 'Not found')
+        return
+      }
+      response.writeHead(302, { Location: `${liveOrigin}${request.url}` })
+      response.end()
+      return
+    }
     try {
       let file = publicFile(publicRoot, parts.length ? parts : ['index.html'])
       if (!file && parts.length && !extname(pathname)) {
@@ -209,9 +237,20 @@ export async function startSiteServer({
         send(404, 'Not found')
         return
       }
-      const stats = lstatSync(file)
       response.setHeader('Content-Type', type)
-      response.setHeader('Content-Length', stats.size)
+      if (liveState && extname(file) === '.html') {
+        const tags = await liveState.headTags()
+        const page = Buffer.from(
+          tags
+            ? injectHeadTags(readFileSync(file, 'utf8'), tags)
+            : readFileSync(file),
+        )
+        response.setHeader('Content-Length', page.length)
+        response.setHeader('Cache-Control', 'no-cache')
+        response.end(request.method === 'HEAD' ? undefined : page)
+        return
+      }
+      response.setHeader('Content-Length', lstatSync(file).size)
       if (parts[0] === 'assets' && /-[\w-]{8,}\.[a-z0-9]+$/i.test(file)) {
         response.setHeader(
           'Cache-Control',

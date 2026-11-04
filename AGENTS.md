@@ -148,7 +148,8 @@ viewer because nothing else uses them.
 - `src/dev/`: development-only tools (the theme-kit editor on a local store),
   loaded behind `import.meta.env.DEV` and absent from the production bundle.
 - `public/`: intentionally public static files, including the downloadable resume.
-- `scripts/`: static server, launchd controller, tests, build validation, and
+- `scripts/`: static server, `live-site-state.mjs` (the production head tags the
+  static server copies into its pages), launchd controller, tests, build validation, and
   `configure-admin-access.mjs` (the owner-only Access app on `/admin`); not shipped
   to the browser.
 - `dist/`: generated site; never edit or commit it.
@@ -189,6 +190,13 @@ On 2026-09-30, the installed job was verified against the renamed
 automatic launchd replacement. The service label remains `lionfeather-org` for
 compatibility. Recheck current status before maintenance; no reinstall is needed
 merely because older notes mention the former directory.
+
+The local server has no Worker, so it stands in for one: it pulls the live theme,
+settings and article edits from lionfeather.dev's homepage (cached 60 s, 8 s
+timeout, silently skipped when production is unreachable) and writes them into the
+pages it serves, and it redirects `/admin` pages to lionfeather.dev because the
+admin API needs Cloudflare Access and the production database
+(`scripts/live-site-state.mjs`). Analytics never sends from loopback pages.
 
 The service reads built files without rebuilding at boot. After application edits,
 run the build and reload the browser. Vite development remains on 5175, with

@@ -59,6 +59,22 @@ obtains installation authorization before stopping it. If the subsequent
 bootstrap fails and no job/listener remains, it restores manual hosting and
 reports that automatic startup was not verified.
 
+## Live theme, settings and admin
+
+The local server has no Cloudflare Worker, so on its own it would show the
+code's default theme and settings. Instead it fetches https://lionfeather.dev/
+and copies the head tags the Worker injected (active theme knobs, site settings,
+article edits) into the HTML it serves, so http://127.0.0.1:5174 looks like the
+live site. The copy is cached for 60 seconds and refreshed in the background;
+the first request after boot waits at most 8 seconds. If production is
+unreachable the pages are served as built and one warning goes to the service
+log per outage. Pages reached this way never send analytics beacons.
+
+The admin pages need Cloudflare Access and the production database, so
+`/admin` and everything under it redirects (302) to the same path on
+lionfeather.dev; `/admin/api/*` answers 404. Article edit titles in the head
+metadata are not reproduced locally.
+
 ## Updates and development
 
 ```sh
@@ -93,7 +109,10 @@ was performed during this check. Use `service:status` to inspect current state.
 ## Files and diagnostics
 
 - `scripts/site-server.mjs`: loopback-only static server for `dist/`, SPA
-  navigation fallback, health, and authenticated graceful stop.
+  navigation fallback, health, authenticated graceful stop, and the admin
+  redirect.
+- `scripts/live-site-state.mjs`: pulls and caches the Worker-injected head tags
+  from production for the server to copy into pages.
 - `scripts/service.mjs`: plist preparation, installation, lifecycle, status,
   and automatic-restart verification.
 - `.local/service/com.<username>.lionfeather-org.plist`: prepared configuration.

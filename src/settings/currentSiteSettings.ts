@@ -22,7 +22,11 @@ function injectedSettings(): unknown {
 const injected = injectedSettings()
 
 // Analytics sends only from pages the Worker served, never from local builds.
-export const servedByWorker = injected !== undefined
+// The local server copies the live state into its pages (scripts/live-site-state.mjs),
+// so the injected settings alone no longer prove a Worker served the page.
+export const servedByWorker =
+  injected !== undefined &&
+  !['127.0.0.1', 'localhost', '[::1]'].includes(location.hostname)
 
 let current = normalizeSiteSettings(injected)
 const listeners = new Set<() => void>()

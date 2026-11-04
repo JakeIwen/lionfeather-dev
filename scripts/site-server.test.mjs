@@ -9,10 +9,12 @@ import {
   symlinkSync,
   writeFileSync,
 } from 'node:fs'
-import { request } from 'node:http'
+import { createServer, request } from 'node:http'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { test } from 'node:test'
+import { build } from 'esbuild'
 import {
   APP,
   HEALTH,
@@ -22,13 +24,19 @@ import {
   startSiteServer,
 } from './site-server.mjs'
 import {
+  articleEditsElementId,
+  createLiveSiteState,
+  settingsElementId,
+  themeStyleElementId,
+} from './live-site-state.mjs'
+import {
   assertOwnedConfiguration,
   configuration,
   ownershipMatches,
   plist,
 } from './service.mjs'
 
-async function fixture(t) {
+async function fixture(t, serverOptions = {}) {
   const root = mkdtempSync(join(tmpdir(), 'lionfeather-service-test-'))
   const dist = join(root, 'dist')
   const state = join(root, 'private-state')
@@ -43,7 +51,14 @@ async function fixture(t) {
     join(root, 'AGENTS.private.md'),
     'PRIVATE_CONTENT_MUST_NOT_LEAK',
   )
-  const app = await startSiteServer({ dist, stateDir: state, port: 0 })
+  // Offline by default: the live origin is production unless a test names a stub.
+  const app = await startSiteServer({
+    dist,
+    stateDir: state,
+    port: 0,
+    liveOrigin: null,
+    ...serverOptions,
+  })
   t.after(async () => {
     await app.close()
     rmSync(root, { recursive: true, force: true })
@@ -210,6 +225,7 @@ test('a failed bind does not overwrite the ownership record of the current liste
       dist: app.dist,
       stateDir: app.state,
       port: app.record.port,
+      liveOrigin: null,
     }),
     { code: 'EADDRINUSE' },
   )
@@ -252,4 +268,203 @@ test('service controls reject unrelated installations and stale HTTP identities'
     false,
   )
   assert.match(plist({ text: 'a&b<c>"d' }), /a&amp;b&lt;c&gt;&quot;d/)
+})
+
+const injectedTags =
+  '<style id="theme-knobs">:root{--hue-neutral:360;--hue-brand:240}</style>' +
+  '<script type="application/json" id="site-settings">{"analytics":{"enabled":true}}</script>' +
+  '<script type="application/json" id="article-edits">{}</script>'
+
+// Stands in for lionfeather.dev: counts requests and answers with `handler`.
+async function stubUpstream(t, handler) {
+  const upstream = { requests: 0 }
+  const server = createServer((req, res) => {
+    upstream.requests += 1
+    handler(req, res)
+  })
+  server.listen(0, '127.0.0.1')
+  await once(server, 'listening')
+  t.after(() => {
+    server.closeAllConnections()
+    server.close()
+  })
+  upstream.origin = `http://127.0.0.1:${server.address().port}`
+  return upstream
+}
+
+const productionPage = (res, head = injectedTags) => {
+  res.writeHead(200, { 'Content-Type': 'text/html' })
+  res.end(`<!doctype html><head><title>Live</title>${head}</head>`)
+}
+
+test('pages carry the live theme, settings and article edits pulled from production, cached between requests', async (t) => {
+  const upstream = await stubUpstream(t, (_req, res) => productionPage(res))
+  const app = await fixture(t, { liveOrigin: upstream.origin })
+  // The build has a head here, as the real one does.
+  writeFileSync(
+    join(app.dist, 'index.html'),
+    '<!doctype html><head><title>Jacob Iwen</title></head><body></body>',
+  )
+  const home = await raw(app, '/')
+  assert.equal(home.status, 200)
+  assert.ok(
+    home.body.includes(`${injectedTags}</head>`),
+    'tags sit at the end of the head',
+  )
+  assert.equal(
+    Number(home.headers['content-length']),
+    Buffer.byteLength(home.body),
+  )
+  const deepLink = await raw(app, '/work/fieldwork', {
+    headers: { Accept: 'text/html' },
+  })
+  assert.ok(deepLink.body.includes(injectedTags))
+  const head = await raw(app, '/', { method: 'HEAD' })
+  assert.equal(head.headers['content-length'], home.headers['content-length'])
+  assert.equal(head.body, '')
+  // Assets are untouched and the three pages cost one upstream request.
+  const script = await raw(app, '/assets/app-12345678.js')
+  assert.equal(script.body, 'console.log("public")')
+  assert.equal(upstream.requests, 1)
+})
+
+test('pages are served unchanged when production is unreachable, errs, or lacks the state', async (t) => {
+  const broken = await stubUpstream(t, (_req, res) => {
+    res.writeHead(500)
+    res.end('boom')
+  })
+  const bare = await stubUpstream(t, (_req, res) => productionPage(res, ''))
+  const tampered = await stubUpstream(t, (_req, res) =>
+    productionPage(
+      res,
+      injectedTags.replace('--hue-brand:240', '--x:url(//evil.example)'),
+    ),
+  )
+  const hangs = await stubUpstream(t, () => {})
+  const originalLog = console.warn
+  const logged = []
+  console.warn = (message) => logged.push(message)
+  t.after(() => {
+    console.warn = originalLog
+  })
+  const cases = [
+    ['http://127.0.0.1:9', {}], // nothing listens on the discard port
+    [broken.origin, {}],
+    [bare.origin, {}],
+    [tampered.origin, {}],
+    [hangs.origin, { liveOptions: { timeoutMs: 150 } }],
+  ]
+  for (const [liveOrigin, options] of cases) {
+    const app = await fixture(t, { liveOrigin, ...options })
+    const started = Date.now()
+    for (let i = 0; i < 3; i += 1) {
+      const home = await raw(app, '/')
+      assert.equal(home.status, 200, liveOrigin)
+      assert.equal(
+        home.body,
+        '<!doctype html><title>Jacob Iwen</title><script src="/assets/app-12345678.js"></script>',
+      )
+    }
+    assert.ok(
+      Date.now() - started < 2000,
+      'a dead upstream must not stall pages',
+    )
+  }
+  assert.equal(
+    logged.length,
+    cases.length,
+    'one log line per outage, not per request',
+  )
+})
+
+test('a failed refresh keeps serving the last good state and recovery is logged once', async () => {
+  let healthy = true
+  let clock = 0
+  const messages = []
+  const realNow = Date.now
+  Date.now = () => clock
+  try {
+    const state = createLiveSiteState({
+      origin: 'http://upstream.test',
+      ttlMs: 60_000,
+      retryMs: 1000,
+      log: (message) => messages.push(message),
+      fetchPage: async () => {
+        if (!healthy) throw new Error('offline')
+        return new Response(`<head>${injectedTags}</head>`)
+      },
+    })
+    assert.equal(await state.headTags(), injectedTags)
+    healthy = false
+    const settle = () => new Promise((done) => setImmediate(done))
+    clock += 61_000
+    assert.equal(await state.headTags(), injectedTags)
+    await settle()
+    clock += 2000
+    assert.equal(await state.headTags(), injectedTags)
+    healthy = true
+    await settle()
+    clock += 2000
+    assert.equal(await state.headTags(), injectedTags)
+    await settle()
+    assert.equal(messages.length, 2)
+    assert.match(messages[0], /offline/)
+    assert.match(messages[1], /available again/)
+  } finally {
+    Date.now = realNow
+  }
+})
+
+test('admin pages redirect to the live site, the admin API stays a 404, other paths are unaffected', async (t) => {
+  const upstream = await stubUpstream(t, (_req, res) => productionPage(res))
+  const app = await fixture(t, { liveOrigin: upstream.origin })
+  for (const [path, location] of [
+    ['/admin', '/admin'],
+    ['/admin/', '/admin/'],
+    ['/admin/settings', '/admin/settings'],
+    ['/admin/writing/agent-sessions?x=1', '/admin/writing/agent-sessions?x=1'],
+  ]) {
+    const response = await raw(app, path, { headers: { Accept: 'text/html' } })
+    assert.equal(response.status, 302, path)
+    assert.equal(response.headers.location, `${upstream.origin}${location}`)
+  }
+  assert.equal(
+    (
+      await raw(app, '/admin/api/appearance', {
+        headers: { Accept: 'text/html' },
+      })
+    ).status,
+    404,
+  )
+  assert.equal(
+    (await raw(app, '/administrator', { headers: { Accept: 'text/html' } }))
+      .status,
+    200,
+  )
+  assert.equal((await raw(app, '/', { method: 'POST' })).status, 405)
+})
+
+test('the element ids copied from production match the ones the app and Worker use', async () => {
+  const result = await build({
+    stdin: {
+      contents: `export { themeStyleElementId } from './src/appearance/siteTheme'
+export { settingsElementId } from './src/settings/siteSettings'
+export { articleEditsElementId } from './src/articleEdits/articleEdit'`,
+      resolveDir: fileURLToPath(new URL('../', import.meta.url)),
+      loader: 'ts',
+    },
+    bundle: true,
+    write: false,
+    format: 'esm',
+  })
+  const source = `data:text/javascript;base64,${Buffer.from(result.outputFiles[0].text).toString('base64')}`
+  const ids = await import(source)
+  assert.deepEqual(
+    { themeStyleElementId, settingsElementId, articleEditsElementId },
+    {
+      themeStyleElementId: ids.themeStyleElementId,
+      settingsElementId: ids.settingsElementId,
+      articleEditsElementId: ids.articleEditsElementId,
+    },
+  )
 })
