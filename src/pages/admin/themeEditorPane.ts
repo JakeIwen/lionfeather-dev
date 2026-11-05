@@ -1,6 +1,6 @@
 // Loaded on first use from the Appearance section, so theme-kit's editor stays
 // out of the admin page's first load.
-import { mountThemeEditor } from 'theme-kit'
+import { mountThemeEditor, paletteSwatchColors } from 'theme-kit'
 import type { ThemeEditorElement } from 'theme-kit'
 import { builtinThemes, siteKnobs } from '../../appearance/siteTheme'
 import { themeModeControl } from '../../appearance/themeModeControl'
@@ -15,6 +15,7 @@ export async function showThemeEditor() {
     builtins: builtinThemes,
     store: themeStore,
     mode: themeModeControl,
+    swatchColors: paletteSwatchColors(siteKnobs),
   })
   editor.show()
 }

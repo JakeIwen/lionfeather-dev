@@ -9,9 +9,9 @@
   overflow-y: auto;
   margin-bottom: 24px;
   padding: 16px;
-  border: 1px solid var(--border-strong);
+  border: 1px solid var(--control-border);
   border-radius: 6px;
-  background: var(--surface-raised);
+  background: var(--surface);
   font-size: 15px;
   line-height: 1.6;
 }

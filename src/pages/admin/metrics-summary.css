@@ -39,7 +39,7 @@
   padding: 14px 16px;
   border: 1px solid var(--line);
   border-radius: 6px;
-  background: var(--surface-raised);
+  background: var(--surface);
 }
 .metric-tile dt {
   display: flex;

@@ -29,7 +29,7 @@
   vertical-align: top;
 }
 .article-table th {
-  background: var(--surface);
+  background: var(--surface-muted);
   font-weight: 650;
 }
 @media (max-width: 580px) {

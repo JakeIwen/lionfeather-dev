@@ -1,38 +1,35 @@
-/* Every color derives from four knobs: --hue-neutral, --hue-brand, --hue-accent and --chroma.
-   The values below are the Clay theme, the first of builtinThemes in src/appearance/siteTheme.ts
-   and the fallback when the Worker injects no theme. Other themes are knob sets there, applied
-   by the Worker's first-paint style, the admin theme editor and the development theme editor. */
+/* Every color derives from four knobs (--hue-neutral, --hue-brand, --hue-accent, --chroma)
+   through theme-kit's shared palette, imported first: the role tokens (paper, surface, ink,
+   muted, line, link, brand, primary, accent, focus, selection, backdrop, shadows) are the
+   kit's, so a theme pasted from Fieldwork gives this site Fieldwork's colors. The knob values
+   below are the Clay theme, the first of builtinThemes in src/appearance/siteTheme.ts and the
+   fallback when the Worker injects no theme. Other themes are knob sets there, applied by the
+   Worker's first-paint style, the admin theme editor and the development theme editor.
+
+   This file holds only the site's own roles: mixed from the kit's tokens where a neutral is
+   wanted, so they follow its hue and chroma treatment in both modes, and built from the knobs
+   where a role needs its own hue (the brand-tinted availability pill, the status dot). */
+@import 'theme-kit/palette.css';
+
 :root {
   --hue-neutral: 65;
   --hue-brand: 50;
   --hue-accent: 155;
   --chroma: 0.85;
-  color-scheme: light;
 
   /* Mode-sensitive roles keep their lightness when a theme changes. */
-  --paper: oklch(0.967 calc(0.011 * var(--chroma)) calc(var(--hue-neutral) - 29));
-  --ink: oklch(0.294 calc(0.025 * var(--chroma)) var(--hue-brand));
-  --muted: oklch(0.539 calc(0.03 * var(--chroma)) var(--hue-neutral));
-  --line: oklch(0.896 calc(0.022 * var(--chroma)) var(--hue-neutral));
-  --brand: oklch(0.389 calc(0.061 * var(--chroma)) calc(var(--hue-brand) + 12));
-  --accent: oklch(0.523 calc(0.121 * var(--chroma)) var(--hue-accent));
-  /* The primary button's tinted fill. */
-  --action: oklch(0.905 calc(0.028 * var(--chroma)) var(--hue-brand));
-  --action-hover: oklch(0.875 calc(0.04 * var(--chroma)) var(--hue-brand));
-  --surface: oklch(0.945 calc(0.016 * var(--chroma)) var(--hue-neutral));
-  --surface-raised: oklch(0.977 calc(0.005 * var(--chroma)) var(--hue-neutral));
-  --surface-hover: oklch(0.934 calc(0.021 * var(--chroma)) var(--hue-neutral));
   --surface-tint: oklch(0.926 calc(0.03 * var(--chroma)) var(--hue-brand));
-  --surface-pressed: oklch(0.893 calc(0.027 * var(--chroma)) var(--hue-neutral));
-  --surface-inset: oklch(0.919 calc(0.017 * var(--chroma)) var(--hue-neutral));
-  --border-strong: oklch(0.801 calc(0.035 * var(--chroma)) calc(var(--hue-neutral) + 5));
-  --border-link: oklch(0.749 calc(0.031 * var(--chroma)) calc(var(--hue-neutral) + 5));
-  --text-subtle: oklch(0.513 calc(0.017 * var(--chroma)) var(--hue-neutral));
-  --text-secondary: oklch(0.5 calc(0.021 * var(--chroma)) var(--hue-brand));
-  --text-stack: oklch(0.438 calc(0.019 * var(--chroma)) var(--hue-brand));
+  --surface-inset: color-mix(in oklch, var(--paper), var(--line) 40%);
+  --border-link: color-mix(in oklch, var(--line), var(--control-border) 50%);
+  --border-soft: color-mix(in oklch, var(--line), var(--control-border) 15%);
+  --text-stack: color-mix(in oklch, var(--ink), var(--muted) 50%);
   --status: oklch(0.598 calc(0.082 * var(--chroma)) calc(var(--hue-brand) - 14));
-  --on-tint: oklch(0.475 calc(0.041 * var(--chroma)) var(--hue-brand));
-  --selection: oklch(0.881 calc(0.036 * var(--chroma)) calc(var(--hue-neutral) - 25));
+  --section-line: var(--surface-inset);
+  --thumbnail-selected: var(--surface);
+  --thumbnail-hover-border: var(--control-border);
+  --diagram-fill: var(--surface-hover);
+  --diagram-shade: var(--surface-selected);
+  --marker: color-mix(in oklch, var(--illustration-window), var(--marker-quiet) 25%);
 
   /* Admin page: errors keep a fixed red hue, chart series differ in lightness as well as hue. */
   --danger: oklch(0.5 0.16 27);
@@ -70,68 +67,39 @@
   /* Shared mixtures keep component-specific roles on the same small ramps. */
   --viewer-control: color-mix(in oklch, var(--inverse-surface), var(--inverse-deep) 12%);
   --viewer-ink: color-mix(in oklch, var(--inverse-ink), var(--surface-bright) 40%);
-  --border-soft: color-mix(in oklch, var(--line), var(--border-strong) 30%);
-  --section-line: var(--surface-inset);
-  --on-brand: var(--surface-bright);
-  --on-action: var(--brand);
-  --selection-ink: var(--ink);
-  --marker: color-mix(in oklch, var(--illustration-window), var(--marker-quiet) 25%);
-  --thumbnail-selected: var(--surface-raised);
-  --thumbnail-hover-border: var(--border-strong);
-  --diagram-fill: var(--surface-hover);
-  --diagram-shade: var(--surface-pressed);
 }
 
 :root[data-theme='dark'] {
-  color-scheme: dark;
-  --paper: oklch(0.245 calc(0.01 * var(--chroma)) calc(var(--hue-neutral) + 25));
-  --ink: oklch(0.929 calc(0.017 * var(--chroma)) var(--hue-neutral));
-  --muted: oklch(0.782 calc(0.025 * var(--chroma)) calc(var(--hue-neutral) + 5));
-  --line: oklch(0.411 calc(0.025 * var(--chroma)) calc(var(--hue-neutral) + 8));
-  --brand: oklch(0.823 calc(0.064 * var(--chroma)) calc(var(--hue-brand) - 11));
-  --accent: oklch(0.773 calc(0.085 * var(--chroma)) var(--hue-accent));
-  --action: oklch(0.38 calc(0.075 * var(--chroma)) var(--hue-brand));
-  --action-hover: oklch(0.43 calc(0.085 * var(--chroma)) var(--hue-brand));
-  --surface: oklch(0.314 calc(0.02 * var(--chroma)) calc(var(--hue-neutral) + 14));
-  --surface-raised: oklch(0.288 calc(0.015 * var(--chroma)) calc(var(--hue-neutral) + 20));
-  --surface-hover: oklch(0.382 calc(0.029 * var(--chroma)) calc(var(--hue-neutral) + 12));
   --surface-tint: oklch(0.347 calc(0.043 * var(--chroma)) var(--hue-brand));
-  --surface-pressed: var(--surface-hover);
-  --surface-inset: oklch(0.226 calc(0.012 * var(--chroma)) calc(var(--hue-neutral) + 20));
-  --border-strong: var(--line);
+  /* The inset sits below the page, so it darkens the paper rather than mixing toward a line. */
+  --surface-inset: color-mix(in oklch, var(--paper), oklch(0 0 0) 16%);
   --border-link: var(--line);
-  --text-subtle: var(--muted);
-  --text-secondary: oklch(0.835 calc(0.025 * var(--chroma)) calc(var(--hue-neutral) + 5));
-  --text-stack: var(--text-secondary);
+  --text-stack: var(--muted);
   --status: oklch(0.756 calc(0.091 * var(--chroma)) calc(var(--hue-brand) - 14));
-  --on-tint: oklch(0.851 calc(0.062 * var(--chroma)) calc(var(--hue-brand) - 14));
-  --selection: oklch(0.476 calc(0.05 * var(--chroma)) calc(var(--hue-brand) - 11));
   --danger: oklch(0.75 0.13 27);
   --chart-views: oklch(0.55 calc(0.06 * var(--chroma)) var(--hue-brand));
   --chart-visitors: oklch(0.85 calc(0.1 * var(--chroma)) var(--hue-accent));
   --section-line: var(--line);
-  --on-brand: var(--inverse-inset);
-  --selection-ink: var(--viewer-ink);
-  --marker: color-mix(in oklch, var(--diagram-line), var(--illustration-glass) 30%);
   --thumbnail-selected: var(--surface-hover);
   --thumbnail-hover-border: var(--marker-quiet);
   --diagram-fill: var(--line);
   --diagram-shade: var(--surface-tint);
+  --marker: color-mix(in oklch, var(--diagram-line), var(--illustration-glass) 30%);
 }
 
-/* theme-kit's editor pane has no palette of its own; it takes these. */
+/* theme-kit's editor pane has no palette of its own; it takes these, as Fieldwork's does. */
 theme-editor {
   --te-bg: var(--paper);
-  --te-surface: var(--surface-raised);
+  --te-surface: var(--surface);
   --te-hover: var(--surface-hover);
-  --te-selected: var(--surface-tint);
+  --te-selected: var(--surface-selected);
   --te-field: var(--paper);
   --te-text: var(--ink);
   --te-muted: var(--muted);
   --te-border: var(--line);
-  --te-control-border: var(--border-strong);
-  --te-accent: var(--brand);
-  --te-focus: var(--accent);
+  --te-control-border: var(--control-border);
+  --te-accent: var(--primary);
+  --te-focus: var(--focus);
   --te-danger: var(--danger);
-  --te-shadow: -12px 0 32px var(--shadow-control);
+  --te-shadow: -12px 0 32px var(--dialog-shadow);
 }

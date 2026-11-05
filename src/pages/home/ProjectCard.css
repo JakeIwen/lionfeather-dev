@@ -3,7 +3,7 @@
   border: 1px solid var(--line);
   border-radius: 5px;
   overflow: hidden;
-  background: var(--surface-raised);
+  background: var(--surface);
   transition:
     box-shadow 0.25s,
     transform 0.25s;

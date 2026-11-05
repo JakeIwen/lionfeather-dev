@@ -98,9 +98,9 @@
   gap: 8px;
   min-height: 44px;
   padding: 8px 16px;
-  border: 1px solid var(--border-strong);
+  border: 1px solid var(--control-border);
   border-radius: 6px;
-  background: var(--surface-raised);
+  background: var(--surface);
   color: var(--ink);
   font-size: 15px;
   font-weight: 600;
@@ -117,7 +117,7 @@
 .admin-button-primary {
   border-color: var(--brand);
   background: var(--brand);
-  color: var(--on-brand);
+  color: var(--on-primary);
 }
 .admin-button-primary:hover:not(:disabled) {
   background: var(--brand);
@@ -136,7 +136,7 @@
   width: 100%;
   min-height: 44px;
   padding: 8px 12px;
-  border: 1px solid var(--border-strong);
+  border: 1px solid var(--control-border);
   border-radius: 6px;
   background: var(--paper);
   color: var(--ink);

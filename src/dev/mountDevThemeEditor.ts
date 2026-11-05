@@ -1,7 +1,7 @@
 // Development only (main.tsx imports it behind import.meta.env.DEV): a fixed
 // Theme button that opens theme-kit's editor pane, with themes kept in this
 // browser's localStorage so nothing needs the Worker.
-import { createLocalThemeStore, mountThemeEditor } from 'theme-kit'
+import { createLocalThemeStore, mountThemeEditor, paletteSwatchColors } from 'theme-kit'
 import type { ThemeEditorElement } from 'theme-kit'
 import { builtinThemes, siteKnobs } from '../appearance/siteTheme'
 import { themeModeControl } from '../appearance/themeModeControl'
@@ -31,6 +31,7 @@ button.addEventListener('click', () => {
     builtins: builtinThemes,
     store,
     mode: themeModeControl,
+    swatchColors: paletteSwatchColors(siteKnobs),
   })
   editor.toggle()
 })

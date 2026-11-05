@@ -3,7 +3,7 @@
   top: 10px;
   left: 20px;
   background: var(--brand);
-  color: var(--on-brand);
+  color: var(--on-primary);
   width: 1px;
   height: 1px;
   overflow: hidden;

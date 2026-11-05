@@ -13,7 +13,7 @@
   width: 44px;
   height: 26px;
   margin: 0;
-  border: 1px solid var(--border-strong);
+  border: 1px solid var(--control-border);
   border-radius: 13px;
   background: var(--surface-inset);
   cursor: pointer;

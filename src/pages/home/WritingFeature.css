@@ -6,11 +6,11 @@
   padding: 38px;
   border: 1px solid var(--line);
   border-radius: 5px;
-  background: var(--surface-raised);
+  background: var(--surface);
   transition: background 0.2s;
 }
 .writing-feature:hover {
-  background: var(--surface);
+  background: var(--surface-hover);
 }
 .writing-feature-copy {
   min-width: 0;

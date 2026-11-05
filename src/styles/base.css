@@ -95,11 +95,11 @@ main:focus {
     transform 0.2s;
 }
 .button-dark {
-  background: var(--action);
-  color: var(--on-action);
+  background: var(--primary);
+  color: var(--on-primary);
 }
 .button-dark:hover {
-  background: var(--action-hover);
+  background: var(--primary-hover);
   transform: translateY(-2px);
 }
 .text-link {

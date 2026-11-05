@@ -24,9 +24,9 @@
   position: fixed;
   z-index: 15;
   padding: 10px 12px;
-  border: 1px solid var(--border-strong);
+  border: 1px solid var(--control-border);
   border-radius: 6px;
-  background: var(--surface-raised);
+  background: var(--surface);
   box-shadow: 0 4px 14px var(--shadow-control);
   color: var(--ink);
   font-size: 14px;

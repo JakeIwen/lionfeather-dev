@@ -12,7 +12,7 @@
   height: 44px;
   padding: 0;
   border-radius: 50%;
-  border: 1px solid var(--border-strong);
+  border: 1px solid var(--control-border);
   color: var(--brand);
   background: var(--paper);
   transition:

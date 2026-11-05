@@ -4,7 +4,7 @@
 .article-inline-code {
   padding: 2px 5px;
   border-radius: 3px;
-  background: var(--surface);
+  background: var(--surface-muted);
   font-size: 0.88em;
   overflow-wrap: anywhere;
 }
