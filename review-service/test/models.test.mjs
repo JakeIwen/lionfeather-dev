@@ -28,6 +28,20 @@ test('GET /models lists the SDK models with efforts and prefers Fable', async (t
   })
 })
 
+test('GET /models offers the latest Fable alias alongside older releases', async (t) => {
+  const response = await modelsFrom(t, createFakeSdk({ models: [
+    { ...SONNET, value: 'fable', resolvedModel: 'claude-fable-8-2', displayName: 'Fable 8.2' },
+    { ...SONNET, value: 'claude-fable-8-1', resolvedModel: 'claude-fable-8-1', displayName: 'Fable 8.1' },
+  ] }))
+  assert.equal(response.status, 200)
+  const body = response.json()
+  assert.deepEqual(body.models.map(({ id, label }) => ({ id, label })), [
+    { id: 'fable', label: 'Fable 8.2' },
+    { id: 'claude-fable-8-1', label: 'Fable 8.1' },
+  ])
+  assert.equal(body.defaultModel, 'fable')
+})
+
 test('without Fable the SDK default model is the default', async (t) => {
   const response = await modelsFrom(
     t,
