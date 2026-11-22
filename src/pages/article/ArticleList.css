@@ -6,9 +6,6 @@
   line-height: 1.9;
   overflow-wrap: anywhere;
 }
-.article-list li + li {
-  margin-top: 12px;
-}
 .article-list li::marker {
   color: var(--muted);
 }
